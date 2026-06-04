@@ -102,15 +102,24 @@ def _aggregate_stage(*, process: str) -> StageConfig:
     )
 
 
-def _thinker_stage(*, gpu: int, speech_enabled: bool, process: str) -> StageConfig:
-    return StageConfig(
+def _thinker_stage(
+    *, gpu: int, speech_enabled: bool, process: str,
+    enable_streaming_text: bool = False,
+) -> StageConfig:
+    factory_args: dict[str, object] = {"thinker_max_seq_len": 8192}
+    if enable_streaming_text and not speech_enabled:
+        factory_args["enable_streaming_text"] = True
+    config = StageConfig(
         name=THINKER_STAGE,
         process=process,
         factory=f"{_PKG}.stages.create_sglang_thinker_executor_from_config",
-        factory_args={"thinker_max_seq_len": 8192},
+        factory_args=factory_args,
         gpu=gpu,
         next=[DECODE_STAGE, TALKER_STAGE] if speech_enabled else DECODE_STAGE,
     )
+    if enable_streaming_text:
+        config.stream_to = [DECODE_STAGE]
+    return config
 
 
 def _streaming_thinker_stage(*, gpu: int, process: str) -> StageConfig:
@@ -154,13 +163,21 @@ def _talker_stream_stage(*, gpu: int, process: str) -> StageConfig:
     )
 
 
-def _decode_stage(*, process: str) -> StageConfig:
-    return StageConfig(
+def _decode_stage(*, process: str, streaming: bool = False) -> StageConfig:
+    factory = (
+        f"{_PKG}.stages.create_streaming_decode_executor"
+        if streaming
+        else f"{_PKG}.stages.create_decode_executor"
+    )
+    config = StageConfig(
         name=DECODE_STAGE,
         process=process,
-        factory=f"{_PKG}.stages.create_decode_executor",
+        factory=factory,
         terminal=True,
     )
+    if streaming:
+        config.can_accept_stream_before_payload = True
+    return config
 
 
 def _talker_stage(*, gpu: int, process: str) -> StageConfig:
@@ -180,8 +197,11 @@ def _ming_text_stages() -> list[StageConfig]:
         _audio_encoder_stage(gpu=0, process="audio_encoder"),
         _image_encoder_stage(gpu=0, process="image_encoder"),
         _aggregate_stage(process="mm_aggregate"),
-        _thinker_stage(gpu=0, speech_enabled=False, process="thinker"),
-        _decode_stage(process="decode"),
+        _thinker_stage(
+            gpu=0, speech_enabled=False, process="thinker",
+            enable_streaming_text=True,
+        ),
+        _decode_stage(process="decode", streaming=True),
     ]
 
 

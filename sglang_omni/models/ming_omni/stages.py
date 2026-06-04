@@ -391,3 +391,25 @@ def create_decode_executor(model_path: str):
         return payload
 
     return SimpleScheduler(_decode)
+
+
+def create_streaming_decode_executor(model_path: str):
+    """Factory for a stream-aware decode stage.
+
+    Returns a ``MingStreamingDecodeScheduler`` that handles both
+    streaming (per-token incremental text deltas via ``stream_chunk``)
+    and non-streaming (one-shot full-text decode via ``new_request``)
+    modes.  Use this instead of ``create_decode_executor`` when the
+    thinker stage is configured with ``stream_to=["decode"]``.
+    """
+    from sglang_omni.models.ming_omni.components.common import load_ming_tokenizer
+    from sglang_omni.models.ming_omni.components.streaming_decode import (
+        MingStreamingDecodeScheduler,
+    )
+
+    tokenizer = load_ming_tokenizer(model_path)
+    eos_token_id = getattr(tokenizer, "eos_token_id", None)
+    return MingStreamingDecodeScheduler(
+        tokenizer=tokenizer,
+        eos_token_id=eos_token_id,
+    )

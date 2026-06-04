@@ -19,6 +19,7 @@ def create_thinker_scheduler(
     tp_size: int = 1,
     nccl_port: int | None = None,
     enable_streaming_tts: bool = False,
+    enable_streaming_text: bool = False,
 ):
     if tp_size < 1:
         raise ValueError(f"tp_size must be >= 1, got {tp_size}")
@@ -83,11 +84,25 @@ def create_thinker_scheduler(
     )
 
     stream_output_builder = None
-    if enable_streaming_tts:
+    if enable_streaming_tts and enable_streaming_text:
         eos_token_id = getattr(tokenizer, "eos_token_id", None)
         stream_output_builder = make_thinker_stream_output_builder(
             tokenizer=tokenizer,
             eos_token_id=eos_token_id,
+            include_text_stream=True,
+        )
+    elif enable_streaming_tts:
+        eos_token_id = getattr(tokenizer, "eos_token_id", None)
+        stream_output_builder = make_thinker_stream_output_builder(
+            tokenizer=tokenizer,
+            eos_token_id=eos_token_id,
+        )
+    elif enable_streaming_text:
+        eos_token_id = getattr(tokenizer, "eos_token_id", None)
+        stream_output_builder = make_thinker_stream_output_builder(
+            tokenizer=tokenizer,
+            eos_token_id=eos_token_id,
+            text_only=True,
         )
 
     return OmniScheduler(
@@ -253,25 +268,37 @@ def make_thinker_stream_output_builder(
     tokenizer: Any,
     eos_token_id: int | None,
     target_stage: str = "segmenter",
+    text_only: bool = False,
+    include_text_stream: bool = False,
 ):
-    """Build a per-token stream callback that emits text deltas to the segmenter.
+    """Build a per-token stream callback.
 
     OmniScheduler calls this on every model step with the freshly generated
     token id. We maintain per-request running output_ids on ``req`` so we can
     incrementally decode and compute the text delta to push to the segmenter.
 
-    Incomplete UTF-8 sequences (``\\ufffd`` in the decoded result) are buffered
-    until the next token completes them.
+    Incomplete UTF-8 sequences (``�`` in the decoded result) are
+    buffered until the next token completes them.
+
+    - When ``text_only=True``: emits per-token ids to ``decode`` for
+      incremental text streaming to the OpenAI client (#600).
+    - When ``text_only=False`` (default): emits text deltas to
+      ``segmenter`` for TTS speech synthesis.
+    - When ``include_text_stream=True``: emits BOTH per-token ids to
+      ``decode`` AND text deltas to ``segmenter``.
     """
     import torch
 
     from sglang_omni.scheduling.messages import OutgoingMessage
 
+    if text_only:
+        return make_text_stream_output_builder(
+            tokenizer=tokenizer,
+            eos_token_id=eos_token_id,
+        )
+
     def _build_stream_output(request_id, req_data, req_output):
         req = getattr(req_data, "req", None)
-        # Suppress while chunked prefill is still consuming prompt tokens —
-        # prompt-side states could otherwise masquerade as the first
-        # assistant token and leak prompt content into TTS.
         if req is not None and int(getattr(req, "is_chunked", 0) or 0) > 0:
             return []
         if req_output.data is None or req is None:
@@ -282,8 +309,6 @@ def make_thinker_stream_output_builder(
         except (TypeError, ValueError):
             return []
 
-        # Per-request state lives on ``req`` so it is automatically GC'd when
-        # the SGLang scheduler drops the request.
         token_ids = getattr(req, "_ming_stream_token_ids", None)
         if token_ids is None:
             token_ids = []
@@ -298,32 +323,36 @@ def make_thinker_stream_output_builder(
             return []
 
         decoded = tokenizer.decode(token_ids, skip_special_tokens=True)
-        # Buffer until the trailing multi-byte char completes.
-        if "\ufffd" in decoded:
+        if "�" in decoded:
             return []
 
         if decoded.startswith(emitted):
             delta = decoded[len(emitted) :]
         else:
-            # Defensive: detokenizer rewrote earlier text — re-emit full.
             delta = decoded
         if not delta:
             return []
 
         req._ming_stream_emitted_text = decoded
 
+        messages: list[OutgoingMessage] = []
+
+        if include_text_stream:
+            messages.append(
+                OutgoingMessage(
+                    request_id=request_id,
+                    type="stream",
+                    data=torch.tensor([token_id], dtype=torch.long),
+                    target="decode",
+                    metadata={"token_id": token_id, "is_eos": bool(is_eos)},
+                )
+            )
+
         text_tensor = torch.tensor(
             list(delta.encode("utf-8")),
             dtype=torch.uint8,
         )
-        # Only emit to the segmenter. The thinker is not a terminal stage,
-        # so it cannot send chunks directly to the coordinator via
-        # target=None — the runtime would fan that out to ``stream_to``
-        # peers, and the relay transport requires torch.Tensor payloads.
-        # Streaming text deltas to the client requires either a stream-
-        # aware decode stage or a dedicated text fan-out stage; left as a
-        # follow-up. Streaming audio still works via the talker_stream.
-        return [
+        messages.append(
             OutgoingMessage(
                 request_id=request_id,
                 type="stream",
@@ -335,6 +364,53 @@ def make_thinker_stream_output_builder(
                     "text_len": int(text_tensor.numel()),
                     "is_eos": bool(is_eos),
                 },
+            )
+        )
+
+        return messages
+
+    return _build_stream_output
+
+
+def make_text_stream_output_builder(
+    *,
+    tokenizer: Any,
+    eos_token_id: int | None,
+):
+    """Build a per-token stream callback that emits token ids to ``decode``.
+
+    Each generated token id is wrapped as a ``stream_chunk``
+    ``OutgoingMessage`` targeted at the ``decode`` stage, which
+    incrementally detokenizes and emits text deltas to the coordinator.
+
+    This is the Ming-Omni equivalent of Qwen3-Omni's text streaming path
+    (see #600).
+    """
+    import torch
+
+    from sglang_omni.scheduling.messages import OutgoingMessage
+
+    def _build_stream_output(request_id, req_data, req_output):
+        req = getattr(req_data, "req", None)
+        if req is not None and int(getattr(req, "is_chunked", 0) or 0) > 0:
+            return []
+        if req_output.data is None or req is None:
+            return []
+
+        try:
+            token_id = int(req_output.data)
+        except (TypeError, ValueError):
+            return []
+
+        is_eos = eos_token_id is not None and token_id == int(eos_token_id)
+
+        return [
+            OutgoingMessage(
+                request_id=request_id,
+                type="stream",
+                data=torch.tensor([token_id], dtype=torch.long),
+                target="decode",
+                metadata={"token_id": token_id, "is_eos": bool(is_eos)},
             )
         ]
 
