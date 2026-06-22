@@ -276,6 +276,16 @@ def test_stage_breakdown_covers_preprocess_encoder_and_prefill(
         ),
         _ev("r1", "talker", "scheduler_request_build_start", 10_300_000),
         _ev("r1", "talker", "scheduler_request_build_end", 10_700_000),  # 0.4ms
+        _ev("r1", "asr", "qwen3_asr_load_audio_start", 10_300_000),
+        _ev("r1", "asr", "qwen3_asr_load_audio_end", 10_500_000),  # 0.2ms
+        _ev("r1", "asr", "qwen3_asr_feature_extract_start", 10_500_000),
+        _ev("r1", "asr", "qwen3_asr_feature_extract_end", 10_650_000),  # 0.15ms
+        _ev("r1", "asr", "qwen3_asr_prompt_build_start", 10_650_000),
+        _ev("r1", "asr", "qwen3_asr_prompt_build_end", 10_675_000),  # 0.025ms
+        _ev("r1", "asr", "qwen3_asr_multimodal_pack_start", 10_675_000),
+        _ev("r1", "asr", "qwen3_asr_multimodal_pack_end", 10_695_000),  # 0.02ms
+        _ev("r1", "asr", "qwen3_asr_req_pack_start", 10_695_000),
+        _ev("r1", "asr", "qwen3_asr_req_pack_end", 10_700_000),  # 0.005ms
         _ev("r1", "talker", "scheduler_prefill_start", 10_800_000),
         _ev(
             "r1",
@@ -294,6 +304,23 @@ def test_stage_breakdown_covers_preprocess_encoder_and_prefill(
 
     assert ("audio_encoder", "encoder_start->encoder_end") in by_key
     assert by_key[("audio_encoder", "encoder_start->encoder_end")].total_ms == 5.0
+
+    asr_load_key = ("asr", "qwen3_asr_load_audio_start->qwen3_asr_load_audio_end")
+    asr_feature_key = (
+        "asr",
+        "qwen3_asr_feature_extract_start->qwen3_asr_feature_extract_end",
+    )
+    asr_prompt_key = ("asr", "qwen3_asr_prompt_build_start->qwen3_asr_prompt_build_end")
+    asr_mm_key = (
+        "asr",
+        "qwen3_asr_multimodal_pack_start->qwen3_asr_multimodal_pack_end",
+    )
+    asr_req_key = ("asr", "qwen3_asr_req_pack_start->qwen3_asr_req_pack_end")
+    assert by_key[asr_load_key].total_ms == 0.2
+    assert by_key[asr_feature_key].total_ms == 0.15
+    assert by_key[asr_prompt_key].total_ms == 0.025
+    assert by_key[asr_mm_key].total_ms == 0.02
+    assert by_key[asr_req_key].total_ms == 0.005
 
     thinker_ttft_key = (
         "thinker",

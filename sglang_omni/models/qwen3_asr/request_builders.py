@@ -32,6 +32,7 @@ from sglang.srt.managers.schedule_batch import (
 from sglang.srt.sampling.sampling_params import SamplingParams
 
 from sglang_omni.proto import StagePayload
+from sglang_omni.profiler.event_recorder import emit as _emit_event
 from sglang_omni.scheduling.sglang_backend import SGLangARRequestData
 
 from .audio_lengths import qwen3_asr_num_audio_tokens
@@ -167,7 +168,18 @@ def make_qwen3_asr_scheduler_adapters(
 
     def request_builder(payload: StagePayload) -> Qwen3ASRRequestData:
         params = payload.request.params or {}
+        _emit_event(
+            request_id=payload.request_id,
+            stage=None,
+            event_name="qwen3_asr_load_audio_start",
+        )
         audio = load_audio(_audio_source_from_payload(payload))
+        _emit_event(
+            request_id=payload.request_id,
+            stage=None,
+            event_name="qwen3_asr_load_audio_end",
+            metadata={"samples": len(audio), "sample_rate": _SAMPLE_RATE},
+        )
         audio_duration_s = float(len(audio) / _SAMPLE_RATE)
         fingerprint = _audio_fingerprint(audio)
 
@@ -179,6 +191,11 @@ def make_qwen3_asr_scheduler_adapters(
         # refs:
         #  https://github.com/huggingface/transformers/blob/main/src/transformers/models/whisper/feature_extraction_whisper.py
         #  https://github.com/huggingface/transformers/issues/26241
+        _emit_event(
+            request_id=payload.request_id,
+            stage=None,
+            event_name="qwen3_asr_feature_extract_start",
+        )
         extracted = feature_extractor(
             audio,
             sampling_rate=_SAMPLE_RATE,
@@ -186,6 +203,11 @@ def make_qwen3_asr_scheduler_adapters(
             return_attention_mask=True,
             padding="longest",
             truncation=True,
+        )
+        _emit_event(
+            request_id=payload.request_id,
+            stage=None,
+            event_name="qwen3_asr_feature_extract_end",
         )
         features = extracted.input_features  # [128, true_frames] (<= 3000)
         feature_attention_mask = getattr(extracted, "attention_mask", None)
@@ -207,8 +229,28 @@ def make_qwen3_asr_scheduler_adapters(
         forced_language = {"zh": "Chinese", "cn": "Chinese"}.get(
             lang_raw, "Chinese" if lang_raw.startswith("zh") else "English"
         )
+        _emit_event(
+            request_id=payload.request_id,
+            stage=None,
+            event_name="qwen3_asr_prompt_build_start",
+        )
         input_ids = _build_prompt_ids(num_audio_tokens, forced_language)
+        _emit_event(
+            request_id=payload.request_id,
+            stage=None,
+            event_name="qwen3_asr_prompt_build_end",
+            metadata={
+                "language": forced_language,
+                "num_audio_tokens": num_audio_tokens,
+                "prompt_tokens": len(input_ids),
+            },
+        )
 
+        _emit_event(
+            request_id=payload.request_id,
+            stage=None,
+            event_name="qwen3_asr_multimodal_pack_start",
+        )
         audio_item = MultimodalDataItem(
             modality=Modality.AUDIO,
             hash=_audio_fingerprint_int(fingerprint),
@@ -243,7 +285,17 @@ def make_qwen3_asr_scheduler_adapters(
         positions = torch.arange(seq_len, dtype=torch.long)
         mm_inputs.mrope_positions = positions.unsqueeze(0).expand(3, -1).clone()
         mm_inputs.mrope_position_delta = torch.tensor([0], dtype=torch.long)
+        _emit_event(
+            request_id=payload.request_id,
+            stage=None,
+            event_name="qwen3_asr_multimodal_pack_end",
+        )
 
+        _emit_event(
+            request_id=payload.request_id,
+            stage=None,
+            event_name="qwen3_asr_req_pack_start",
+        )
         temperature = float(params.get("temperature") or 0.0)
         if temperature == 0.0:
             # Qwen3-ASR degenerates under pure-greedy (emits only the language
@@ -272,6 +324,15 @@ def make_qwen3_asr_scheduler_adapters(
         )
         req.multimodal_inputs = mm_inputs
         req._codec_suppress_tokens = None
+        _emit_event(
+            request_id=payload.request_id,
+            stage=None,
+            event_name="qwen3_asr_req_pack_end",
+            metadata={
+                "max_new_tokens": request_max_new_tokens,
+                "temperature": temperature,
+            },
+        )
 
         return Qwen3ASRRequestData(
             input_ids=torch.tensor(input_ids, dtype=torch.long),

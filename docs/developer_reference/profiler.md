@@ -75,6 +75,11 @@ Supporting events used for finer-grained breakdown:
 | Stage | `stage_stream_chunk_received` | Each stream chunk materialized and ready for the receiver scheduler, including coordinator terminal chunks |
 | AR scheduler | `scheduler_queue_enter` | Built request entered the scheduler queue |
 | AR scheduler | `scheduler_first_emit` | First `stream_output_builder` emission per request |
+| Qwen3-ASR request builder | `qwen3_asr_load_audio_start` / `_end` | Audio bytes/path decode, mono conversion, and 16 kHz resample |
+| Qwen3-ASR request builder | `qwen3_asr_feature_extract_start` / `_end` | Whisper feature extraction into mel features |
+| Qwen3-ASR request builder | `qwen3_asr_prompt_build_start` / `_end` | Prompt token construction with `<\|audio_pad\|>` placeholders |
+| Qwen3-ASR request builder | `qwen3_asr_multimodal_pack_start` / `_end` | `MultimodalDataItem` / offsets / MRoPE setup |
+| Qwen3-ASR request builder | `qwen3_asr_req_pack_start` / `_end` | Sampling params and SGLang `Req` construction |
 
 Custom callsites can call `sglang_omni.profiler.event_recorder.emit(...)` to
 add domain-specific events. Events from inactive recorders are no-ops, so

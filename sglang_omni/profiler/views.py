@@ -138,6 +138,11 @@ _STAGE_INTERVAL_EVENTS = (
     ("encoder_start", "encoder_end"),
     ("preprocess_start", "preprocess_end"),
     ("scheduler_request_build_start", "scheduler_request_build_end"),
+    ("qwen3_asr_load_audio_start", "qwen3_asr_load_audio_end"),
+    ("qwen3_asr_feature_extract_start", "qwen3_asr_feature_extract_end"),
+    ("qwen3_asr_prompt_build_start", "qwen3_asr_prompt_build_end"),
+    ("qwen3_asr_multimodal_pack_start", "qwen3_asr_multimodal_pack_end"),
+    ("qwen3_asr_req_pack_start", "qwen3_asr_req_pack_end"),
     ("scheduler_prefill_start", "stage_first_stream_chunk_sent"),
     ("scheduler_prefill_start", "scheduler_first_emit"),
 )
