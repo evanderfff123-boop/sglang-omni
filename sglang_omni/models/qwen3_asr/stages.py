@@ -9,6 +9,7 @@ from sglang.srt.managers.mm_utils import init_mm_embedding_cache
 from transformers import AutoFeatureExtractor, AutoTokenizer
 
 from sglang_omni.model_runner.base import ModelRunner
+from sglang_omni.models.qwen3_asr import configuration_qwen3_asr as _qwen3_asr_config  # noqa: F401
 from sglang_omni.models.qwen3_asr.request_builders import (
     make_qwen3_asr_scheduler_adapters,
 )
