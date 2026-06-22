@@ -646,11 +646,56 @@ class OmniScheduler:
             # needs it (the fallback reaches upstream run_batch, which counts).
             self.forward_ct = getattr(self, "forward_ct", 0) + 1
             sched_output = self._build_sched_output(batch)
+            metadata = self._batch_profile_metadata(batch)
+            self._emit_scheduler_batch_event(
+                sched_output,
+                "scheduler_model_execute_start",
+                metadata=metadata,
+            )
             mr_output = self._model_runner.execute(sched_output)
+            self._emit_scheduler_batch_event(
+                sched_output,
+                "scheduler_model_execute_end",
+                metadata=metadata,
+            )
             self._emit_stream_output(sched_output, mr_output)
             return self._make_batch_result(batch, mr_output)
         # Fallback: call upstream's run_batch (uses tp_worker directly)
         return _Upstream.run_batch(self, batch, pp_proxy_tensors)
+
+    def _batch_profile_metadata(self, batch: Any) -> dict[str, Any]:
+        mode = getattr(batch, "forward_mode", None)
+        metadata: dict[str, Any] = {
+            "batch_size": len(getattr(batch, "reqs", []) or []),
+            "forward_ct": int(getattr(self, "forward_ct", 0)),
+            "forward_mode": repr(mode),
+        }
+        for name in ("is_extend", "is_decode"):
+            method = getattr(mode, name, None)
+            if callable(method):
+                try:
+                    metadata[name] = bool(method())
+                except Exception:
+                    pass
+        for attr in ("is_prefill_only", "is_extend_in_batch"):
+            if hasattr(batch, attr):
+                metadata[attr] = bool(getattr(batch, attr))
+        return metadata
+
+    @staticmethod
+    def _emit_scheduler_batch_event(
+        sched_output: Any,
+        event_name: str,
+        *,
+        metadata: dict[str, Any],
+    ) -> None:
+        for sched_req in sched_output.requests:
+            _emit_event(
+                request_id=sched_req.request_id,
+                stage=None,
+                event_name=event_name,
+                metadata=metadata,
+            )
 
     def _build_sched_output(self, batch):
         """Wrap a ScheduleBatch into the SchedulerOutput the model runner
@@ -790,7 +835,18 @@ class OmniScheduler:
                 else None
             )
             try:
+                _emit_event(
+                    request_id=rid,
+                    stage=None,
+                    event_name="scheduler_result_adapter_start",
+                    metadata={"output_tokens": len(data.output_ids or [])},
+                )
                 result = self._result_adapter(data)
+                _emit_event(
+                    request_id=rid,
+                    stage=None,
+                    event_name="scheduler_result_adapter_end",
+                )
             except Exception as exc:
                 logger.exception(
                     "OmniScheduler result adapter failed for request %s", rid
@@ -805,6 +861,12 @@ class OmniScheduler:
 
             self._first_emit_done.discard(rid)
             self._prefill_start_done.discard(rid)
+            _emit_event(
+                request_id=rid,
+                stage=None,
+                event_name="scheduler_result_enqueued",
+                metadata={"output_tokens": len(data.output_ids or [])},
+            )
             self.outbox.put(
                 OutgoingMessage(
                     request_id=rid,
