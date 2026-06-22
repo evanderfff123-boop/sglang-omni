@@ -647,12 +647,23 @@ class OmniScheduler:
             self.forward_ct = getattr(self, "forward_ct", 0) + 1
             sched_output = self._build_sched_output(batch)
             metadata = self._batch_profile_metadata(batch)
+            phase_event_prefix = self._batch_profile_phase_event_prefix(metadata)
             self._emit_scheduler_batch_event(
                 sched_output,
                 "scheduler_model_execute_start",
                 metadata=metadata,
             )
+            self._emit_scheduler_batch_event(
+                sched_output,
+                f"{phase_event_prefix}_start",
+                metadata=metadata,
+            )
             mr_output = self._model_runner.execute(sched_output)
+            self._emit_scheduler_batch_event(
+                sched_output,
+                f"{phase_event_prefix}_end",
+                metadata=metadata,
+            )
             self._emit_scheduler_batch_event(
                 sched_output,
                 "scheduler_model_execute_end",
@@ -681,6 +692,14 @@ class OmniScheduler:
             if hasattr(batch, attr):
                 metadata[attr] = bool(getattr(batch, attr))
         return metadata
+
+    @staticmethod
+    def _batch_profile_phase_event_prefix(metadata: dict[str, Any]) -> str:
+        if bool(metadata.get("is_extend")):
+            return "scheduler_prefill_execute"
+        if bool(metadata.get("is_decode")):
+            return "scheduler_decode_execute"
+        return "scheduler_other_execute"
 
     @staticmethod
     def _emit_scheduler_batch_event(
@@ -865,7 +884,10 @@ class OmniScheduler:
                 request_id=rid,
                 stage=None,
                 event_name="scheduler_result_enqueued",
-                metadata={"output_tokens": len(data.output_ids or [])},
+                metadata={
+                    "output_tokens": len(data.output_ids or []),
+                    "finish_reason": data.finish_reason,
+                },
             )
             self.outbox.put(
                 OutgoingMessage(
