@@ -32,6 +32,7 @@ from sglang.srt.managers.schedule_batch import (
 from sglang.srt.sampling.sampling_params import SamplingParams
 
 from sglang_omni.proto import StagePayload
+from sglang_omni.profiler.event_recorder import emit as _emit_event
 from sglang_omni.scheduling.sglang_backend import SGLangARRequestData
 
 from .audio_lengths import qwen3_asr_num_audio_tokens
@@ -166,10 +167,32 @@ def make_qwen3_asr_scheduler_adapters(
         return tokenizer(prompt, add_special_tokens=False).input_ids
 
     def request_builder(payload: StagePayload) -> Qwen3ASRRequestData:
+        request_id = payload.request_id
         params = payload.request.params or {}
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_load_audio_start",
+        )
         audio = load_audio(_audio_source_from_payload(payload))
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_load_audio_end",
+            metadata={"audio_samples": len(audio)},
+        )
         audio_duration_s = float(len(audio) / _SAMPLE_RATE)
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_fingerprint_start",
+        )
         fingerprint = _audio_fingerprint(audio)
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_fingerprint_end",
+        )
 
         # note (Jeffro Qu): unlike Whisper's default 30s window, here we pad the mel to the clip's true length.
         # WhisperFeatureExtractor defaults to padding="max_length", padding every clip to nb_max_frames=3000 (~30s),
@@ -179,6 +202,11 @@ def make_qwen3_asr_scheduler_adapters(
         # refs:
         #  https://github.com/huggingface/transformers/blob/main/src/transformers/models/whisper/feature_extraction_whisper.py
         #  https://github.com/huggingface/transformers/issues/26241
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_feature_extract_start",
+        )
         extracted = feature_extractor(
             audio,
             sampling_rate=_SAMPLE_RATE,
@@ -186,6 +214,11 @@ def make_qwen3_asr_scheduler_adapters(
             return_attention_mask=True,
             padding="longest",
             truncation=True,
+        )
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_feature_extract_end",
         )
         features = extracted.input_features  # [128, true_frames] (<= 3000)
         feature_attention_mask = getattr(extracted, "attention_mask", None)
@@ -207,8 +240,28 @@ def make_qwen3_asr_scheduler_adapters(
         forced_language = {"zh": "Chinese", "cn": "Chinese"}.get(
             lang_raw, "Chinese" if lang_raw.startswith("zh") else "English"
         )
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_prompt_ids_start",
+            metadata={
+                "num_audio_tokens": num_audio_tokens,
+                "forced_language": forced_language,
+            },
+        )
         input_ids = _build_prompt_ids(num_audio_tokens, forced_language)
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_prompt_ids_end",
+            metadata={"prompt_tokens": len(input_ids)},
+        )
 
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_multimodal_pack_start",
+        )
         audio_item = MultimodalDataItem(
             modality=Modality.AUDIO,
             hash=_audio_fingerprint_int(fingerprint),
@@ -243,7 +296,18 @@ def make_qwen3_asr_scheduler_adapters(
         positions = torch.arange(seq_len, dtype=torch.long)
         mm_inputs.mrope_positions = positions.unsqueeze(0).expand(3, -1).clone()
         mm_inputs.mrope_position_delta = torch.tensor([0], dtype=torch.long)
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_multimodal_pack_end",
+            metadata={"seq_len": seq_len, "num_audio_tokens": num_audio_tokens},
+        )
 
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_sampling_params_start",
+        )
         temperature = float(params.get("temperature") or 0.0)
         if temperature == 0.0:
             # Qwen3-ASR degenerates under pure-greedy (emits only the language
@@ -261,9 +325,23 @@ def make_qwen3_asr_scheduler_adapters(
             stop_token_ids=[eos_token_id],
         )
         sampling_params.normalize(tokenizer=None)
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_sampling_params_end",
+            metadata={
+                "temperature": temperature,
+                "max_new_tokens": request_max_new_tokens,
+            },
+        )
 
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_req_pack_start",
+        )
         req = Req(
-            rid=payload.request_id,
+            rid=request_id,
             origin_input_text="",
             origin_input_ids=input_ids,
             sampling_params=sampling_params,
@@ -273,7 +351,7 @@ def make_qwen3_asr_scheduler_adapters(
         req.multimodal_inputs = mm_inputs
         req._codec_suppress_tokens = None
 
-        return Qwen3ASRRequestData(
+        data = Qwen3ASRRequestData(
             input_ids=torch.tensor(input_ids, dtype=torch.long),
             req=req,
             prompt_token_ids=input_ids,
@@ -284,6 +362,12 @@ def make_qwen3_asr_scheduler_adapters(
             engine_start_s=time.perf_counter(),
             stage_payload=payload,
         )
+        _emit_event(
+            request_id=request_id,
+            stage=None,
+            event_name="qwen3_asr_req_pack_end",
+        )
+        return data
 
     def result_adapter(data: Qwen3ASRRequestData) -> StagePayload:
         payload = data.stage_payload
