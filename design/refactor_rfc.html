@@ -27,29 +27,28 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=a64801f4" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=a64801f4" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../_static/documentation_options.js?v=98feffa1"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=ccdb6887"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
 
 
@@ -58,173 +57,11 @@
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -269,6 +106,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -276,7 +139,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -293,42 +164,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -351,7 +280,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -362,12 +291,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -387,8 +310,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -400,7 +323,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -412,9 +335,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -437,8 +360,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -448,10 +374,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -476,39 +400,44 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 
 window.addEventListener("load", load);
 window.runMermaid = runMermaid;</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'design/refactor_rfc';</script>
-    <script src="../_static/js/qwen3_omni_server_generator.js?v=621ec60e"></script>
-    <script src="../_static/js/ming_omni_server_generator.js?v=694b1473"></script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/js/qwen3_omni_server_generator.js?v=d7738e8a"></script>
+    <script src="../_static/js/ming_omni_server_generator.js?v=7979a72f"></script>
     <link rel="icon" href="../_static/logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.0" />
-    <meta name="docbuild:last-update" content="Jun 22, 2026"/>
+  <meta name="docsearch:version" content="0.1.5" />
+    <meta name="docbuild:last-update" content="Sep 13, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -534,7 +463,51 @@ window.runMermaid = runMermaid;</script>
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -592,6 +565,9 @@ window.runMermaid = runMermaid;</script>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">🚀 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Installation — Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="nav bd-sidenav">
@@ -599,19 +575,34 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/voxtral_tts.html">Voxtral TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fishaudio_s2_pro.html">Fish Audio S2-Pro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_tts.html">Qwen3 TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_tts.html">Ming-Omni-TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_tts.html">MOSS-TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_tts_local.html">MOSS-TTS-Local</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/dots_tts.html">dots.tts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/minimax_music3.html">MiniMax Music 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/zonos2.html">ZONOS2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_asr.html">Qwen3-ASR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_asr.html">Fun-ASR-Nano</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/arkasr.html">ARK-ASR-3B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_transcribe_diarize.html">MOSS-Transcribe-Diarize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/whisper_asr.html">Whisper ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_omni.html">Qwen3-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_omni.html">Ming-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/llada2_uni.html">LLaDA2.0-Uni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/auk.html">AuK</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">General Usage</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/qwen3_omni.html">Omni Model Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/audio_translations.html">Audio Translations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/tts.html">TTS Model Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">Omni Router Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology.html">Process Topology, Replicas, and GPU Sharing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/tts_process_topology.html">TTS Process Topology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology_migration.html">Process Topology Migration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
 <ul class="nav bd-sidenav">
@@ -623,9 +614,13 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/apiserver_design.html">API Server Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/pipeline.html">Pipeline Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/config.html">Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/adding_parameters.html">Adding a Parameter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/communication.html">Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/reference_encode_service.html">Reference Encode Service</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/profiler.html">Request-level profiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/qwen3_asr_concurrency_profile.html">Qwen3-ASR High-Concurrency Benchmark and Bottleneck Profile</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
 
     </div>
@@ -819,11 +814,18 @@ window.runMermaid = runMermaid;</script>
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -851,9 +853,9 @@ window.runMermaid = runMermaid;</script>
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-overview">System Overview</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layer-responsibilities">Layer Responsibilities</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#directory-layout">Directory Layout</a></li>
@@ -861,7 +863,7 @@ window.runMermaid = runMermaid;</script>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-example-fish-audio-s2-pro">End-to-end example: Fish Audio S2-Pro</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-layer">Pipeline Layer</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-layer">Pipeline Layer</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#http-websocket">HTTP/Websocket</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#client">Client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinator">Coordinator</a></li>
@@ -873,7 +875,7 @@ window.runMermaid = runMermaid;</script>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relay-io-utility-module"><code class="docutils literal notranslate"><span class="pre">relay_io</span></code> Utility Module</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scheduling-layer">Scheduling Layer</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scheduling-layer">Scheduling Layer</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omnischeduler-composition-with-sglang">OmniScheduler — Composition with SGLang</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#composition-boundary-with-sglang">Composition boundary with SGLang</a></li>
 </ul>
@@ -884,7 +886,7 @@ window.runMermaid = runMermaid;</script>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#message-types">Message Types</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-runner-callbacks">Model Runner + Callbacks</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-runner-callbacks">Model Runner + Callbacks</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelrunner-base"><code class="docutils literal notranslate"><span class="pre">ModelRunner</span></code> (Base)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#thinkermodelrunner"><code class="docutils literal notranslate"><span class="pre">ThinkerModelRunner</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feedbackarmodelrunner"><code class="docutils literal notranslate"><span class="pre">FeedbackARModelRunner</span></code></a><ul class="nav section-nav flex-column">
@@ -895,12 +897,12 @@ window.runMermaid = runMermaid;</script>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-forward-one-decode-step-ar-codebook">Model.forward(): One Decode Step (AR + Codebook)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-directory-convention">Model Directory Convention</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-directory-convention">Model Directory Convention</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qwen3-omni">Qwen3-Omni</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fish-audio-s2-pro">Fish Audio S2-Pro</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declarative-config">Declarative Config</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declarative-config">Declarative Config</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stageconfig-reference"><code class="docutils literal notranslate"><span class="pre">StageConfig</span></code> reference</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#route-fn-contract"><code class="docutils literal notranslate"><span class="pre">route_fn</span></code> contract</a></li>
@@ -911,7 +913,7 @@ window.runMermaid = runMermaid;</script>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipelineconfig-reference"><code class="docutils literal notranslate"><span class="pre">PipelineConfig</span></code> reference</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-process-runner">Multi-Process Runner</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-process-runner">Multi-Process Runner</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stagelaunchconfig"><code class="docutils literal notranslate"><span class="pre">StageLaunchConfig</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parallelism-axes-tp-today-extension-path">Parallelism axes — TP today, extension path</a></li>
 </ul>
@@ -921,7 +923,7 @@ window.runMermaid = runMermaid;</script>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tensor-parallelism-support">Tensor Parallelism Support</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-pipelines">Supported Pipelines</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-pipelines">Supported Pipelines</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qwen3-omni-8-stage-speech">Qwen3-Omni (8-stage speech)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fish-audio-s2-pro-3-stage-tts">Fish Audio S2-Pro (3-stage TTS)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mimo-audio-249-planned">MiMo-Audio (#249) — planned</a></li>
@@ -930,7 +932,7 @@ window.runMermaid = runMermaid;</script>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-new-model">Adding a New Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#progress-tracking">Progress Tracking</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-decision-history">Design Decision History</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-decision-history">Design Decision History</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pr-294-alternative-pipeline-added-rfc">2026-04-15 — PR #294: Alternative pipeline added [RFC]</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pr-334-v1-pipeline-added-rfc">2026-04-23 — PR #334: V1 pipeline added [RFC]</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pr-385-openai-realtime-websocket-endpoint-v1-feature">2026-05-04 — PR #385: OpenAI Realtime WebSocket endpoint [V1, Feature]</a></li>
@@ -1294,7 +1296,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <p>All schedulers share the same interface: <code class="docutils literal notranslate"><span class="pre">inbox</span></code>, <code class="docutils literal notranslate"><span class="pre">outbox</span></code>, <code class="docutils literal notranslate"><span class="pre">start()</span></code>, <code class="docutils literal notranslate"><span class="pre">stop()</span></code>, <code class="docutils literal notranslate"><span class="pre">abort()</span></code>.</p>
 <section id="omnischeduler-composition-with-sglang">
 <h3>OmniScheduler — Composition with SGLang<a class="headerlink" href="#omnischeduler-composition-with-sglang" title="Link to this heading">#</a></h3>
-<p>For AR stages. Subset of SGLang Scheduler — reuses <code class="docutils literal notranslate"><span class="pre">get_next_batch_to_run()</span></code>, <code class="docutils literal notranslate"><span class="pre">run_batch()</span></code>, <code class="docutils literal notranslate"><span class="pre">process_batch_result()</span></code>, <code class="docutils literal notranslate"><span class="pre">event_loop_normal()</span></code>, overlap scheduling.</p>
+<p>For AR stages. Subset of SGLang Scheduler — reuses <code class="docutils literal notranslate"><span class="pre">get_next_batch_to_run()</span></code>, <code class="docutils literal notranslate"><span class="pre">run_batch()</span></code>, <code class="docutils literal notranslate"><span class="pre">process_batch_result()</span></code>, <code class="docutils literal notranslate"><span class="pre">event_loop_normal()</span></code>. (Overlap scheduling ended up unsupported: the <code class="docutils literal notranslate"><span class="pre">Req.inflight_middle_chunks</span></code> decrement lags one iteration on that loop, so <code class="docutils literal notranslate"><span class="pre">_event_loop_overlap</span></code> refuses to run.)</p>
 <ul class="simple">
 <li><p><strong>Reused from SGLang:</strong> <code class="docutils literal notranslate"><span class="pre">get_next_batch_to_run()</span></code>, <code class="docutils literal notranslate"><span class="pre">process_batch_result()</span></code>, <code class="docutils literal notranslate"><span class="pre">self_check_during_idle()</span></code> — KV cache management, prefill/decode scheduling, tree cache, dLLM support</p></li>
 <li><p><strong>Overridden:</strong> <code class="docutils literal notranslate"><span class="pre">init</span></code> (skip ZMQ/tokenizer/metrics), <code class="docutils literal notranslate"><span class="pre">recv_requests()</span></code> (drain inbox, route stream chunks to per-request state), <code class="docutils literal notranslate"><span class="pre">process_input_requests()</span></code> (<code class="docutils literal notranslate"><span class="pre">request_builder</span></code> conversion), <code class="docutils literal notranslate"><span class="pre">run_batch()</span></code> (delegate to ModelRunner), <code class="docutils literal notranslate"><span class="pre">send_to_tokenizer()</span></code> (no-op)</p></li>
@@ -1340,12 +1342,12 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <h3>Message Types<a class="headerlink" href="#message-types" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">IncomingMessage</span><span class="p">:</span>
     <span class="n">request_id</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;new_request&quot;</span> <span class="o">|</span> <span class="s2">&quot;stream_chunk&quot;</span> <span class="o">|</span> <span class="s2">&quot;stream_done&quot;</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="s2">"new_request"</span> <span class="o">|</span> <span class="s2">"stream_chunk"</span> <span class="o">|</span> <span class="s2">"stream_done"</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">Any</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">OutgoingMessage</span><span class="p">:</span>
     <span class="n">request_id</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;result&quot;</span> <span class="o">|</span> <span class="s2">&quot;stream&quot;</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="s2">"result"</span> <span class="o">|</span> <span class="s2">"stream"</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">Any</span>
     <span class="n">target</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>  <span class="c1"># for stream: downstream stage name</span>
 </pre></div>
@@ -1570,29 +1572,29 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stages</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;preprocessing&quot;</span><span class="p">,</span>
-                <span class="n">factory</span><span class="o">=</span><span class="s2">&quot;...create_preprocessing_executor&quot;</span><span class="p">,</span>
-                <span class="n">route_fn</span><span class="o">=</span><span class="s2">&quot;...routing.preprocessing_next&quot;</span><span class="p">),</span>
+    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"preprocessing"</span><span class="p">,</span>
+                <span class="n">factory</span><span class="o">=</span><span class="s2">"...create_preprocessing_executor"</span><span class="p">,</span>
+                <span class="n">route_fn</span><span class="o">=</span><span class="s2">"...routing.preprocessing_next"</span><span class="p">),</span>
 
-    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;image_encoder&quot;</span><span class="p">,</span>
-                <span class="n">factory</span><span class="o">=</span><span class="s2">&quot;...create_image_encoder_executor&quot;</span><span class="p">,</span>
-                <span class="n">gpu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">next</span><span class="o">=</span><span class="s2">&quot;mm_aggregate&quot;</span><span class="p">),</span>
+    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"image_encoder"</span><span class="p">,</span>
+                <span class="n">factory</span><span class="o">=</span><span class="s2">"...create_image_encoder_executor"</span><span class="p">,</span>
+                <span class="n">gpu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">next</span><span class="o">=</span><span class="s2">"mm_aggregate"</span><span class="p">),</span>
 
-    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;mm_aggregate&quot;</span><span class="p">,</span>
-                <span class="n">factory</span><span class="o">=</span><span class="s2">&quot;...create_aggregate_executor&quot;</span><span class="p">,</span>
-                <span class="n">wait_for</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;image_encoder&quot;</span><span class="p">,</span> <span class="s2">&quot;audio_encoder&quot;</span><span class="p">],</span>
-                <span class="n">merge_fn</span><span class="o">=</span><span class="s2">&quot;...merge_for_thinker&quot;</span><span class="p">,</span>
-                <span class="nb">next</span><span class="o">=</span><span class="s2">&quot;thinker&quot;</span><span class="p">),</span>
+    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"mm_aggregate"</span><span class="p">,</span>
+                <span class="n">factory</span><span class="o">=</span><span class="s2">"...create_aggregate_executor"</span><span class="p">,</span>
+                <span class="n">wait_for</span><span class="o">=</span><span class="p">[</span><span class="s2">"preprocessing"</span><span class="p">,</span> <span class="s2">"image_encoder"</span><span class="p">,</span> <span class="s2">"audio_encoder"</span><span class="p">],</span>
+                <span class="n">merge_fn</span><span class="o">=</span><span class="s2">"...merge_for_thinker"</span><span class="p">,</span>
+                <span class="nb">next</span><span class="o">=</span><span class="s2">"thinker"</span><span class="p">),</span>
 
-    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;thinker&quot;</span><span class="p">,</span>
-                <span class="n">factory</span><span class="o">=</span><span class="s2">&quot;...create_thinker_executor&quot;</span><span class="p">,</span>
-                <span class="n">factory_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;speech_enabled&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-                <span class="n">gpu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">next</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;decode&quot;</span><span class="p">,</span> <span class="s2">&quot;talker_ar&quot;</span><span class="p">],</span>
-                <span class="n">stream_to</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;talker_ar&quot;</span><span class="p">,</span> <span class="s2">&quot;decode&quot;</span><span class="p">]),</span>
+    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"thinker"</span><span class="p">,</span>
+                <span class="n">factory</span><span class="o">=</span><span class="s2">"...create_thinker_executor"</span><span class="p">,</span>
+                <span class="n">factory_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"speech_enabled"</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+                <span class="n">gpu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">next</span><span class="o">=</span><span class="p">[</span><span class="s2">"decode"</span><span class="p">,</span> <span class="s2">"talker_ar"</span><span class="p">],</span>
+                <span class="n">stream_to</span><span class="o">=</span><span class="p">[</span><span class="s2">"talker_ar"</span><span class="p">,</span> <span class="s2">"decode"</span><span class="p">]),</span>
 
-    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;decode&quot;</span><span class="p">,</span> <span class="n">factory</span><span class="o">=</span><span class="s2">&quot;...create_decode&quot;</span><span class="p">,</span> <span class="n">terminal</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"decode"</span><span class="p">,</span> <span class="n">factory</span><span class="o">=</span><span class="s2">"...create_decode"</span><span class="p">,</span> <span class="n">terminal</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
 
-    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;code2wav&quot;</span><span class="p">,</span> <span class="n">factory</span><span class="o">=</span><span class="s2">&quot;...create_code2wav&quot;</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">terminal</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"code2wav"</span><span class="p">,</span> <span class="n">factory</span><span class="o">=</span><span class="s2">"...create_code2wav"</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">terminal</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
 <span class="p">]</span>
 </pre></div>
 </div>
@@ -1760,7 +1762,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <p>TP within a stage is orthogonal to pipeline parallelism between stages. For a TP stage, its <code class="docutils literal notranslate"><span class="pre">StageGroup</span></code> spawns <code class="docutils literal notranslate"><span class="pre">tp_size</span></code> processes. Each process runs a full <code class="docutils literal notranslate"><span class="pre">OmniScheduler</span></code> + <code class="docutils literal notranslate"><span class="pre">ModelWorker</span></code> with a different <code class="docutils literal notranslate"><span class="pre">tp_rank</span></code> and <code class="docutils literal notranslate"><span class="pre">gpu_id</span></code>. NCCL collectives inside the model forward keep TP ranks in lockstep. The Coordinator is TP-unaware and only talks to rank 0 inside the TP group.</p>
 <p>Within a TP group, rank 0 receives from the control plane and broadcasts to peer ranks. All ranks make identical scheduling decisions. Only rank 0 sends results downstream. Each stage gets its own NCCL port (<code class="docutils literal notranslate"><span class="pre">_NcclPortAllocator</span></code> in <code class="docutils literal notranslate"><span class="pre">mp_runner.py</span></code>).</p>
 <p>Declaring TP in a stage:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;thinker&quot;</span><span class="p">,</span> <span class="n">factory</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">tp_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">StageConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"thinker"</span><span class="p">,</span> <span class="n">factory</span><span class="o">=</span><span class="s2">"..."</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">tp_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">StageGroup</span></code> spawns 4 processes. NCCL collectives inside the model forward keep them in lockstep. The coordinator only talks to rank 0. Each stage gets its own NCCL port.</p>
@@ -1861,6 +1863,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li><p><strong>Qwen-Omni optimizations:</strong> piecewise CUDA Graph for talker, high-performance code-predictor backend</p></li>
 </ul>
 <p><strong>Why it matters:</strong> The discoverability anchor for the V0 → V1 cutover. Names individual owners per work item so contributors can pick up threads independently; several follow-up issues and PRs in this history root back to this trackboard.</p>
+<p><a id="2026-05-04--pr-385-openai-realtime-websocket-endpoint-v1-feature"></a></p>
 </section>
 <section id="pr-385-openai-realtime-websocket-endpoint-v1-feature">
 <h3><a class="reference external" href="https://github.com/sgl-project/sglang-omni/pull/385">2026-05-04 — PR #385: OpenAI Realtime WebSocket endpoint [V1, Feature]</a><a class="headerlink" href="#pr-385-openai-realtime-websocket-endpoint-v1-feature" title="Link to this heading">#</a></h3>
@@ -1923,6 +1926,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li><p><strong>Outcome:</strong> closed without merging; consolidation absorbed into #447</p></li>
 </ul>
 <p><strong>Why it matters:</strong> Captures the rationale that drove the launcher consolidation. The diagnosis and bugfix informed #447 and downstream cleanups even though no commits from this branch shipped — kept here to attribute both the design decision and the double-launch bugfix correctly.</p>
+<p><a id="2026-05-12--pr-430-colocated-stage-execution-colocation"></a></p>
 </section>
 <section id="pr-430-colocated-stage-execution-colocation">
 <h3><a class="reference external" href="https://github.com/sgl-project/sglang-omni/pull/430">2026-05-12 — PR #430: Colocated Stage Execution [Colocation]</a><a class="headerlink" href="#pr-430-colocated-stage-execution-colocation" title="Link to this heading">#</a></h3>
@@ -1936,6 +1940,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li><p><strong>Qwen3-Omni placement policy:</strong> rejects unsupported topologies (standalone <code class="docutils literal notranslate"><span class="pre">code_predictor</span></code>, unsupported thinker / talker TP); admits same-GPU thinker / talker only via <code class="docutils literal notranslate"><span class="pre">Qwen3OmniSpeechColocatedPipelineConfig</span></code></p></li>
 </ul>
 <p><strong>Why it matters:</strong> The biggest single deployment-shape win in the V1 refactor. Lets a thinker + talker speech model run as one process on one GPU rather than two separate stages, dramatically reducing the resource footprint for inference clusters that don’t need horizontal stage parallelism.</p>
+<p><a id="2026-05-15--pr-447-unify-serving-on-multiprocess-runner-rfc"></a></p>
 </section>
 <section id="pr-447-unify-serving-on-multiprocess-runner-rfc">
 <h3><a class="reference external" href="https://github.com/sgl-project/sglang-omni/pull/447">2026-05-15 — PR #447: Unify serving on multiprocess runner [RFC]</a><a class="headerlink" href="#pr-447-unify-serving-on-multiprocess-runner-rfc" title="Link to this heading">#</a></h3>
@@ -2286,9 +2291,9 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-overview">System Overview</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layer-responsibilities">Layer Responsibilities</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#directory-layout">Directory Layout</a></li>
@@ -2296,7 +2301,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-example-fish-audio-s2-pro">End-to-end example: Fish Audio S2-Pro</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-layer">Pipeline Layer</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-layer">Pipeline Layer</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#http-websocket">HTTP/Websocket</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#client">Client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinator">Coordinator</a></li>
@@ -2308,7 +2313,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relay-io-utility-module"><code class="docutils literal notranslate"><span class="pre">relay_io</span></code> Utility Module</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scheduling-layer">Scheduling Layer</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scheduling-layer">Scheduling Layer</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omnischeduler-composition-with-sglang">OmniScheduler — Composition with SGLang</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#composition-boundary-with-sglang">Composition boundary with SGLang</a></li>
 </ul>
@@ -2319,7 +2324,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#message-types">Message Types</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-runner-callbacks">Model Runner + Callbacks</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-runner-callbacks">Model Runner + Callbacks</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelrunner-base"><code class="docutils literal notranslate"><span class="pre">ModelRunner</span></code> (Base)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#thinkermodelrunner"><code class="docutils literal notranslate"><span class="pre">ThinkerModelRunner</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feedbackarmodelrunner"><code class="docutils literal notranslate"><span class="pre">FeedbackARModelRunner</span></code></a><ul class="nav section-nav flex-column">
@@ -2330,12 +2335,12 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-forward-one-decode-step-ar-codebook">Model.forward(): One Decode Step (AR + Codebook)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-directory-convention">Model Directory Convention</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-directory-convention">Model Directory Convention</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qwen3-omni">Qwen3-Omni</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fish-audio-s2-pro">Fish Audio S2-Pro</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declarative-config">Declarative Config</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declarative-config">Declarative Config</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stageconfig-reference"><code class="docutils literal notranslate"><span class="pre">StageConfig</span></code> reference</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#route-fn-contract"><code class="docutils literal notranslate"><span class="pre">route_fn</span></code> contract</a></li>
@@ -2346,7 +2351,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipelineconfig-reference"><code class="docutils literal notranslate"><span class="pre">PipelineConfig</span></code> reference</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-process-runner">Multi-Process Runner</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-process-runner">Multi-Process Runner</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stagelaunchconfig"><code class="docutils literal notranslate"><span class="pre">StageLaunchConfig</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parallelism-axes-tp-today-extension-path">Parallelism axes — TP today, extension path</a></li>
 </ul>
@@ -2356,7 +2361,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tensor-parallelism-support">Tensor Parallelism Support</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-pipelines">Supported Pipelines</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-pipelines">Supported Pipelines</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qwen3-omni-8-stage-speech">Qwen3-Omni (8-stage speech)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fish-audio-s2-pro-3-stage-tts">Fish Audio S2-Pro (3-stage TTS)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mimo-audio-249-planned">MiMo-Audio (#249) — planned</a></li>
@@ -2365,7 +2370,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-new-model">Adding a New Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#progress-tracking">Progress Tracking</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-decision-history">Design Decision History</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-decision-history">Design Decision History</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pr-294-alternative-pipeline-added-rfc">2026-04-15 — PR #294: Alternative pipeline added [RFC]</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pr-334-v1-pipeline-added-rfc">2026-04-23 — PR #334: V1 pipeline added [RFC]</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pr-385-openai-realtime-websocket-endpoint-v1-feature">2026-05-04 — PR #385: OpenAI Realtime WebSocket endpoint [V1, Feature]</a></li>
@@ -2437,7 +2442,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jun 22, 2026.
+  Last updated on Sep 13, 2026.
   <br/>
 </p>
   </div>
@@ -2455,8 +2460,8 @@ By SGLang-Omni Team
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

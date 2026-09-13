@@ -1,417 +1,447 @@
-# Omni Router Usage
+# SGLang-Omni Rust Router
 
-The SGLang-Omni Router is an external HTTP router for Omni V1 deployments. It
-fronts multiple complete Omni V1 API servers and exposes one OpenAI-compatible
-endpoint to clients.
+`sgl-omni-router` is the multi-threaded Rust data plane for SGLang-Omni. It
+routes OpenAI-compatible chat, speech, transcription, translation, and
+realtime requests across compatible worker replicas with bounded admission,
+health-aware selection, and backpressured streaming.
 
-Use the router when you launch more than one `sgl-omni serve` process and want
-one stable endpoint for request distribution, health tracking, and worker-pool
-control.
+## Overview
 
-## Router Topology
+- OpenAI-compatible HTTP and WebSocket routes for Omni, TTS, and ASR workers.
+- Static worker manifests with explicit model, modality, and media contracts.
+- `round_robin` and `least_requests` routing over compatible healthy replicas.
+- Direct request streaming for homogeneous worker cohorts and bounded
+  classification when routing depends on the request body.
+- Pooled upstream HTTP/1.1 connections with request-ID propagation and direct
+  response backpressure.
+- Status-based health checks, exact admission and active-request accounting,
+  Prometheus metrics, diagnostics, and graceful shutdown.
 
-The router is an external HTTP process:
-
-```text
-client
-  |
-  v
-sgl-omni-router
-  |
-  +-- sgl-omni serve worker A
-  +-- sgl-omni serve worker B
+```mermaid
+flowchart LR
+    Client[Client] --> Listener[Bounded HTTP/1 listener]
+    Listener --> Routes[HTTP and WebSocket routes]
+    Routes --> Direct[Direct request path]
+    Routes --> Classified[Bounded classification path]
+    Direct --> Selection[Admission and worker selection]
+    Classified --> Selection
+    Selection --> Relay[Backpressured relay]
+    Relay --> Workers[Compatible healthy worker replicas]
+    Health[Health checks] --> Selection
+    Operations[Metrics and diagnostics] --> Selection
 ```
 
-Each worker is a complete Omni V1 HTTP server. The router does not load model
-weights or split a single request across workers. It selects one routable worker
-for each request, forwards the original request bytes, and returns the worker
-response with router diagnostic headers.
+## Installation
 
-## Launch Workers and Router From YAML
+### Prerequisites
 
-For a local homogeneous pool, `sgl-omni-router` can start the worker replicas
-and then start the router after all managed workers pass `/health`:
+- **Rust and Cargo**
+
+  ```bash
+  # Install rustup (Rust installer and version manager)
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+  # Reload shell environment
+  source "$HOME/.cargo/env"
+
+  # Verify installation
+  rustc --version
+  cargo --version
+  ```
+
+- **SGLang-Omni**, installed using the
+  [installation guide](../get_started/installation.md), for running model
+  workers.
+
+The Rust router is built from this repository as a separate binary. It routes
+requests to configured SGLang-Omni workers but does not install, launch, or
+supervise them.
+
+### Rust Binary
 
 ```bash
-sgl-omni-router \
-  --host 0.0.0.0 \
-  --port 8008 \
-  --launcher-config examples/configs/qwen3_omni_router.yaml \
-  --policy round_robin \
-  --health-failure-threshold 2 \
-  --health-success-threshold 1 \
-  --health-check-interval-secs 10 \
-  --log-level info
+git clone https://github.com/sgl-project/sglang-omni.git
+cd sglang-omni/sglang_omni_router/rust
+
+# Build release binary
+cargo build --release --locked
 ```
 
-Example launcher config:
+`rust-toolchain.toml` selects the supported Rust toolchain. The optimized
+binary is written to `target/release/sgl-omni-router`.
 
-```yaml
-launcher:
-  backend: local
-  model_path: Qwen/Qwen3-Omni-30B-A3B-Instruct
-  model_name: qwen3-omni
-  num_workers: 2
-  num_gpus_per_worker: 1
-  worker_host: 127.0.0.1
-  worker_base_port: 8011
-  worker_extra_args: "--config examples/configs/qwen3_omni_colocated_h20.yaml --colocate"
-  wait_timeout: 600
-```
+## Checking Version
 
-`backend: local` means the router process starts and manages worker
-subprocesses on the same machine. The launched workers are complete Omni V1
-servers started with `sgl-omni serve`; they are not partial
-pipeline stages. The router waits for every managed worker to pass `/health`
-before it starts accepting client traffic, and it stops those managed workers
-when the router exits.
-
-`num_gpus_per_worker` controls automatic GPU grouping. The default Qwen3-Omni
-router example uses colocated workers: each complete speech worker runs on one
-GPU through `examples/configs/qwen3_omni_colocated_h20.yaml`. With
-`num_workers: 2` and `num_gpus_per_worker: 1`, the launcher assigns GPU `0` to
-the first worker and GPU `1` to the second worker when two CUDA devices are
-visible.
-
-Use `examples/configs/qwen3_omni_colocated_h200.yaml` instead for single-H200
-workers.
-
-Set `worker_gpu_ids` only when you need explicit placement. Each entry maps one
-`CUDA_VISIBLE_DEVICES` value to one worker, for example
-`worker_gpu_ids: ["0", "1"]` for two one-GPU colocated Qwen3-Omni workers. Use
-`worker_extra_args: "--text-only"` only if you intentionally want text-output
-workers instead of speech-output workers.
-
-Use `worker_extra_args` for public Omni V1 serve options that are specific to
-the worker process, such as `--mem-fraction-static`, `--thinker-tp-size`, or
-`--text-only`. These arguments are passed to `sgl-omni serve`
-after the launcher-owned flags. When no memory flags are provided, Omni V1 uses
-its normal auto-sizing path.
-
-Use `worker_capabilities` when managed workers intentionally expose only part
-of the Omni API surface. For example, text-only workers should not advertise
-speech or audio-output support:
-
-```yaml
-launcher:
-  backend: local
-  model_path: Qwen/Qwen3-Omni-30B-A3B-Instruct
-  model_name: qwen3-omni
-  num_workers: 2
-  num_gpus_per_worker: 1
-  worker_extra_args: "--text-only"
-  worker_capabilities:
-    - chat
-    - streaming
-    - image_input
-    - audio_input
-    - video_input
-```
-
-If `worker_capabilities` is omitted and `worker_extra_args` contains
-`--text-only`, the router registers the managed workers with the same text-only
-capability set shown above.
-
-For short audio-input / text-output MMSU-style workloads, use the fused
-text-path Qwen3-Omni config instead of the default speech-colocated worker:
-
-```yaml
-launcher:
-  backend: local
-  model_path: Qwen/Qwen3-Omni-30B-A3B-Instruct
-  model_name: qwen3-omni
-  num_workers: 2
-  num_gpus_per_worker: 1
-  worker_extra_args: "--config examples/configs/qwen3_omni_mmsu.yaml --text-only"
-```
-
-This keeps preprocessing, encoders, aggregation, thinker, and decode in one
-worker process while leaving the general speech-colocated topology unchanged.
-
-## Launch Worker Servers Manually
-
-Start each Omni V1 worker separately. The example below launches two colocated
-Qwen3-Omni speech workers on different GPUs and ports:
+After installation, verify the installation and check the version:
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 sgl-omni serve \
-  --model-path Qwen/Qwen3-Omni-30B-A3B-Instruct \
-  --model-name qwen3-omni \
-  --config examples/configs/qwen3_omni_colocated_h20.yaml \
-  --colocate \
-  --host 0.0.0.0 \
-  --port 8011
+./target/release/sgl-omni-router --version
 ```
 
-```bash
-CUDA_VISIBLE_DEVICES=1 sgl-omni serve \
-  --model-path Qwen/Qwen3-Omni-30B-A3B-Instruct \
-  --model-name qwen3-omni \
-  --config examples/configs/qwen3_omni_colocated_h20.yaml \
-  --colocate \
-  --host 0.0.0.0 \
-  --port 8012
+## Quick Start
+
+Choose the example that matches the worker service:
+
+| Configuration | Worker service |
+| --- | --- |
+| `examples/omni.toml` | Multimodal chat with text or audio output |
+| `examples/tts.toml` | Speech synthesis, including PCM streaming |
+| `examples/asr.toml` | Transcription and speech-to-English translation |
+
+The examples define two workers at `127.0.0.1:8000` and
+`127.0.0.1:8001`. Set the worker URLs, model IDs, and service
+profiles to match the processes you are running.
+
+Validate the configuration before starting the router:
+
+```console
+./target/release/sgl-omni-router \
+  --config examples/omni.toml \
+  --check-config
 ```
 
-Worker URLs passed to the router must be base URLs such as
-`http://127.0.0.1:8011`. Do not include endpoint paths, query strings, or
-fragments.
+Start the router:
 
-## Launch the Router
-
-Start the router with the worker URLs:
-
-```bash
-sgl-omni-router \
-  --host 0.0.0.0 \
-  --port 8008 \
-  --worker-urls http://127.0.0.1:8011 http://127.0.0.1:8012 \
-  --policy round_robin \
-  --health-failure-threshold 2 \
-  --health-success-threshold 1 \
-  --health-check-interval-secs 10 \
-  --log-level info
+```console
+./target/release/sgl-omni-router --config examples/omni.toml
 ```
 
-## Router Arguments
+Wait for readiness and send a request:
 
-The table below lists the router command-line arguments.
+```console
+curl --fail http://127.0.0.1:30000/ready
 
-| Argument | Default | Description |
-|---|---|---|
-| `--host` | `0.0.0.0` | Host interface for the router HTTP server. |
-| `--port` | `8000` | Port for the router HTTP server. |
-| `--worker-urls` | not set | Space-separated Omni V1 worker base URLs for a homogeneous worker pool. |
-| `--worker-config` | not set | JSON file that defines workers and optional per-worker model/capability metadata. |
-| `--launcher-config` | not set | YAML file for a managed local worker pool. Do not use with `--worker-urls` or `--worker-config`. |
-| `--policy` | `round_robin` | Routing policy: `round_robin`, `least_request`, or `random`. |
-| `--model` | not set | Model name assigned to every worker when using `--worker-urls`. Do not use with `--worker-config`. |
-| `--request-timeout-secs` | `1800` | Timeout for proxied worker requests. |
-| `--max-payload-size` | `536870912` | Maximum request body size accepted by the router, in bytes. |
-| `--max-connections` | `100` | Maximum number of HTTP connections used by the router's upstream worker client. |
-| `--health-failure-threshold` | `3` | Consecutive failed health checks or routed request failures before a worker becomes unhealthy. |
-| `--health-success-threshold` | `2` | Consecutive successful health checks before an unhealthy or unknown worker becomes healthy. |
-| `--health-check-timeout-secs` | `5` | Timeout for one worker health-check request. |
-| `--health-check-interval-secs` | `10` | Interval between background worker health checks. |
-| `--health-check-endpoint` | `/health` | Worker endpoint used by background health checks. |
-| `--log-level` | `info` | Router and Uvicorn log level. |
-
-Routing policies:
-
-- `round_robin`: rotates through routable workers in order.
-- `least_request`: selects a routable worker with the fewest active data-plane
-  requests, then round-robins among ties.
-- `random`: selects a random routable worker.
-
-Pass exactly one of `--launcher-config`, `--worker-urls`, or
-`--worker-config`. Use `--worker-config` when workers serve different models or
-only a subset of Omni capabilities:
-
-```json
-{
-  "workers": [
-    {
-      "url": "http://127.0.0.1:8011",
-      "model": "qwen3-omni",
-      "capabilities": ["chat", "image_input", "video_input"]
-    },
-    {
-      "url": "http://127.0.0.1:8012",
-      "model": "qwen3-omni",
-      "capabilities": ["chat", "audio_input", "audio_output", "speech"]
-    }
-  ]
-}
+curl --http1.1 http://127.0.0.1:30000/v1/chat/completions \
+  --header 'content-type: application/json' \
+  --data-binary \
+  '{"model":"omni-model","messages":[{"role":"user","content":"hello"}]}'
 ```
 
-Then launch with:
+## Configuration
 
-```bash
-sgl-omni-router \
-  --host 0.0.0.0 \
-  --port 8008 \
-  --worker-config workers.json \
-  --policy least_request
+Configuration is strict UTF-8 TOML. Unknown fields, duplicate fields, missing
+required sections, unsupported schema versions, invalid tracing filters, and
+invalid limits fail validation. `--check-config` validates the file without
+creating a Tokio runtime, binding the listener, initializing tracing, probing
+workers, or changing process limits.
+
+The top-level sections are:
+
+| Section | Purpose |
+| --- | --- |
+| `server` | Listener address, accepted-connection limit, and request-head timeout |
+| `shutdown` | Graceful drain deadline |
+| `logging` | Structured log format and tracing filter |
+| `router` | Routing policy and optional voice owner |
+| `admission` | Global and per-service in-flight limits |
+| `health` | Probe interval, timeout, and transition thresholds |
+| `http` | Shared upstream connection pool and aggregate buffering budget |
+| `http_generation` | Chat trust domain, request limits, and deadline |
+| `http_media` | Enabled media routes, trust domain, request limits, and deadline |
+| `websocket` | Speech and realtime routes with setup and close bounds |
+| `workers` | Worker identity, endpoint, health path, session capacity, and service profiles |
+
+Each worker has a stable ID, base URL, trust domain, optional default model,
+health path, session capacity, and one or more correlated service profiles.
+A profile row describes a combination the worker supports; the router never
+combines independent fields from different rows.
+
+DNS worker authorities are resolved when an upstream connection is opened, so
+health probes and new data connections follow DNS changes. Worker membership
+remains static for the process lifetime.
+
+Configuration limits are deployment budgets. Set admission, connection-pool
+limits, and timeouts from the expected workload and worker topology.
+
+## Supported APIs
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/live` | Process liveness |
+| `GET` | `/ready` | Readiness of every enabled service |
+| `POST` | `/v1/chat/completions` | Chat and multimodal generation |
+| `POST` | `/v1/audio/speech` | Encoded speech or streaming PCM |
+| `POST` | `/v1/audio/speech/batch` | Ordered, unsplit speech batch |
+| `POST` | `/v1/audio/transcriptions` | Multipart transcription |
+| `POST` | `/v1/audio/translations` | Multipart translation |
+| `GET` | `/v1/audio/speech/stream` | Speech WebSocket |
+| `GET` | `/v1/realtime[?model=<id>]` | OpenAI-compatible realtime WebSocket |
+| `GET`, `POST` | `/v1/audio/voices` | List or upload worker-local voices |
+| `DELETE` | `/v1/audio/voices/{name}` | Delete a worker-local voice |
+| `GET` | `/v1/models` | Static model inventory |
+| `GET` | `/metrics` | Prometheus lifecycle and capacity metrics |
+| `GET` | `/diagnostics` | Bounded router state |
+
+Generation requests use HTTP/1.1, JSON content type, and no query string.
+Fixed-length and chunked request bodies are accepted. A single
+`Expect: 100-continue` is handled by the client connection and is not forwarded
+upstream. Ambiguous framing, trailers, other expectations, unsupported content
+encoding, and oversized uploads are rejected before dispatch.
+
+A canonical `x-request-id` identifies each request. A valid caller value is
+preserved; otherwise the router generates one. The same value is sent to the
+worker and returned to the client.
+
+## Routing and Relay
+
+### Request paths
+
+The direct path is available when every eligible replica in a trust-scoped
+cohort has the same concrete default model and compatible profile contract.
+Heterogeneous pools use the classified path. The optional
+`x-sglang-omni-route-model` and `x-sglang-omni-route-stream` headers are checked
+against the classified body and are not forwarded upstream. The router relays
+a direct request body as a backpressured stream.
+
+Requests that require body-owned routing facts reserve aggregate byte capacity,
+read the body once, and classify the model, content forms, media placement,
+input and output modalities, response format, and stream mode. Classification
+runs on Tokio's blocking pool with execution limited to the available CPU
+parallelism, while the aggregate buffered-byte budget bounds concurrent
+classifier memory. The original bytes are forwarded without reconstructing
+JSON or multipart content.
+
+The direct path is bounded by each route's `streamed_request_max_bytes`. The
+classified path is bounded by the route's `buffered_request_max_bytes` per
+request and `http.buffered_request_total_bytes` across chat and media requests.
+Their defaults are 512 MiB, 8 MiB, and 256 MiB respectively. Chunked classified
+requests acquire the shared budget as bytes arrive. Requests without an
+explicit model return `ambiguous_model` when compatible workers do not share
+one default. Classified JSON follows the standard JSON number grammar;
+non-standard `NaN` and `Infinity` tokens are rejected.
+
+Classification completes before worker selection, so classification
+does not occupy an upstream connection.
+
+### Worker selection
+
+`round_robin` rotates across compatible healthy replicas. `least_requests`
+compares active requests and rotates equal ties. Selection increments the
+chosen worker's load before dispatch and performs no network or body work while
+holding the policy lock.
+
+Routing policy is workload-specific. Use full-corpus measurements at the target
+concurrency to choose between the supported policies.
+
+### Admission and backpressure
+
+Global admission counts request envelopes. Per-service admission counts
+requests or sessions, except speech-batch admission, which counts batch items.
+Admission is fail-fast, and its permits and worker-load guard remain held until
+response EOF, upstream error, or downstream cancellation. The worker remains
+responsible for its execution and queue capacity.
+
+The router sends one upstream request through a shared HTTP/1.1 connection
+pool. Redirects, ambient proxies, retries, and automatic decompression are
+disabled. Request and response bodies use direct backpressure without a body
+pump, application queue, or extra relay task.
+
+The request deadline covers upload, connection establishment, and upstream
+response headers. A final worker response received before the upload completes
+is rejected as an upstream protocol error and is not committed downstream.
+After response headers are committed, the response has no total wall-clock
+limit.
+
+Responses still end normally on upstream EOF or error, downstream disconnect,
+or process drain.
+
+## Media and Realtime Sessions
+
+Media routes are enabled independently. Speech batches remain ordered and are
+never split. Classified transcription and translation requests buffer the full
+multipart upload, so heterogeneous ASR deployments must size the buffered
+limits for their largest accepted recordings. Transcription and translation
+share a capacity class but require separate profile tasks.
+
+The router preserves the trusted worker's response content type together with
+JSON, text, SSE, encoded audio, raw PCM, sample-rate and channel metadata,
+usage, completion-token, and finish-reason contracts. It does not decode,
+transcode, or regenerate audio.
+
+Speech and realtime WebSockets terminate both handshakes and pin one worker for
+the complete session. Each frame awaits its destination send, preserving frame
+type and order without relay tasks or application queues. Both links use a 16
+MiB message bound. Speech configuration, upstream transport setup, the first
+worker event, and close convergence use separate deadlines. Application-level
+idle behavior remains worker-owned. A realtime `model` query requires a worker
+with the matching default; an omitted model can use any compatible worker in
+the trust domain. `worker_setup_timeout_ms` is an operator safety bound on the
+initial worker application event; it does not limit session lifetime or mark a
+worker unhealthy when it expires.
+Speech configuration is replayed byte-for-byte; the router extracts routing
+facts while the worker owns protocol-value validation.
+
+Uploaded voices have one explicit owner configured by
+`router.voice_owner_worker_id`. Voice CRUD and uploaded-name requests are
+pinned to that worker. Preset names and explicit references continue to use
+normal worker selection. The router does not store, replicate, or reconcile
+worker-local voice data. `voice_name_policy = "preset"` declares names provided
+by the serving model. `voice_name_policy = "uploaded"` declares names resolved
+from worker-local voice state; hybrid pipelines should use `uploaded` so named
+requests are routed conservatively. A named-voice request is rejected when
+otherwise compatible profiles disagree on this policy.
+Qwen3-TTS CustomVoice profiles use `preset`; Qwen3-TTS Base, Higgs, and hybrid
+dots-style profiles use `uploaded`.
+
+## Health and Readiness
+
+Workers start with unknown health. Each worker has one serial probe loop that
+applies the configured consecutive success and failure thresholds.
+Transport and upstream protocol failures can request an immediate coalesced
+probe. Application responses do not directly change worker health.
+
+`GET /ready` returns `200` while the process is serving and every enabled
+generation, media, and WebSocket service has a compatible healthy worker.
+Readiness also requires the configured uploaded-voice owner to be healthy and
+compatible. Current worker load does not change readiness.
+
+## Operations
+
+`/v1/models` returns a sorted, deduplicated inventory built from worker defaults
+and correlated profile model IDs. `/metrics` exposes Prometheus lifecycle,
+readiness, health, admission, worker-load, listener, buffered-byte,
+classification-slot, and WebSocket-session gauges. It also exposes cumulative
+request and response-header counts, router-generated faults, saturation
+rejections, worker probe outcomes, classification outcomes, WebSocket
+termination reasons, and committed HTTP response-body outcomes.
+
+The response-header histogram measures from router boundary entry until an HTTP
+response is available. It does not measure response-body completion, streaming
+TTFT, or WebSocket-session duration. Requests cancelled before that boundary
+are counted separately. Classification histograms separate slot wait,
+blocking-executor wait, and execution for each request kind. Blocking work that
+outlives a caller timeout or cancellation records its phase durations when that
+work starts or finishes, without changing the caller's terminal outcome.
+WebSocket termination counters distinguish setup from active relay and record
+one bounded terminal cause per upgraded session. They do not measure completion
+of the bounded close handshake. HTTP response-body counters distinguish
+complete bodies, upstream body errors, and bodies dropped before completion.
+The post-commit relay-failure counter is the upstream-error subset.
+`/diagnostics` returns bounded deterministic JSON for the same router-local
+state and marks the configured voice owner. Each diagnostic worker includes
+cumulative dispatch counts for the fixed service classes and voice-control
+operations. A speech batch contributes one dispatch while active worker load
+remains item-weighted. Workers also include their latest probe result, HTTP
+status when present, observation time, transition streaks, and cumulative
+outcomes.
+
+Operations responses snapshot router-local state and never contact workers.
+Admission values come from the semaphores that enforce router limits. Worker
+load comes from the same counters used by `least_requests`. Metric labels use
+fixed vocabularies instead of worker IDs, model IDs, request IDs, paths, or
+client input. Listener usage includes the slot reserved by the pending accept.
+registered WebSocket sessions represent callbacks retained for shutdown.
+
+Structured logging covers lifecycle events, health transitions, and exceptional
+conditions. `logging.filter` accepts a tracing filter expression, and
+`logging.format` accepts `json` or `compact`.
+
+## Networking and Shutdown
+
+`server.max_connections` bounds accepted client sockets. The listener acquires
+capacity before `accept`, and the accepted transport retains the permit through
+HTTP upgrade until the socket closes. Accepted sockets enable `TCP_NODELAY`.
+
+`server.header_read_timeout_ms` limits each initial or keep-alive HTTP/1 request
+head. It does not limit request bodies, active handlers, responses, streams, or
+upgraded transports. Connection-level accept errors retry immediately; other
+accept errors are logged and retried after one second.
+
+On Unix, startup attempts to raise the `RLIMIT_NOFILE` soft limit to `65,535`.
+If the process hard limit prevents that, the router logs a warning and continues.
+Set the process file limit for the deployment's configured connection and
+admission concurrency.
+
+The first `SIGINT` or `SIGTERM` closes admission, stops health work, drops the
+listener, and drains owned tasks. A distinct second signal or the drain
+deadline aborts and joins remaining work and exits with failure.
+
+## Security and Deployment
+
+The router uses one static manifest and one multi-threaded process. It supports
+numeric loopback and non-loopback listener addresses, Linux hosts and
+containers, and MPS data-parallel worker deployments without a Python
+control-plane/data-plane split.
+
+The router does not implement client authentication or terminate TLS. Deploy it
+on a trusted network or behind an authenticated TLS proxy.
+
+Dynamic worker discovery and CRUD, request retries, circuit breakers,
+cache-aware routing, prefill/decode routing, and worker supervision are outside
+this router's data-plane contract.
+
+## Development
+
+### Toolchains
+
+Install the pinned implementation toolchain and minimum-supported Rust version:
+
+```console
+rustup toolchain install 1.97.1 \
+  --profile minimal \
+  --component clippy,rustfmt
+rustup toolchain install 1.90.0 --profile minimal
 ```
 
-## Check Router and Worker State
+`rust-toolchain.toml` selects Rust 1.97.1 for normal commands. Rust 1.90.0 is
+used only for compatibility checks.
 
-The router exposes separate process and worker-pool health surfaces:
+### Shared build cache
 
-```bash
-curl -i http://127.0.0.1:8008/live
-curl -i http://127.0.0.1:8008/ready
-curl -i http://127.0.0.1:8008/health
-curl -s http://127.0.0.1:8008/workers
-curl -s http://127.0.0.1:8008/v1/models
+Cargo writes build artifacts to `target/` by default. Developers using multiple
+Git worktrees can share one build directory:
+
+```console
+export CARGO_TARGET_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/sglang-omni-router/target"
 ```
 
-The endpoints have different meanings:
+Cargo coordinates concurrent access to the shared directory. Different
+toolchains, profiles, targets, and feature sets retain separate fingerprints.
+When `CARGO_TARGET_DIR` is set, Cargo writes the binary to
+`$CARGO_TARGET_DIR/release/sgl-omni-router`.
 
-- `GET /live`: the router process is running. This does not wait for workers to
-  become healthy.
-- `GET /ready`: at least one worker is routable. This returns `503` when all
-  workers are unhealthy, dead, disabled, or still unknown.
-- `GET /health`: worker-pool health summary. This returns `503` when no worker
-  is routable.
-- `GET /workers`: detailed worker state, including `health_state`, `disabled`,
-  `routable`, `active_requests`, failure counters, and last error.
-- `GET /v1/models`: merged model list from routable workers.
+### Quality gates
 
-## Send Requests Through the Router
+Run the same checks used by CI:
 
-Point clients at the router port instead of the worker ports. The request schema
-is the same OpenAI-compatible schema used by each worker server.
-
-Image input with text output:
-
-```bash
-curl -i http://127.0.0.1:8008/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "x-request-id: router-image-1" \
-  -d '{
-    "model": "qwen3-omni",
-    "messages": [
-      {"role": "user", "content": "How many cars are there in the image? Answer briefly."}
-    ],
-    "images": ["tests/data/cars.jpg"],
-    "modalities": ["text"],
-    "max_tokens": 16
-  }'
+```console
+cargo fmt --all -- --check
+cargo +1.90.0 check --workspace --all-targets --all-features --locked
+cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+cargo test --workspace --all-targets --all-features --locked -- --test-threads=1
+RUSTDOCFLAGS="-D warnings" \
+  cargo doc --workspace --all-features --no-deps --locked
+cargo build --release --workspace --all-features --locked
 ```
 
-Streaming text:
+Validate all tracked deployment examples with the release binary:
 
-```bash
-curl -N http://127.0.0.1:8008/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "x-request-id: router-stream-1" \
-  -d '{
-    "model": "qwen3-omni",
-    "messages": [{"role": "user", "content": "Say hello briefly."}],
-    "stream": true,
-    "max_tokens": 16
-  }'
+```console
+binary="${CARGO_TARGET_DIR:-./target}/release/sgl-omni-router"
+git ls-files -- 'examples/*.toml' | LC_ALL=C sort | while IFS= read -r config; do
+  "$binary" --config "$config" --check-config
+done
 ```
 
-The router preserves the original request body. For ordinary JSON requests, it
-parses a bounded amount of request metadata for worker selection and forwards
-the original bytes to the selected worker.
+Unit tests live next to the implementation they exercise. Process, HTTP,
+media, WebSocket, and voice integration tests live under `tests/` and use real
+loopback sockets where transport behavior is part of the contract.
 
-## Manage Workers
+### Source layout
 
-Add a worker at runtime:
+| Path | Responsibility |
+| --- | --- |
+| `src/config.rs` | Strict configuration and cross-field validation |
+| `src/server.rs` | Runtime assembly, routes, listener, and shutdown |
+| `src/worker_pool/` | Admission, health, profiles, policy selection, and worker load |
+| `src/http_relay/` | Shared HTTP client, buffering, body adapters, and relay |
+| `src/http_generation/` | Chat validation and classification |
+| `src/http_media/` | Speech, batch, transcription, translation, and voices |
+| `src/websocket/` | Speech and realtime session setup and relay |
+| `src/operations.rs` | Models, metrics, and diagnostics |
+| `tests/` | Process and protocol integration tests |
 
-```bash
-curl -s http://127.0.0.1:8008/workers \
-  -H "Content-Type: application/json" \
-  -d '{"url":"http://127.0.0.1:8013","model":"qwen3-omni"}'
-```
+## Python Router
 
-Disable a worker without deleting it:
-
-```bash
-curl -s -X PUT http://127.0.0.1:8008/workers/http%3A%2F%2F127.0.0.1%3A8013 \
-  -H "Content-Type: application/json" \
-  -d '{"disabled":true}'
-```
-
-Mark a worker dead for manual quarantine:
-
-```bash
-curl -s -X PUT http://127.0.0.1:8008/workers/http%3A%2F%2F127.0.0.1%3A8013 \
-  -H "Content-Type: application/json" \
-  -d '{"is_dead":true}'
-```
-
-Recover a manually dead worker:
-
-```bash
-curl -s -X PUT http://127.0.0.1:8008/workers/http%3A%2F%2F127.0.0.1%3A8013 \
-  -H "Content-Type: application/json" \
-  -d '{"is_dead":false}'
-```
-
-Delete a worker:
-
-```bash
-curl -s -X DELETE http://127.0.0.1:8008/workers/http%3A%2F%2F127.0.0.1%3A8013
-```
-
-Worker update requests are atomic. If an update returns `400`, the live worker
-state is not partially changed.
-
-## Routing Behavior
-
-The router only selects workers that are healthy, not disabled, and capable of
-serving the request.
-
-The default worker capability set represents a complete Omni V1 replica:
-
-- `chat`
-- `speech`
-- `streaming`
-- `image_input`
-- `audio_input`
-- `video_input`
-- `audio_output`
-
-The router infers required capabilities from each request:
-
-- `/v1/chat/completions` requires `chat`
-- `stream: true` requires `streaming`
-- `images`, `image`, or image message parts require `image_input`
-- `audios`, `audio_inputs`, or audio message parts require `audio_input`
-- `videos`, `video`, or video message parts require `video_input`
-- `modalities: ["audio"]` or `audio` output fields require `audio_output`
-- `/v1/audio/speech` requires `speech`, plus `streaming` for streamed speech
-
-Register narrower worker capabilities only when a worker cannot serve one of
-those request classes.
-
-Large JSON requests are not fully parsed by the router. With a homogeneous pool
-of complete Omni V1 replicas, no extra headers are needed. With mixed models,
-provide a model hint. With mixed worker capabilities, provide a capability hint
-when the router cannot infer a single safe worker set:
-
-- `X-SGLang-Omni-Route-Model`: requested model for mixed-model pools
-- `X-SGLang-Omni-Route-Capabilities`: comma-separated capabilities such as
-  `image_input`, `audio_input`, `video_input`, `audio_output`, or `streaming`
-- `X-SGLang-Omni-Route-Stream`: `true` or `false` for large streaming requests
-
-These headers are router-only hints and are not forwarded to workers.
-
-## Request Diagnostics
-
-Routed responses include:
-
-- `X-SGLang-Omni-Worker`: selected worker ID
-- `X-SGLang-Omni-Request-ID`: request ID from the request headers or body, or a
-  router-generated ID
-- `X-SGLang-Omni-Route-Attempt`: currently `1`
-
-Router logs include a route-completion record for buffered and streaming
-requests. Each record contains the request ID, selected worker, path, stream
-flag, inferred capabilities, status code, duration, and terminal outcome.
-
-## Failure Handling
-
-If a worker health check or routed request fails repeatedly, the worker becomes
-unhealthy and leaves the routable pool. It can return to healthy after the
-configured number of successful health checks.
-
-To inspect failover behavior:
-
-1. Stop one worker.
-2. Call `GET /workers` and check its `consecutive_failures`, `health_state`, and
-   `routable` fields.
-3. Send another request through the router and verify that it uses a remaining
-   routable worker.
-4. Restart the stopped worker and wait for it to become healthy again.
-
-For a source checkout without installed console scripts, verify the module entry
-point with:
-
-```bash
-python -m sglang_omni_router.serve --help
-```
+The Python router remains available as `sgl-omni-router-py`. Its guide is
+`docs/basic_usage/python_router.md`.

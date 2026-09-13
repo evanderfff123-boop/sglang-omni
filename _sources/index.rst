@@ -12,8 +12,8 @@ Core features:
 
 - **Multi-Stage Pipeline**: Flexible framework for orchestrating preprocessing, AR engine, codec, and vocoder stages across processes and GPUs.
 - **Native SGLang Integration**: Leverages SGLang's RadixAttention, continuous batching, and CUDA Graph optimizations for the AR backbone.
-- **OpenAI-Compatible Server**: Drop-in ``/v1/audio/speech``, ``/v1/audio/transcriptions``, and ``/v1/chat/completions`` endpoints with real-time streaming support.
-- **Broad Model Support**: Supports a growing set of TTS, ASR, and omni models including Higgs Audio, Fish Audio S2-Pro, Voxtral TTS, Qwen3 TTS, MOSS-TTS, Qwen3-ASR, Whisper ASR, Qwen3-Omni, Ming-Omni, and LLaDA2.0-Uni.
+- **OpenAI-Compatible Server**: Drop-in ``/v1/audio/speech``, ``/v1/audio/transcriptions``, ``/v1/audio/translations``, and ``/v1/chat/completions`` endpoints with real-time streaming support.
+- **Broad Model Support**: TTS (Higgs, Fish S2-Pro, Voxtral, Qwen3-TTS, MOSS-TTS / Local, Ming-Omni-TTS, dots.tts, ZONOS2), Music (MiniMax Music 3), ASR (Qwen3-ASR, Fun-ASR, ARK-ASR, Whisper, MOSS-Transcribe-Diarize), Omni (Qwen3-Omni, Ming-Omni), and LLaDA2.0-Uni.
 
 Supported Models
 ----------------
@@ -39,13 +39,37 @@ Supported Models
      - Voice cloning, streaming, 10 languages, 0.6B / 1.7B
    * - `OpenMOSS-Team/MOSS-TTS-v1.5 <https://huggingface.co/OpenMOSS-Team/MOSS-TTS-v1.5>`_
      - TTS
-     - Voice cloning, streaming, 31 languages
+     - Delay-pattern MOSS-TTS; voice cloning, streaming, 31 languages
+   * - `OpenMOSS-Team/MOSS-TTS-Local-Transformer-v1.5 <https://huggingface.co/OpenMOSS-Team/MOSS-TTS-Local-Transformer-v1.5>`_
+     - TTS
+     - Local-transformer MOSS-TTS; 48 kHz stereo, streaming
+   * - `inclusionAI/Ming-omni-tts-16.8B-A3B <https://huggingface.co/inclusionAI/Ming-omni-tts-16.8B-A3B>`_
+     - TTS
+     - Text-to-speech and zero-shot voice cloning
+   * - `dots-studio/dots.tts-mf <https://huggingface.co/dots-studio/dots.tts-mf>`_
+     - TTS
+     - 48 kHz continuous-latent TTS; also ``dots.tts-soar`` / ``dots.tts-base``
+   * - `Zyphra/zonos2 <https://huggingface.co/Zyphra/zonos2>`_
+     - TTS
+     - MoE TTS, 9 DAC codebooks, voice cloning
+   * - `MiniMaxAI/MiniMax-Music3 <https://huggingface.co/MiniMaxAI/MiniMax-Music3>`_
+     - Music
+     - Text-to-music; lyrics + caption → 32 kHz stereo song
    * - `Qwen/Qwen3-ASR-1.7B <https://huggingface.co/Qwen/Qwen3-ASR-1.7B>`_
      - ASR
-     - Audio transcription through ``/v1/audio/transcriptions``
+     - Multilingual transcription with 30 language hints
+   * - `FunAudioLLM/Fun-ASR-Nano-2512-hf <https://huggingface.co/FunAudioLLM/Fun-ASR-Nano-2512-hf>`_
+     - ASR
+     - Multilingual Fun-ASR-Nano
+   * - `AutoArk-AI/ARK-ASR-3B <https://huggingface.co/AutoArk-AI/ARK-ASR-3B>`_
+     - ASR
+     - Multilingual ARK-ASR
+   * - `OpenMOSS-Team/MOSS-Transcribe-Diarize <https://huggingface.co/OpenMOSS-Team/MOSS-Transcribe-Diarize>`_
+     - ASR
+     - Multi-speaker transcription + diarization + timestamps
    * - `openai/whisper-large-v3 <https://huggingface.co/openai/whisper-large-v3>`_
      - ASR
-     - Experimental Whisper transcription route; response schema is served, correctness is not yet validated
+     - Experimental transcription and speech-to-English translation routes; see the `audio translation support matrix <basic_usage/audio_translations.html>`_
    * - `Qwen/Qwen3-Omni-30B-A3B-Instruct <https://huggingface.co/Qwen/Qwen3-Omni-30B-A3B-Instruct>`_
      - Omni
      - Text, image, audio, video → text + audio
@@ -62,6 +86,9 @@ Supported Models
    :caption: Get Started
 
    get_started/installation.md
+   get_started/installation_npu.md
+   get_started/installation_xpu.md
+   get_started/installation_cpu.md
 
 
 .. toctree::
@@ -72,21 +99,36 @@ Supported Models
    cookbook/voxtral_tts.md
    cookbook/fishaudio_s2_pro.md
    cookbook/qwen3_tts.md
+   cookbook/ming_tts.md
    cookbook/moss_tts.md
    cookbook/moss_tts_local.md
+   cookbook/dots_tts.md
+   cookbook/minimax_music3.md
+   cookbook/zonos2.md
    cookbook/qwen3_asr.md
+   cookbook/fun_asr.md
+   cookbook/arkasr.md
+   cookbook/moss_transcribe_diarize.md
    cookbook/whisper_asr.md
    cookbook/qwen3_omni.md
    cookbook/ming_omni.md
+   cookbook/nemotron_voicechat.md
    cookbook/llada2_uni.md
+   cookbook/fun_cosyvoice3.md
+   cookbook/auk.md
 
 .. toctree::
    :maxdepth: 1
    :caption: General Usage
 
    basic_usage/qwen3_omni.md
+   basic_usage/audio_translations.md
    basic_usage/tts.md
+   basic_usage/process_topology.md
+   basic_usage/tts_process_topology.md
+   basic_usage/process_topology_migration.md
    basic_usage/omni_router.md
+   basic_usage/mps_dp.md
 
 
 .. toctree::
@@ -104,6 +146,10 @@ Supported Models
    developer_reference/apiserver_design.md
    developer_reference/pipeline.md
    developer_reference/config.md
+   developer_reference/adding_parameters.md
    developer_reference/communication.md
+   developer_reference/reference_encode_service.md
    developer_reference/profiler.md
+   developer_reference/qwen3_asr_concurrency_profile.md
    developer_reference/rl_admin_control.md
+   developer_reference/bump_version.md
