@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=98feffa1"></script>
+    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -416,8 +416,8 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.5" />
-    <meta name="docbuild:last-update" content="Sep 13, 2026"/>
+  <meta name="docsearch:version" content="0.1.8" />
+    <meta name="docbuild:last-update" content="Oct 16, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -565,15 +565,18 @@ window.runMermaid = runMermaid;</script>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">🚀 Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Installation — Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">🚀 Installation — Ascend NPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/higgs_tts.html">Higgs TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_diarization.html">Nemotron 3 Diarization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/voxtral_tts.html">Voxtral TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fishaudio_s2_pro.html">Fish Audio S2-Pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/fishaudio_drama3.html">Fish Audio Drama 3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_tts.html">Qwen3 TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_tts.html">Ming-Omni-TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_tts.html">MOSS-TTS</a></li>
@@ -584,11 +587,14 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_asr.html">Qwen3-ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_asr.html">Fun-ASR-Nano</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/arkasr.html">ARK-ASR-3B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron3_5_asr.html">Nemotron 3.5 ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_transcribe_diarize.html">MOSS-Transcribe-Diarize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/whisper_asr.html">Whisper ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_omni.html">Qwen3-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_omni.html">Ming-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/personaplex.html">PersonaPlex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/llada2_uni.html">LLaDA2.0-Uni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/auk.html">AuK</a></li>
@@ -604,10 +610,6 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../benchmarks/relay.html">Benchmark Relay</a></li>
-</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
@@ -619,7 +621,14 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/reference_encode_service.html">Reference Encode Service</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/profiler.html">Request-level profiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/qwen3_asr_concurrency_profile.html">Qwen3-ASR High-Concurrency Benchmark and Bottleneck Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_bench.html">Full-Duplex-Bench runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_metrics.html">Full-Duplex-Bench v1.0 unified metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/tts_bench.html">TTS benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
 
@@ -868,18 +877,12 @@ window.runMermaid = runMermaid;</script>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#client">Client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinator">Coordinator</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stage">Stage</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inter-stage-communication">Inter-Stage Communication</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-not-ray">Why not Ray?</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inter-stage-communication">Inter-Stage Communication</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relay-io-utility-module"><code class="docutils literal notranslate"><span class="pre">relay_io</span></code> Utility Module</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scheduling-layer">Scheduling Layer</a><ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omnischeduler-composition-with-sglang">OmniScheduler — Composition with SGLang</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#composition-boundary-with-sglang">Composition boundary with SGLang</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omnischeduler-composition-with-sglang">OmniScheduler — Composition with SGLang</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-handling">Error handling</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simplescheduler">SimpleScheduler</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code2wavscheduler">Code2WavScheduler</a></li>
@@ -889,10 +892,7 @@ window.runMermaid = runMermaid;</script>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-runner-callbacks">Model Runner + Callbacks</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelrunner-base"><code class="docutils literal notranslate"><span class="pre">ModelRunner</span></code> (Base)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#thinkermodelrunner"><code class="docutils literal notranslate"><span class="pre">ThinkerModelRunner</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feedbackarmodelrunner"><code class="docutils literal notranslate"><span class="pre">FeedbackARModelRunner</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#callback-pattern-bare-functions-vs-strategy-object">Callback pattern: bare functions vs Strategy object</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feedbackarmodelrunner"><code class="docutils literal notranslate"><span class="pre">FeedbackARModelRunner</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callback-pattern">Callback Pattern</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-forward-one-decode-step-ar-codebook">Model.forward(): One Decode Step (AR + Codebook)</a></li>
 </ul>
@@ -904,20 +904,12 @@ window.runMermaid = runMermaid;</script>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declarative-config">Declarative Config</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stageconfig-reference"><code class="docutils literal notranslate"><span class="pre">StageConfig</span></code> reference</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#route-fn-contract"><code class="docutils literal notranslate"><span class="pre">route_fn</span></code> contract</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime-parameter-plumbing">Runtime parameter plumbing</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stage-placement-same-gpu-co-location">Stage placement — same-GPU co-location</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stageconfig-reference"><code class="docutils literal notranslate"><span class="pre">StageConfig</span></code> reference</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipelineconfig-reference"><code class="docutils literal notranslate"><span class="pre">PipelineConfig</span></code> reference</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-process-runner">Multi-Process Runner</a><ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stagelaunchconfig"><code class="docutils literal notranslate"><span class="pre">StageLaunchConfig</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parallelism-axes-tp-today-extension-path">Parallelism axes — TP today, extension path</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stagelaunchconfig"><code class="docutils literal notranslate"><span class="pre">StageLaunchConfig</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stagegroup"><code class="docutils literal notranslate"><span class="pre">StageGroup</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiprocessrunner"><code class="docutils literal notranslate"><span class="pre">MultiProcessRunner</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tensor-parallelism-support">Tensor Parallelism Support</a></li>
@@ -1257,11 +1249,9 @@ container. The receiver sees the same Python object references, including nested
 tensors and metadata, so downstream code must treat them as read-only until the
 receiver has finished with the request.</p>
 <p>The split between control and data planes is the core architectural decision: ZMQ stays out of the tensor path (it carries only the small <code class="docutils literal notranslate"><span class="pre">SubmitMessage</span></code> / <code class="docutils literal notranslate"><span class="pre">DataReadyMessage</span></code> / <code class="docutils literal notranslate"><span class="pre">AbortMessage</span></code> coordination messages), the relay (SHM/NCCL/NIXL/Mooncake) stays out of the coordination path, and either can be swapped independently.</p>
-<section id="why-not-ray">
-<h4>Why not Ray?<a class="headerlink" href="#why-not-ray" title="Link to this heading">#</a></h4>
+<p><strong>Why not Ray?</strong></p>
 <p>The thinker→talker relationship is fundamentally producer–consumer: thinker produces hidden states / text tokens, talker consumes them and emits audio codes. Structurally this is the same pattern as RL training (actor produces trajectories, learner consumes them), where Ray is the dominant orchestration layer. So it is a fair first-principles question whether we should use Ray for inter-stage scheduling instead of hand-rolling ZMQ + relay.</p>
 <p>We chose not to. Ray’s overhead — extra runtime, object-store semantics, and operational footprint — is significant for our shape: a small fixed number of stages on a small fixed number of GPUs, with no autoscaling. ZMQ + relay covers the topology with much less moving infrastructure. The decision is revisitable; nothing in the pipeline layer hard-bakes “no Ray” beyond the relay backend list.</p>
-</section>
 </section>
 <section id="relay-io-utility-module">
 <h3><code class="docutils literal notranslate"><span class="pre">relay_io</span></code> Utility Module<a class="headerlink" href="#relay-io-utility-module" title="Link to this heading">#</a></h3>
@@ -1303,8 +1293,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li><p><strong>Not used from SGLang:</strong> ZMQ channels, tokenizer init, grammar backend, metrics exporter, disaggregation, LoRA, speculative decoding, PP, watchdog</p></li>
 </ul>
 <p>Runs in a dedicated thread. Stage communicates via thread-safe queues.</p>
-<section id="composition-boundary-with-sglang">
-<h4>Composition boundary with SGLang<a class="headerlink" href="#composition-boundary-with-sglang" title="Link to this heading">#</a></h4>
+<p><strong>Composition boundary with SGLang</strong></p>
 <p>Composing on top of SGLang’s <code class="docutils literal notranslate"><span class="pre">Scheduler</span></code> is the right call, but only if we pin the boundary deliberately — RL forks of SGLang have hit upgrade pain by letting composition drift into a de facto fork. Three rules govern the boundary:</p>
 <ol class="arabic simple">
 <li><p><strong>Pin, don’t track.</strong> Tracking SGLang <code class="docutils literal notranslate"><span class="pre">main</span></code> fits the same-umbrella relationship, but only if CI runs against the real Scheduler rather than mocks. Running that CI is currently too expensive, so we pin.</p></li>
@@ -1312,7 +1301,6 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li><p><strong>Upstream-first, when affordable.</strong> If OmniScheduler needs something SGLang doesn’t cleanly expose, the preferred fix is a hook or factored-out method in SGLang <code class="docutils literal notranslate"><span class="pre">main</span></code> rather than a downstream patch. Today the cost of upstream PRs is high enough that we don’t routinely do this; it remains the long-term direction.</p></li>
 </ol>
 <p><code class="docutils literal notranslate"><span class="pre">CodePredictor</span></code> is placed under Talker, but whether <code class="docutils literal notranslate"><span class="pre">ThinkerScheduler</span></code> and <code class="docutils literal notranslate"><span class="pre">CodePredictorScheduler</span></code> need a separate documented split (their KV cache shapes are quite different) is tracked in <a class="reference external" href="https://github.com/sgl-project/sglang-omni/issues/538">#538 §2.1</a>.</p>
-</section>
 </section>
 <section id="error-handling">
 <h3>Error handling<a class="headerlink" href="#error-handling" title="Link to this heading">#</a></h3>
@@ -1448,8 +1436,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">extract_output_fn</span></code>: read codes / feedback from model after forward</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">prefill_forward_fn</span></code>: custom forward for prefill (optional)</p></li>
 </ul>
-<section id="callback-pattern-bare-functions-vs-strategy-object">
-<h4>Callback pattern: bare functions vs Strategy object<a class="headerlink" href="#callback-pattern-bare-functions-vs-strategy-object" title="Link to this heading">#</a></h4>
+<p><strong>Callback pattern: bare functions vs Strategy object</strong></p>
 <p>Each model currently provides three bare functions that get passed in individually. This works, but the three are semantically coupled — they all operate on the same model’s buffers — and nothing at the type level enforces that coupling.</p>
 <p>A lightweight improvement is to collect them into a Strategy object:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">FeedbackStrategy</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
@@ -1472,7 +1459,6 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 </pre></div>
 </div>
 <p>The bare-function form is what ships today; the Strategy form is the recommended evolution if a third self-contained model joins. The trade-off is mostly typing surface vs explicitness — neither blocks the other.</p>
-</section>
 </section>
 <section id="callback-pattern">
 <h3>Callback Pattern<a class="headerlink" href="#callback-pattern" title="Link to this heading">#</a></h3>
@@ -1678,8 +1664,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 </tbody>
 </table>
 </div>
-<section id="route-fn-contract">
-<h4><code class="docutils literal notranslate"><span class="pre">route_fn</span></code> contract<a class="headerlink" href="#route-fn-contract" title="Link to this heading">#</a></h4>
+<p><strong><code class="docutils literal notranslate"><span class="pre">route_fn</span></code> contract</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">route_fn</span></code> has narrow utility: Qwen3-Omni and Fish S2 Pro are fully covered by <code class="docutils literal notranslate"><span class="pre">next</span></code> + <code class="docutils literal notranslate"><span class="pre">stream_to</span></code>. It is only needed when the hidden state itself carries a modality tag and the downstream branch must be decided from the data (e.g. Ming, where the output if/else’s into a video or audio head). The contract is therefore narrow on purpose:</p>
 <ul class="simple">
 <li><p>Return value must be a stage already declared in <code class="docutils literal notranslate"><span class="pre">next</span></code>, so the topology stays statically derivable.</p></li>
@@ -1687,18 +1672,13 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li><p>The docstring restricts use to data-driven modality dispatch.</p></li>
 </ul>
 <p>One field, narrow contract, easy to widen later when a real consumer shows up.</p>
-</section>
-<section id="runtime-parameter-plumbing">
-<h4>Runtime parameter plumbing<a class="headerlink" href="#runtime-parameter-plumbing" title="Link to this heading">#</a></h4>
+<p><strong>Runtime parameter plumbing</strong></p>
 <p>Critical runtime params (<code class="docutils literal notranslate"><span class="pre">mem_fraction_static</span></code>, <code class="docutils literal notranslate"><span class="pre">thinker_max_seq_len</span></code>, and soon <code class="docutils literal notranslate"><span class="pre">video_fps</span></code>) are today either hardcoded deep in the stack or routed through ad-hoc overrides that nobody fully understands. CLI, config-file, and override paths do not compose, and every new param reinvents its own precedence resolution.</p>
 <p>The refactor should consolidate this into one canonical mechanism: a typed, stage-addressable override primitive at the <code class="docutils literal notranslate"><span class="pre">PipelineConfig</span></code> layer, with CLI / config / env as thin adapters on top. Every runtime param then flows through the same primitive. A related symmetry gap to fix at the same time: length validation guards only the thinker input side. Talker also needs an output-length cap so an unbounded decode loop (missed stop token, hallucination loop) cannot drive OOM or tail latency the same way. Both belong on the same plumbing once it exists.</p>
-</section>
-<section id="stage-placement-same-gpu-co-location">
-<h4>Stage placement — same-GPU co-location<a class="headerlink" href="#stage-placement-same-gpu-co-location" title="Link to this heading">#</a></h4>
-<p>Stages may share GPUs. Earlier topologies hard-rejected same-GPU speech-stage placement, which left Talker on H200 at &lt;2% utilization long-term. Informed by Ratish’s vLLM-Omni investigation (vLLM co-locates thinker + talker on a single device via per-stage memory budgeting + NVML accounting), the placement model now treats “any stage on any GPU” as first-class, with budgeting that accounts for co-tenants rather than rejecting the topology. See Design Decision History § PR #430 for the typed runtime config + placement planner that shipped this.</p>
-<p>Memory-fraction semantics have also been pinned down: vLLM’s <code class="docutils literal notranslate"><span class="pre">gpu_memory_utilization</span></code> is a fraction of total VRAM, while SGLang’s <code class="docutils literal notranslate"><span class="pre">mem_fraction_static</span></code> is a fraction of remaining VRAM after weights load — more principled for single-stage LLM, but ambiguous for omni where stages load sequentially and “remaining” depends on load order. The placement model now uses one explicit semantics rather than inheriting the ambiguity.</p>
+<p><strong>Stage placement — same-GPU co-location</strong></p>
+<p>Stages may share GPUs. Earlier topologies hard-rejected same-GPU speech-stage placement, which left Talker on H200 at &lt;2% utilization long-term. The placement model now treats “any stage on any GPU” as first-class, with per-stage memory budgeting and NVML accounting that account for co-tenants rather than rejecting the topology. See Design Decision History § PR #430 for the typed runtime config + placement planner that shipped this.</p>
+<p>Memory-fraction semantics have also been pinned down: SGLang’s <code class="docutils literal notranslate"><span class="pre">mem_fraction_static</span></code> is a fraction of remaining VRAM after weights load — principled for single-stage LLM, but ambiguous for omni where stages load sequentially and “remaining” depends on load order. The placement model now uses one explicit semantics rather than inheriting the ambiguity.</p>
 <p>Whether <code class="docutils literal notranslate"><span class="pre">factory</span></code> and <code class="docutils literal notranslate"><span class="pre">factory_args</span></code> should collapse into a single field is tracked in <a class="reference external" href="https://github.com/sgl-project/sglang-omni/issues/538">#538 §2.2</a>.</p>
-</section>
 </section>
 <section id="pipelineconfig-reference">
 <h3><code class="docutils literal notranslate"><span class="pre">PipelineConfig</span></code> reference<a class="headerlink" href="#pipelineconfig-reference" title="Link to this heading">#</a></h3>
@@ -1743,11 +1723,9 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <p>A rename to <code class="docutils literal notranslate"><span class="pre">StageLaunchConfig</span></code> would carry the same meaning more clearly; tracked in <a class="reference external" href="https://github.com/sgl-project/sglang-omni/issues/538">#538 §2.3</a>.</p>
 <p>The main process resolves all dotted strings, injects <code class="docutils literal notranslate"><span class="pre">model_path</span></code> / <code class="docutils literal notranslate"><span class="pre">gpu_id</span></code> into factory args, allocates ZMQ endpoints, and computes stream targets and relay config. Each launch config captures everything needed to construct one logical stage instance; <code class="docutils literal notranslate"><span class="pre">StageWorkerProcessSpec</span></code> is the OS-process payload that groups the launch configs sharing a process.</p>
 <p>The subprocess entrypoint (<code class="docutils literal notranslate"><span class="pre">stage_process_main</span></code>) imports each stage factory, calls it, builds routing callables from <code class="docutils literal notranslate"><span class="pre">route_fn</span></code> or <code class="docutils literal notranslate"><span class="pre">next_stages</span></code>, builds input handlers from <code class="docutils literal notranslate"><span class="pre">wait_for</span></code> / <code class="docutils literal notranslate"><span class="pre">merge_fn</span></code>, constructs all <code class="docutils literal notranslate"><span class="pre">Stage</span></code> instances assigned to that process, and runs them on one event loop.</p>
-<section id="parallelism-axes-tp-today-extension-path">
-<h4>Parallelism axes — TP today, extension path<a class="headerlink" href="#parallelism-axes-tp-today-extension-path" title="Link to this heading">#</a></h4>
+<p><strong>Parallelism axes — TP today, extension path</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">StageProcessSpec</span></code> exposes <code class="docutils literal notranslate"><span class="pre">tp_size</span></code> as a top-level field. This treats TP as a special axis, but it is only one of several plausible parallelism strategies — Qwen3-Omni’s Thinker is MoE and could want EP, and throughput-oriented stages might want DP across replicas. If we add either later, we will accumulate <code class="docutils literal notranslate"><span class="pre">tp_size</span></code> / <code class="docutils literal notranslate"><span class="pre">ep_size</span></code> / <code class="docutils literal notranslate"><span class="pre">dp_size</span></code> at the top level.</p>
 <p>The cleaner long-term shape is to group them under a single <code class="docutils literal notranslate"><span class="pre">parallelism:</span> <span class="pre">ParallelismConfig</span></code> field — <code class="docutils literal notranslate"><span class="pre">ParallelismConfig(tp=N)</span></code> reads as clearly as <code class="docutils literal notranslate"><span class="pre">tp_size=N</span></code> and leaves room to add <code class="docutils literal notranslate"><span class="pre">ep</span></code> and <code class="docutils literal notranslate"><span class="pre">dp</span></code> without further schema churn. We are intentionally not making that change now: with only TP in use, a <code class="docutils literal notranslate"><span class="pre">ParallelismConfig</span></code> would have exactly one attribute and add visual weight without adding capability. The intended migration is to introduce the group field at the same time as the second parallelism axis lands.</p>
-</section>
 </section>
 <section id="stagegroup">
 <h3><code class="docutils literal notranslate"><span class="pre">StageGroup</span></code><a class="headerlink" href="#stagegroup" title="Link to this heading">#</a></h3>
@@ -2306,18 +2284,12 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#client">Client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinator">Coordinator</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stage">Stage</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inter-stage-communication">Inter-Stage Communication</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-not-ray">Why not Ray?</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inter-stage-communication">Inter-Stage Communication</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relay-io-utility-module"><code class="docutils literal notranslate"><span class="pre">relay_io</span></code> Utility Module</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scheduling-layer">Scheduling Layer</a><ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omnischeduler-composition-with-sglang">OmniScheduler — Composition with SGLang</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#composition-boundary-with-sglang">Composition boundary with SGLang</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omnischeduler-composition-with-sglang">OmniScheduler — Composition with SGLang</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-handling">Error handling</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simplescheduler">SimpleScheduler</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code2wavscheduler">Code2WavScheduler</a></li>
@@ -2327,10 +2299,7 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-runner-callbacks">Model Runner + Callbacks</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelrunner-base"><code class="docutils literal notranslate"><span class="pre">ModelRunner</span></code> (Base)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#thinkermodelrunner"><code class="docutils literal notranslate"><span class="pre">ThinkerModelRunner</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feedbackarmodelrunner"><code class="docutils literal notranslate"><span class="pre">FeedbackARModelRunner</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#callback-pattern-bare-functions-vs-strategy-object">Callback pattern: bare functions vs Strategy object</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feedbackarmodelrunner"><code class="docutils literal notranslate"><span class="pre">FeedbackARModelRunner</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callback-pattern">Callback Pattern</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-forward-one-decode-step-ar-codebook">Model.forward(): One Decode Step (AR + Codebook)</a></li>
 </ul>
@@ -2342,20 +2311,12 @@ Python object references for LOCAL_OBJECT payloads and stream chunks</p></li>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declarative-config">Declarative Config</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stageconfig-reference"><code class="docutils literal notranslate"><span class="pre">StageConfig</span></code> reference</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#route-fn-contract"><code class="docutils literal notranslate"><span class="pre">route_fn</span></code> contract</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime-parameter-plumbing">Runtime parameter plumbing</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stage-placement-same-gpu-co-location">Stage placement — same-GPU co-location</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stageconfig-reference"><code class="docutils literal notranslate"><span class="pre">StageConfig</span></code> reference</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipelineconfig-reference"><code class="docutils literal notranslate"><span class="pre">PipelineConfig</span></code> reference</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-process-runner">Multi-Process Runner</a><ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stagelaunchconfig"><code class="docutils literal notranslate"><span class="pre">StageLaunchConfig</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parallelism-axes-tp-today-extension-path">Parallelism axes — TP today, extension path</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stagelaunchconfig"><code class="docutils literal notranslate"><span class="pre">StageLaunchConfig</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stagegroup"><code class="docutils literal notranslate"><span class="pre">StageGroup</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiprocessrunner"><code class="docutils literal notranslate"><span class="pre">MultiProcessRunner</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tensor-parallelism-support">Tensor Parallelism Support</a></li>
@@ -2442,7 +2403,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Sep 13, 2026.
+  Last updated on Oct 16, 2026.
   <br/>
 </p>
   </div>

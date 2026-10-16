@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=98feffa1"></script>
+    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -415,11 +415,11 @@ window.runMermaid = runMermaid;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="NemotronLabs VoiceChat" href="nemotron_voicechat.html" />
-    <link rel="prev" title="Qwen3-Omni" href="qwen3_omni.html" />
+    <link rel="prev" title="MiniCPM-o" href="minicpm_o.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.5" />
-    <meta name="docbuild:last-update" content="Sep 13, 2026"/>
+  <meta name="docsearch:version" content="0.1.8" />
+    <meta name="docbuild:last-update" content="Oct 16, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -565,15 +565,18 @@ window.runMermaid = runMermaid;</script>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">🚀 Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Installation — Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">🚀 Installation — Ascend NPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="higgs_tts.html">Higgs TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nemotron_diarization.html">Nemotron 3 Diarization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="voxtral_tts.html">Voxtral TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fishaudio_s2_pro.html">Fish Audio S2-Pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fishaudio_drama3.html">Fish Audio Drama 3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qwen3_tts.html">Qwen3 TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ming_tts.html">Ming-Omni-TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="moss_tts.html">MOSS-TTS</a></li>
@@ -584,11 +587,14 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1"><a class="reference internal" href="qwen3_asr.html">Qwen3-ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fun_asr.html">Fun-ASR-Nano</a></li>
 <li class="toctree-l1"><a class="reference internal" href="arkasr.html">ARK-ASR-3B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nemotron3_5_asr.html">Nemotron 3.5 ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="moss_transcribe_diarize.html">MOSS-Transcribe-Diarize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="whisper_asr.html">Whisper ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qwen3_omni.html">Qwen3-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Ming-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="personaplex.html">PersonaPlex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="llada2_uni.html">LLaDA2.0-Uni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auk.html">AuK</a></li>
@@ -604,10 +610,6 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../benchmarks/relay.html">Benchmark Relay</a></li>
-</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
@@ -619,7 +621,14 @@ window.runMermaid = runMermaid;</script>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/reference_encode_service.html">Reference Encode Service</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/profiler.html">Request-level profiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/qwen3_asr_concurrency_profile.html">Qwen3-ASR High-Concurrency Benchmark and Bottleneck Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_bench.html">Full-Duplex-Bench runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_metrics.html">Full-Duplex-Bench v1.0 unified metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/tts_bench.html">TTS benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
 
@@ -877,6 +886,7 @@ window.runMermaid = runMermaid;</script>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#image-text-mmmu">Image-Text (MMMU)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#non-streaming-talker">Non-Streaming Talker</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-talker">Streaming Talker</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#seedtts-english-speech-results">SeedTTS English Speech Results</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#audio-equivalence">Audio Equivalence</a></li>
 </ul>
 </li>
@@ -902,6 +912,7 @@ window.runMermaid = runMermaid;</script>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hf<span class="w"> </span>download<span class="w"> </span>inclusionAI/Ming-flash-omni-2.0
 </pre></div>
 </div>
+<p>For Intel GPUs, follow the <a class="reference internal" href="../get_started/installation_xpu.html#ming-omni-omni-chat-and-speech-one-or-two-xpus"><span class="std std-ref">Ming-Omni XPU recipe</span></a>.</p>
 <p>The speech path expects the checkpoint to include the <code class="docutils literal notranslate"><span class="pre">talker/</span></code> assets, including <code class="docutils literal notranslate"><span class="pre">talker/data/voice_name.json</span></code> and <code class="docutils literal notranslate"><span class="pre">talker/vae/</span></code>. The default voice in the current Ming speech pipeline is <code class="docutils literal notranslate"><span class="pre">DB30</span></code>. <code class="docutils literal notranslate"><span class="pre">campplus.onnx</span></code> and <code class="docutils literal notranslate"><span class="pre">talker_tn</span></code> are optional runtime helpers: missing <code class="docutils literal notranslate"><span class="pre">campplus.onnx</span></code> disables speaker embedding extraction, and missing <code class="docutils literal notranslate"><span class="pre">talker_tn</span></code> falls back to identity text normalization.</p>
 <p><code class="docutils literal notranslate"><span class="pre">Ming-flash-omni-2.0</span></code> on HF does not ship top-level thinker tokenizer files. <code class="docutils literal notranslate"><span class="pre">load_ming_tokenizer</span></code> falls back to <code class="docutils literal notranslate"><span class="pre">inclusionAI/Ming-flash-omni-Preview</span></code> (~12 MB) to copy <code class="docutils literal notranslate"><span class="pre">tokenizer.json</span></code>, <code class="docutils literal notranslate"><span class="pre">tokenizer_config.json</span></code>, and <code class="docutils literal notranslate"><span class="pre">special_tokens_map.json</span></code>. In offline environments, download those files too:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hf<span class="w"> </span>download<span class="w"> </span>inclusionAI/Ming-flash-omni-Preview<span class="w"> </span>tokenizer.json<span class="w"> </span>tokenizer_config.json<span class="w"> </span>special_tokens_map.json
@@ -1337,7 +1348,7 @@ window.runMermaid = runMermaid;</script>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">temperature</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
-<td><p>Chat-completions default. Set 0.0 for greedy deterministic examples.</p></td>
+<td><p>Thinker sampling. Set 0.0 for greedy deterministic examples.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">top_p</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
@@ -1552,6 +1563,38 @@ window.runMermaid = runMermaid;</script>
 </div>
 <p>At c=1 streaming delivers first audio ~2.2× sooner at a ~38% throughput cost. The crossover is around c≈4; past it, single-stream queuing makes streaming’s first chunk arrive later than the non-streaming full response. Each streaming request emits ~20 chunks at ~19 ms intervals. The streaming measurements are from PR/local-patch evidence, not a release-wide guarantee; cite streaming as a low-concurrency first-audio win rather than a universal throughput win.</p>
 </section>
+<section id="seedtts-english-speech-results">
+<h3>SeedTTS English Speech Results<a class="headerlink" href="#seedtts-english-speech-results" title="Link to this heading">#</a></h3>
+<p>Results for the full 1,088-sample English SeedTTS split on 3× H200 (Thinker TP=2 and a dedicated Talker GPU), at concurrency 4 with voice <code class="docutils literal notranslate"><span class="pre">DB30</span></code>, temperature 0.7, seed 42, and <code class="docutils literal notranslate"><span class="pre">max_new_tokens=256</span></code>. AudioVAE uses FlashAttention-2. WER is corpus WER from Qwen3-ASR-1.7B. Each mode was measured once after four warmup requests.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head text-right"><p>Throughput (req/s)</p></th>
+<th class="head text-right"><p>Mean latency (s)</p></th>
+<th class="head text-right"><p>First audio (s)</p></th>
+<th class="head text-right"><p>Audio throughput (audio-s/s)</p></th>
+<th class="head text-right"><p>EN WER</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Non-streaming</p></td>
+<td class="text-right"><p>4.606</p></td>
+<td class="text-right"><p>0.867</p></td>
+<td class="text-right"><p>—</p></td>
+<td class="text-right"><p>29.988</p></td>
+<td class="text-right"><p>1.666%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming</p></td>
+<td class="text-right"><p>1.503</p></td>
+<td class="text-right"><p>2.658</p></td>
+<td class="text-right"><p>2.059</p></td>
+<td class="text-right"><p>9.712</p></td>
+<td class="text-right"><p>1.591%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="audio-equivalence">
 <h3>Audio Equivalence<a class="headerlink" href="#audio-equivalence" title="Link to this heading">#</a></h3>
 <p>A small c=1 audit (single prompt, single voice, n=4 WAVs per mode) checks that the streaming path preserves audio content versus non-streaming on the same backend.</p>
@@ -1598,12 +1641,12 @@ window.runMermaid = runMermaid;</script>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="qwen3_omni.html"
+       href="minicpm_o.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Qwen3-Omni</p>
+        <p class="prev-next-title">MiniCPM-o</p>
       </div>
     </a>
     <a class="right-next"
@@ -1656,6 +1699,7 @@ window.runMermaid = runMermaid;</script>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#image-text-mmmu">Image-Text (MMMU)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#non-streaming-talker">Non-Streaming Talker</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-talker">Streaming Talker</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#seedtts-english-speech-results">SeedTTS English Speech Results</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#audio-equivalence">Audio Equivalence</a></li>
 </ul>
 </li>
@@ -1693,7 +1737,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Sep 13, 2026.
+  Last updated on Oct 16, 2026.
   <br/>
 </p>
   </div>

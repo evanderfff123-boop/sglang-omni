@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=98feffa1"></script>
+    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="prev" title="Reference Encode Service" href="reference_encode_service.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.5" />
-    <meta name="docbuild:last-update" content="Sep 13, 2026"/>
+  <meta name="docsearch:version" content="0.1.8" />
+    <meta name="docbuild:last-update" content="Oct 16, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -207,15 +207,18 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">🚀 Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Installation — Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">🚀 Installation — Ascend NPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/higgs_tts.html">Higgs TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_diarization.html">Nemotron 3 Diarization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/voxtral_tts.html">Voxtral TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fishaudio_s2_pro.html">Fish Audio S2-Pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/fishaudio_drama3.html">Fish Audio Drama 3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_tts.html">Qwen3 TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_tts.html">Ming-Omni-TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_tts.html">MOSS-TTS</a></li>
@@ -226,11 +229,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_asr.html">Qwen3-ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_asr.html">Fun-ASR-Nano</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/arkasr.html">ARK-ASR-3B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron3_5_asr.html">Nemotron 3.5 ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_transcribe_diarize.html">MOSS-Transcribe-Diarize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/whisper_asr.html">Whisper ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_omni.html">Qwen3-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_omni.html">Ming-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/personaplex.html">PersonaPlex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/llada2_uni.html">LLaDA2.0-Uni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/auk.html">AuK</a></li>
@@ -246,10 +252,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../benchmarks/relay.html">Benchmark Relay</a></li>
-</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="main.html">Architecture</a></li>
@@ -261,7 +263,14 @@
 <li class="toctree-l1"><a class="reference internal" href="reference_encode_service.html">Reference Encode Service</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Request-level profiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qwen3_asr_concurrency_profile.html">Qwen3-ASR High-Concurrency Benchmark and Bottleneck Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="full_duplex_bench.html">Full-Duplex-Bench runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="full_duplex_metrics.html">Full-Duplex-Bench v1.0 unified metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tts_bench.html">TTS benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="asr_bench.html">ASR benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rl_admin_control.html">RL Admin Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlx.html">MLX Path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
 
@@ -498,6 +507,9 @@
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event-model">Event model</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-event-names">Standard event names</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#full-duplex-session-unit-metrics">Full Duplex session Unit metrics</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#active-stage-attribution">Active-stage attribution</a></li>
 </ul>
 </li>
@@ -528,8 +540,11 @@ token / first code chunk, hops, terminal response) — used to reconstruct
 a single request’s end-to-end timeline and to aggregate stage / hop costs
 across a batch;</p></li>
 <li><p>a <strong>torch profiler</strong> that produces a Chrome trace of kernel-level CPU /
-CUDA activity — used to drill into a specific window once the event
-recorder has identified where the time is going.</p></li>
+device activity — used to drill into a specific window once the event
+recorder has identified where the time is going. Activities are <code class="docutils literal notranslate"><span class="pre">CPU</span></code> plus
+whatever device activity this torch build reports via
+<code class="docutils literal notranslate"><span class="pre">torch.profiler.supported_activities()</span></code> — <code class="docutils literal notranslate"><span class="pre">CUDA</span></code> on NVIDIA / ROCm, <code class="docutils literal notranslate"><span class="pre">XPU</span></code> on
+Intel.</p></li>
 </ul>
 <p>Most diagnostics use the event recorder. The torch profiler is opt-in for
 deeper kernel investigation.</p>
@@ -611,7 +626,7 @@ first executable prefill / extend batch is selected.</p>
 </tr>
 <tr class="row-even"><td><p>Code2Wav first audio</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">code2wav_first_audio</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Code2WavScheduler.decode_delta</span></code> / <code class="docutils literal notranslate"><span class="pre">_flush_pending</span></code> / <code class="docutils literal notranslate"><span class="pre">run_step</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Code2WavScheduler.keep_audio</span></code> (every decoded or flushed window)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Terminal response</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">terminal_response</span></code></p></td>
@@ -667,23 +682,15 @@ first executable prefill / extend batch is selected.</p>
 </tr>
 <tr class="row-odd"><td><p>Code2Wav</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">code2wav_decode_start</span></code></p></td>
-<td><p>Serial decode start: trigger, start/end/new/context/window frames, active and threshold-ready requests, inbox depth</p></td>
+<td><p>Each window’s decode start: trigger, start/end/new/context/window frames, <code class="docutils literal notranslate"><span class="pre">rows</span></code> (the windows its replay decodes together), active and threshold-ready requests, inbox depth</p></td>
 </tr>
 <tr class="row-even"><td><p>Code2Wav</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">code2wav_decode_launched</span></code></p></td>
-<td><p>Pipelined serial window whose vocoder work and asynchronous D2H copy have been enqueued; includes execution mode and window/new-frame counts</p></td>
+<td><p>Pipelined window whose vocoder work and asynchronous D2H copy have been enqueued; includes execution mode, window/new-frame counts and <code class="docutils literal notranslate"><span class="pre">rows</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Code2Wav</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">code2wav_decode_end</span></code></p></td>
 <td><p>Repeats start metadata and adds the current decode’s <code class="docutils literal notranslate"><span class="pre">audio_samples</span></code> plus execution metadata; output-overlap runs also include <code class="docutils literal notranslate"><span class="pre">pipelined</span></code> and the previous window’s post-EOS-scan <code class="docutils literal notranslate"><span class="pre">d2h_wait_ns</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>Code2Wav</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">code2wav_batch_start</span></code></p></td>
-<td><p>Coalesced step start: batch and bucket shape, new/window frames, active requests, inbox depth, oldest wait, fire reason, due-bucket count, and sub-batch decomposition</p></td>
-</tr>
-<tr class="row-odd"><td><p>Code2Wav</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">code2wav_batch_end</span></code></p></td>
-<td><p>Repeats the start metadata and adds audio samples, execution mode, graph key, and fallback reason</p></td>
 </tr>
 </tbody>
 </table>
@@ -698,6 +705,72 @@ measurement of whether blocking synchronization was actually removed.</p>
 add domain-specific events. Events from inactive recorders are no-ops, so
 instrumentation sites do not need to guard against the disabled case.</p>
 </section>
+</section>
+<section id="full-duplex-session-unit-metrics">
+<h2>Full Duplex session Unit metrics<a class="headerlink" href="#full-duplex-session-unit-metrics" title="Link to this heading">#</a></h2>
+<p>Enable the existing request event recorder with <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/start_request_profile</span></code>
+and stop it with <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/stop_request_profile</span></code>. The JSONL files then include a
+small session vocabulary that can be converted with
+<code class="docutils literal notranslate"><span class="pre">sglang_omni.profiler.duplex_metrics.build_duplex_session_metrics</span></code>.</p>
+<p>Each session-specific event carries its <code class="docutils literal notranslate"><span class="pre">request_id</span></code>; the report uses session
+metadata to name the Unit as <code class="docutils literal notranslate"><span class="pre">(session_id,</span> <span class="pre">session_open_index,</span> <span class="pre">input_seq)</span></code>.
+Unit lifecycle and start events carry the input modality and media clock.
+Output events carry the output sequence, modality, media clock, duration, and
+kind. Payload bytes are never stored.</p>
+<p>The event boundaries have these meanings:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">session_unit_ready</span></code> is declared by the ingress owner when a logical Unit
+has all required input needed to run without waiting for more required
+input. It is modality-independent and is not inferred by the profiler from
+PCM, frames, or any other payload boundary.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">session_unit_admitted</span></code> is emitted after the coordinator accepts an append;
+a rejected <code class="docutils literal notranslate"><span class="pre">QueueFullError</span></code> has no event.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stage_dispatch</span></code> is the existing stage ingress observation used as the queue
+boundary for a non-AR session Unit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scheduler_queue_enter</span></code> and <code class="docutils literal notranslate"><span class="pre">scheduler_prefill_start</span></code> are the existing AR
+scheduler boundaries. For an AR Unit, they replace <code class="docutils literal notranslate"><span class="pre">stage_dispatch</span></code> and
+<code class="docutils literal notranslate"><span class="pre">session_stage_started</span></code> for queue and start timing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">session_stage_started</span></code> marks execution after per-session ordering for a
+<code class="docutils literal notranslate"><span class="pre">SessionScheduler</span></code> stage.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">session_stage_bypassed</span></code> is the authoritative AR decision that an input
+Unit completed without generation. Its <code class="docutils literal notranslate"><span class="pre">reason</span></code> metadata identifies the
+bypass path, such as <code class="docutils literal notranslate"><span class="pre">generation_bypassed</span></code> or <code class="docutils literal notranslate"><span class="pre">finish_input</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stage_complete</span></code> is the existing stage result observation used as the finish
+boundary for a session Unit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">session_output_emitted</span></code> marks a model content chunk entering the
+coordinator output buffer. <code class="docutils literal notranslate"><span class="pre">input_done</span></code> is a lifecycle completion and is
+recorded as <code class="docutils literal notranslate"><span class="pre">session_unit_finished</span></code>, not as model output.</p></li>
+</ul>
+<p>The report joins generic stage events by <code class="docutils literal notranslate"><span class="pre">request_id</span></code>. For AR stages, <code class="docutils literal notranslate"><span class="pre">queue_ms</span></code>
+is <code class="docutils literal notranslate"><span class="pre">scheduler_queue_enter</span> <span class="pre">-&gt;</span> <span class="pre">scheduler_prefill_start</span></code>; for
+<code class="docutils literal notranslate"><span class="pre">SessionScheduler</span></code> stages, it is <code class="docutils literal notranslate"><span class="pre">stage_dispatch</span> <span class="pre">-&gt;</span> <span class="pre">session_stage_started</span></code>.
+<code class="docutils literal notranslate"><span class="pre">service_ms</span></code> is the observed execution-start to <code class="docutils literal notranslate"><span class="pre">stage_complete</span></code> interval, not
+pure GPU compute time. A stage is <code class="docutils literal notranslate"><span class="pre">observed</span></code> when its selected boundaries are
+complete, <code class="docutils literal notranslate"><span class="pre">bypassed</span></code> when <code class="docutils literal notranslate"><span class="pre">session_stage_bypassed</span></code> is present, and <code class="docutils literal notranslate"><span class="pre">incomplete</span></code>
+when a boundary is missing. Bypassed stages retain their timestamp and reason;
+queue and service durations remain <code class="docutils literal notranslate"><span class="pre">null</span></code>. <code class="docutils literal notranslate"><span class="pre">handoff_from_previous_ms</span></code> ends at
+the current stage’s generic <code class="docutils literal notranslate"><span class="pre">stage_dispatch</span></code> boundary. The recorder carries
+the input media clock for later benchmarking, but this slice does not claim
+semantic input-to-output latency, playback underrun, or deadline misses.</p>
+<p>Readiness is observed only while the request event recorder is active. The
+internal observation carries that profiler run ID, and admission emits the
+ready event only when the same run is still active; a run rotation leaves the
+admitted-based values valid while ready-based values remain unavailable.</p>
+<p>The report names the ready-based values explicitly:
+<code class="docutils literal notranslate"><span class="pre">ready_to_admitted_ms</span></code>, <code class="docutils literal notranslate"><span class="pre">ready_to_first_output_ms</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">ready_to_finished_ms</span></code>. They measure ingress wait, ready-to-first-output, and
+ready-to-finish directly from their event timestamps. The admitted-based
+decomposition remains available as <code class="docutils literal notranslate"><span class="pre">admitted_to_first_output_ms</span></code> and
+<code class="docutils literal notranslate"><span class="pre">admitted_to_finished_ms</span></code>; those intervals start when
+<code class="docutils literal notranslate"><span class="pre">CoordinatorSessions.append_session</span></code> accepts the Unit. They exclude any
+earlier <code class="docutils literal notranslate"><span class="pre">SessionRuntime.pending_pcm</span></code> buffering before submission and do not
+claim producer-ready, client/network, semantic-response, playback, or
+deadline latency. For a complete Unit, <code class="docutils literal notranslate"><span class="pre">ready_to_first_output_ms</span></code> is the
+ready-to-admission wait plus the post-admission time to first output; each
+value is derived per Unit before aggregation.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SessionScheduler</span></code> scalar hook emits one start event per Unit immediately
+before append. <code class="docutils literal notranslate"><span class="pre">BatchedSessionHooks.append_batch</span></code> emits one event per row with
+one shared directly observed batch-start timestamp.</p>
 <section id="active-stage-attribution">
 <h3>Active-stage attribution<a class="headerlink" href="#active-stage-attribution" title="Link to this heading">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">emit(...)</span></code> accepts an explicit <code class="docutils literal notranslate"><span class="pre">stage=...</span></code> parameter; when the caller can’t
@@ -804,7 +877,7 @@ trace stays small enough to load in <code class="docutils literal notranslate"><
 <td><p>Record input tensor shapes per op</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SGLANG_TORCH_PROFILER_PROFILE_MEMORY=1</span></code></p></td>
-<td><p>Track every CUDA caching-allocator alloc / free</p></td>
+<td><p>Record tensor memory allocation / free events</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SGLANG_TORCH_PROFILER_WITH_STACK=1</span></code></p></td>
 <td><p>Record the Python (and C++) call stack per op</p></td>
@@ -930,6 +1003,9 @@ from “talker prefill start”.</p></li>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event-model">Event model</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-event-names">Standard event names</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#full-duplex-session-unit-metrics">Full Duplex session Unit metrics</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#active-stage-attribution">Active-stage attribution</a></li>
 </ul>
 </li>
@@ -971,7 +1047,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Sep 13, 2026.
+  Last updated on Oct 16, 2026.
   <br/>
 </p>
   </div>

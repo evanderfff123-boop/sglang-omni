@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=98feffa1"></script>
+    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,12 +56,12 @@
     <link rel="icon" href="../_static/logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Voxtral TTS" href="voxtral_tts.html" />
-    <link rel="prev" title="🚀 Installation — Intel CPU" href="../get_started/installation_cpu.html" />
+    <link rel="next" title="Nemotron 3 Diarization" href="nemotron_diarization.html" />
+    <link rel="prev" title="🚀 Installation — MUSA" href="../get_started/installation_musa.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.5" />
-    <meta name="docbuild:last-update" content="Sep 13, 2026"/>
+  <meta name="docsearch:version" content="0.1.8" />
+    <meta name="docbuild:last-update" content="Oct 16, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -207,15 +207,18 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">🚀 Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Installation — Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">🚀 Installation — Ascend NPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Higgs TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nemotron_diarization.html">Nemotron 3 Diarization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="voxtral_tts.html">Voxtral TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fishaudio_s2_pro.html">Fish Audio S2-Pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fishaudio_drama3.html">Fish Audio Drama 3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qwen3_tts.html">Qwen3 TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ming_tts.html">Ming-Omni-TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="moss_tts.html">MOSS-TTS</a></li>
@@ -226,11 +229,14 @@
 <li class="toctree-l1"><a class="reference internal" href="qwen3_asr.html">Qwen3-ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fun_asr.html">Fun-ASR-Nano</a></li>
 <li class="toctree-l1"><a class="reference internal" href="arkasr.html">ARK-ASR-3B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nemotron3_5_asr.html">Nemotron 3.5 ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="moss_transcribe_diarize.html">MOSS-Transcribe-Diarize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="whisper_asr.html">Whisper ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qwen3_omni.html">Qwen3-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ming_omni.html">Ming-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="personaplex.html">PersonaPlex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="llada2_uni.html">LLaDA2.0-Uni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auk.html">AuK</a></li>
@@ -246,10 +252,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../benchmarks/relay.html">Benchmark Relay</a></li>
-</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
@@ -261,7 +263,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/reference_encode_service.html">Reference Encode Service</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/profiler.html">Request-level profiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/qwen3_asr_concurrency_profile.html">Qwen3-ASR High-Concurrency Benchmark and Bottleneck Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_bench.html">Full-Duplex-Bench runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_metrics.html">Full-Duplex-Bench v1.0 unified metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/tts_bench.html">TTS benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
 
@@ -506,13 +515,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-shot">Zero-shot</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#voice-cloning">Voice Cloning</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming">Streaming</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inline-control-tokens">Inline Control Tokens</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#emotion">Emotion</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#style">Style</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sound-effects">Sound Effects</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#prosody">Prosody</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inline-control-tokens">Inline Control Tokens</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#request-parameters">Request parameters</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance">Performance</a></li>
 </ul>
@@ -645,6 +648,14 @@ sgl-omni<span class="w"> </span>serve<span class="w"> </span><span class="se">\<
 </div>
 <p>The voice-cloning examples below use local reference clips from
 <code class="docutils literal notranslate"><span class="pre">docs/_static/audio</span></code>.</p>
+<p>CUDA reference encoding temporarily disables cuDNN convolutions and cuDNN
+attention. These settings affect the whole process, so <code class="docutils literal notranslate"><span class="pre">audio_encoder</span></code> must
+run in a separate process from CUDA stages such as <code class="docutils literal notranslate"><span class="pre">tts_engine</span></code> and <code class="docutils literal notranslate"><span class="pre">vocoder</span></code>,
+even when they use different GPUs. The default layout already does this:
+CPU preprocessing and the audio encoder share <code class="docutils literal notranslate"><span class="pre">tts_frontend</span></code>, while the
+engine and vocoder share <code class="docutils literal notranslate"><span class="pre">pipeline</span></code> on the same GPU. Custom layouts that
+combine the CUDA encoder with another CUDA stage are rejected at configuration
+validation; CPU encoding does not have this restriction.</p>
 </section>
 <section id="synthesizing-speech">
 <h2>Synthesizing Speech<a class="headerlink" href="#synthesizing-speech" title="Link to this heading">#</a></h2>
@@ -1045,8 +1056,7 @@ onomatopoeia gives the model the acoustic cue to realize the effect.</p></li>
 <audio controls>
   <source src="../_static/audio/gaokao-listening.wav" type="audio/wav">
 </audio>
-<section id="emotion">
-<h4>Emotion<a class="headerlink" href="#emotion" title="Link to this heading">#</a></h4>
+<p><strong>Emotion</strong></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Token</p></th>
@@ -1120,9 +1130,7 @@ onomatopoeia gives the model the acoustic cue to realize the effect.</p></li>
 </tbody>
 </table>
 </div>
-</section>
-<section id="style">
-<h4>Style<a class="headerlink" href="#style" title="Link to this heading">#</a></h4>
+<p><strong>Style</strong></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Token</p></th>
@@ -1142,9 +1150,7 @@ onomatopoeia gives the model the acoustic cue to realize the effect.</p></li>
 </tbody>
 </table>
 </div>
-</section>
-<section id="sound-effects">
-<h4>Sound Effects<a class="headerlink" href="#sound-effects" title="Link to this heading">#</a></h4>
+<p><strong>Sound Effects</strong></p>
 <p>Pair each token with the matching onomatopoeia immediately after it.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -1193,9 +1199,7 @@ onomatopoeia gives the model the acoustic cue to realize the effect.</p></li>
 </tbody>
 </table>
 </div>
-</section>
-<section id="prosody">
-<h4>Prosody<a class="headerlink" href="#prosody" title="Link to this heading">#</a></h4>
+<p><strong>Prosody</strong></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Token</p></th>
@@ -1236,7 +1240,6 @@ onomatopoeia gives the model the acoustic cue to realize the effect.</p></li>
 </tbody>
 </table>
 </div>
-</section>
 </section>
 <section id="request-parameters">
 <h3>Request parameters<a class="headerlink" href="#request-parameters" title="Link to this heading">#</a></h3>
@@ -1301,17 +1304,17 @@ onomatopoeia gives the model the acoustic cue to realize the effect.</p></li>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">temperature</span></code></p></td>
 <td><p>float</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
 <td><p>Sampling temperature</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">top_p</span></code></p></td>
 <td><p>float</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
 <td><p>Top-p sampling</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">top_k</span></code></p></td>
 <td><p>int</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">30</span></code></p></td>
 <td><p>Top-k sampling</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">seed</span></code></p></td>
@@ -1393,20 +1396,20 @@ onomatopoeia gives the model the acoustic cue to realize the effect.</p></li>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../get_started/installation_cpu.html"
+       href="../get_started/installation_musa.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">🚀 Installation — Intel CPU</p>
+        <p class="prev-next-title">🚀 Installation — MUSA</p>
       </div>
     </a>
     <a class="right-next"
-       href="voxtral_tts.html"
+       href="nemotron_diarization.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Voxtral TTS</p>
+        <p class="prev-next-title">Nemotron 3 Diarization</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1438,13 +1441,7 @@ onomatopoeia gives the model the acoustic cue to realize the effect.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-shot">Zero-shot</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#voice-cloning">Voice Cloning</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming">Streaming</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inline-control-tokens">Inline Control Tokens</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#emotion">Emotion</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#style">Style</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sound-effects">Sound Effects</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#prosody">Prosody</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inline-control-tokens">Inline Control Tokens</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#request-parameters">Request parameters</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance">Performance</a></li>
 </ul>
@@ -1482,7 +1479,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Sep 13, 2026.
+  Last updated on Oct 16, 2026.
   <br/>
 </p>
   </div>

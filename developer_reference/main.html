@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=98feffa1"></script>
+    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -57,11 +57,11 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="API Server Design" href="apiserver_design.html" />
-    <link rel="prev" title="Benchmark Relay" href="../benchmarks/relay.html" />
+    <link rel="prev" title="Same-GPU Data Parallelism with CUDA MPS" href="../basic_usage/mps_dp.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.5" />
-    <meta name="docbuild:last-update" content="Sep 13, 2026"/>
+  <meta name="docsearch:version" content="0.1.8" />
+    <meta name="docbuild:last-update" content="Oct 16, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -207,15 +207,18 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">🚀 Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Installation — Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">🚀 Installation — Ascend NPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/higgs_tts.html">Higgs TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_diarization.html">Nemotron 3 Diarization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/voxtral_tts.html">Voxtral TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fishaudio_s2_pro.html">Fish Audio S2-Pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/fishaudio_drama3.html">Fish Audio Drama 3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_tts.html">Qwen3 TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_tts.html">Ming-Omni-TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_tts.html">MOSS-TTS</a></li>
@@ -226,11 +229,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_asr.html">Qwen3-ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_asr.html">Fun-ASR-Nano</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/arkasr.html">ARK-ASR-3B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron3_5_asr.html">Nemotron 3.5 ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_transcribe_diarize.html">MOSS-Transcribe-Diarize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/whisper_asr.html">Whisper ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_omni.html">Qwen3-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_omni.html">Ming-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/personaplex.html">PersonaPlex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/llada2_uni.html">LLaDA2.0-Uni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/auk.html">AuK</a></li>
@@ -246,10 +252,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../benchmarks/relay.html">Benchmark Relay</a></li>
-</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Architecture</a></li>
@@ -261,7 +263,14 @@
 <li class="toctree-l1"><a class="reference internal" href="reference_encode_service.html">Reference Encode Service</a></li>
 <li class="toctree-l1"><a class="reference internal" href="profiler.html">Request-level profiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qwen3_asr_concurrency_profile.html">Qwen3-ASR High-Concurrency Benchmark and Bottleneck Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="full_duplex_bench.html">Full-Duplex-Bench runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="full_duplex_metrics.html">Full-Duplex-Bench v1.0 unified metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tts_bench.html">TTS benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="asr_bench.html">ASR benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rl_admin_control.html">RL Admin Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlx.html">MLX Path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
 
@@ -499,6 +508,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-overview">System Overview</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#directory-layout">Directory Layout</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-directory-convention">Model Directory Convention</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#naming-and-lint-checks">Naming and lint checks</a></li>
 </ul>
             </nav>
         </div>
@@ -589,6 +599,54 @@ modalities.</p>
 <code class="docutils literal notranslate"><span class="pre">Stage</span></code>, <code class="docutils literal notranslate"><span class="pre">Coordinator</span></code>, schedulers, model-runner bases, relay, runtime prep, and
 runners.</p>
 </section>
+<section id="naming-and-lint-checks">
+<h2>Naming and lint checks<a class="headerlink" href="#naming-and-lint-checks" title="Link to this heading">#</a></h2>
+<p>Use public names for classes, functions, methods, and attributes defined in
+<code class="docutils literal notranslate"><span class="pre">sglang_omni/</span></code> and <code class="docutils literal notranslate"><span class="pre">tests/</span></code>. The leading-underscore lint hook checks every Python
+file under those directories, including new model packages and test suites. It
+flags class and function
+definitions, every attribute read or write, and string names passed to
+<code class="docutils literal notranslate"><span class="pre">getattr</span></code>. It ignores vendor copies, dunder names such as <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, a lone
+<code class="docutils literal notranslate"><span class="pre">_</span></code>, and definitions inside functions.</p>
+<p>A name inherited from an upstream object still fails the check. Keep that
+spelling, and mark the line:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">session_request</span><span class="o">.</span><span class="n">_omni_prompt_cache_key</span> <span class="o">=</span> <span class="n">adapter_request</span><span class="o">.</span><span class="n">_omni_prompt_cache_key</span>  <span class="c1"># noqa: leading-underscore</span>
+</pre></div>
+</div>
+<p>When a local definition must keep a name because an external interface
+requires it, put <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">noqa:</span> <span class="pre">leading-underscore</span></code> on that line and explain why:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExternalAdapter</span><span class="p">(</span><span class="n">ExternalBase</span><span class="p">):</span>
+    <span class="c1"># ExternalBase calls this hook by its exact name.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_required_external_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># noqa: leading-underscore</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
+</pre></div>
+</div>
+<p>The exemption keeps the definition out of lint violations and automatic renames.
+Its references retain the same name. A comment such as
+<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">skip</span> <span class="pre">leading-underscore</span> <span class="pre">class</span> <span class="pre">and</span> <span class="pre">function</span> <span class="pre">names</span></code> is not an exemption.</p>
+<p>The pre-commit hook runs <code class="docutils literal notranslate"><span class="pre">scripts/check_leading_underscore.py</span></code> and only reports
+violations. It does not rewrite files. To rename violating class and function
+definitions and their references within the same file, run the fixer and review
+the diff:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>scripts/check_leading_underscore.py<span class="w"> </span>--fix
+</pre></div>
+</div>
+<p>The fixer never renames attributes, and it does not update callers in other
+files, pytest fixture parameters, or string references such as
+<code class="docutils literal notranslate"><span class="pre">monkeypatch.setattr(module,</span> <span class="pre">&quot;_name&quot;,</span> <span class="pre">...)</span></code>. Rename those by hand, preserve
+third-party API names, and update those references explicitly.</p>
+<p>Every <code class="docutils literal notranslate"><span class="pre">if</span></code> under <code class="docutils literal notranslate"><span class="pre">sglang_omni/</span></code> must have an <code class="docutils literal notranslate"><span class="pre">else</span></code>, or belong to an <code class="docutils literal notranslate"><span class="pre">if</span></code>/<code class="docutils literal notranslate"><span class="pre">elif</span></code>
+chain that ends in <code class="docutils literal notranslate"><span class="pre">else</span></code>. Returning, raising, or a one-line body does not
+exempt it. There is no <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">noqa</span></code> exemption. Prefer an <code class="docutils literal notranslate"><span class="pre">else</span></code> branch that does
+real work. At least write <code class="docutils literal notranslate"><span class="pre">else:</span> <span class="pre">pass</span></code>.</p>
+<p>The pre-commit hook runs <code class="docutils literal notranslate"><span class="pre">scripts/check_if_else.py</span></code> and only reports
+violations. It does not rewrite files. When the other branch truly does
+nothing, insert <code class="docutils literal notranslate"><span class="pre">else:</span> <span class="pre">pass</span></code> yourself, or run the fixer:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>scripts/check_if_else.py<span class="w"> </span>--fix
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--all-files</span></code> before submitting a change.</p>
+</section>
 </section>
 
 
@@ -603,12 +661,12 @@ runners.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../benchmarks/relay.html"
+       href="../basic_usage/mps_dp.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Benchmark Relay</p>
+        <p class="prev-next-title">Same-GPU Data Parallelism with CUDA MPS</p>
       </div>
     </a>
     <a class="right-next"
@@ -641,6 +699,7 @@ runners.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-overview">System Overview</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#directory-layout">Directory Layout</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-directory-convention">Model Directory Convention</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#naming-and-lint-checks">Naming and lint checks</a></li>
 </ul>
   </nav></div>
 
@@ -674,7 +733,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Sep 13, 2026.
+  Last updated on Oct 16, 2026.
   <br/>
 </p>
   </div>

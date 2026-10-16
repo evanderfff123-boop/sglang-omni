@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=98feffa1"></script>
+    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="prev" title="Fun-CosyVoice3" href="fun_cosyvoice3.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.5" />
-    <meta name="docbuild:last-update" content="Sep 13, 2026"/>
+  <meta name="docsearch:version" content="0.1.8" />
+    <meta name="docbuild:last-update" content="Oct 16, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -207,15 +207,18 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">🚀 Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Installation — Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">🚀 Installation — Ascend NPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="higgs_tts.html">Higgs TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nemotron_diarization.html">Nemotron 3 Diarization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="voxtral_tts.html">Voxtral TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fishaudio_s2_pro.html">Fish Audio S2-Pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fishaudio_drama3.html">Fish Audio Drama 3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qwen3_tts.html">Qwen3 TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ming_tts.html">Ming-Omni-TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="moss_tts.html">MOSS-TTS</a></li>
@@ -226,11 +229,14 @@
 <li class="toctree-l1"><a class="reference internal" href="qwen3_asr.html">Qwen3-ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fun_asr.html">Fun-ASR-Nano</a></li>
 <li class="toctree-l1"><a class="reference internal" href="arkasr.html">ARK-ASR-3B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nemotron3_5_asr.html">Nemotron 3.5 ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="moss_transcribe_diarize.html">MOSS-Transcribe-Diarize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="whisper_asr.html">Whisper ASR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qwen3_omni.html">Qwen3-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ming_omni.html">Ming-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="personaplex.html">PersonaPlex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="llada2_uni.html">LLaDA2.0-Uni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">AuK</a></li>
@@ -246,10 +252,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../benchmarks/relay.html">Benchmark Relay</a></li>
-</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
@@ -261,7 +263,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/reference_encode_service.html">Reference Encode Service</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/profiler.html">Request-level profiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/qwen3_asr_concurrency_profile.html">Qwen3-ASR High-Concurrency Benchmark and Bottleneck Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_bench.html">Full-Duplex-Bench runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_metrics.html">Full-Duplex-Bench v1.0 unified metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/tts_bench.html">TTS benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
 
@@ -500,6 +509,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#speech-generation">Speech Generation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#speech-editing">Speech Editing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling">Sampling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dit-q-k-fusion">DiT Q/K fusion</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seedtts-evaluation">SeedTTS Evaluation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#upstream-parity">Upstream Parity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attribution">Attribution</a></li>
@@ -562,6 +572,7 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>sglang_omni.cli<span class="w"> </span>serve<span class="w"> </span>--model-path<span class="w"> </span>tencent/AuK-Flash<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
 </pre></div>
 </div>
+<p>For Intel GPUs, follow the <a class="reference internal" href="../get_started/installation_xpu.html#auk-speech-generation-and-editing-single-xpu"><span class="std std-ref">AuK XPU recipe</span></a>.</p>
 </section>
 <section id="speech-generation">
 <h2>Speech Generation<a class="headerlink" href="#speech-generation" title="Link to this heading">#</a></h2>
@@ -614,8 +625,25 @@
 <h2>Sampling<a class="headerlink" href="#sampling" title="Link to this heading">#</a></h2>
 <p>Base AuK uses Euler integration with factory defaults <code class="docutils literal notranslate"><span class="pre">nfe=32</span></code>, <code class="docutils literal notranslate"><span class="pre">cfg_strength=2.0</span></code>, and <code class="docutils literal notranslate"><span class="pre">sway_sampling_coef=-1.0</span></code>. Override them with <code class="docutils literal notranslate"><span class="pre">--auk_engine.factory.*</span></code> flags. Flash locks to the released four-step grid with CFG disabled, so those flags have no effect on <code class="docutils literal notranslate"><span class="pre">tencent/AuK-Flash</span></code>. Request overrides of these settings and <code class="docutils literal notranslate"><span class="pre">max_seconds</span></code> are rejected. Qwen uses BF16 autocast; the VAE runs in FP32.</p>
 <p>The DiT stores its weights in BF16 and runs without autocast by default (<code class="docutils literal notranslate"><span class="pre">--auk_engine.factory.weight_dtype</span> <span class="pre">bfloat16</span></code>), which removes the per-step FP32-to-BF16 weight casts. Set <code class="docutils literal notranslate"><span class="pre">--auk_engine.factory.weight_dtype</span> <span class="pre">float32</span></code> to keep FP32 weights with BF16 autocast instead; that is the upstream-exact recipe the parity test compares against, at roughly 1.3x the sampling time. The ODE state is integrated in FP32 in both modes.</p>
+<p>Two further sampling-speed options are on by default. <code class="docutils literal notranslate"><span class="pre">--auk_engine.factory.enable_dit_torch_compile</span></code> compiles each transformer block once for all blocks of its kind, folding the modulation, gating, and normalization chain into the matmul stream. <code class="docutils literal notranslate"><span class="pre">--auk_engine.factory.enable_dit_cuda_graph</span></code> captures one whole Euler step as a CUDA graph and replays it for every NFE step: only the noised latent and the timestep change between steps, so one capture serves a whole trajectory, and every later request whose shape it covers. Set either to <code class="docutils literal notranslate"><span class="pre">false</span></code> to fall back. The graph removes op-issue time and nothing else, so what it is worth depends on whether issuing a step costs more than running it; benchmark it on your own card before assuming it does.</p>
+<p>Graph capture requires padding, so a batch pads up to a declared capture shape – a <code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">frames,</span> <span class="pre">reference</span> <span class="pre">frames,</span> <span class="pre">text</span> <span class="pre">tokens)</span></code> tuple – and only to one that covers it on every axis. The default list is the cross product of five frame rungs (192 to 768 frames, roughly 4s to 15s of audio), two conditioning profiles (an instruction alone, and a cloned voice carrying its reference’s own tokens), and batch sizes 1 and 2; set your own with <code class="docutils literal notranslate"><span class="pre">--auk_engine.factory.dit_cuda_graph_capture_shapes</span></code>. A batch no declared shape covers – a long reference, a wide batch – runs the step eagerly and unpadded, since padding only pays for itself when it buys a replay.</p>
+<p>Padded rows are computed and discarded, not blended in: the attention bias sends masked keys to <code class="docutils literal notranslate"><span class="pre">-inf</span></code>, the convolutional position embedding masks its own input, and rope positions come from the real lengths, so a padded batch produces what the unpadded one does. <code class="docutils literal notranslate"><span class="pre">enable_dit_cuda_graph</span></code> is refused on a checkpoint whose config disables <code class="docutils literal notranslate"><span class="pre">attn_mask_enabled</span></code>, since that bias is what makes padding neutral. Block compilation and every declared capture are paid at startup rather than under the first request that needs each shape, because entering a capture synchronizes the whole device and empties the allocator cache while the conditioning and decode stages are running in the same process. A shape left without enough free device memory to capture logs a warning and runs eagerly; trim the list if startup time or graph memory matters. Sampling stays reproducible for a fixed input shape, but a different padded width is a different numerical path.</p>
 <p><code class="docutils literal notranslate"><span class="pre">seed</span></code> initializes separate request-local generators for target noise and reference VAE posterior sampling, without changing the process RNG. Sampling is reproducible for fixed inputs; different batch shapes or compute backends can still produce numerical differences. Multiple structured references are rejected.</p>
 <p>Conditioning and DiT sampling use dynamic batching, with default maximum batch sizes of 8 and 16. VAE decoding groups equal-length latents (up to 4 requests) to preserve boundary behavior. The stages can overlap on separate CUDA streams and share VAE weights within the same process/device. Conditioning loads the Qwen encoder, the VAE and the two hidden-state fusion parameters; only the sampling stage loads the DiT. Set <code class="docutils literal notranslate"><span class="pre">--conditioning.factory.max_batch_size</span></code>, <code class="docutils literal notranslate"><span class="pre">--auk_engine.factory.max_batch_size</span></code>, or <code class="docutils literal notranslate"><span class="pre">--decode.factory.max_batch_size</span></code> to tune them. Audio is returned after decoding completes; incremental audio streaming is not implemented.</p>
+</section>
+<section id="dit-q-k-fusion">
+<h2>DiT Q/K fusion<a class="headerlink" href="#dit-q-k-fusion" title="Link to this heading">#</a></h2>
+<p>On CUDA, the DiT uses a Triton kernel that fuses per-head RMSNorm with
+interleaved rotary embedding. Disable it to use the native PyTorch path:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>sglang_omni.cli<span class="w"> </span>serve<span class="w"> </span>--model-path<span class="w"> </span>tencent/AuK<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--auk_engine.factory.enable_dit_fused_qk_norm_rope<span class="w"> </span><span class="nb">false</span>
+</pre></div>
+</div>
+<p>The kernel derives the head dimension and output dtype from the model. It
+leaves the conditioner, VAE, and sampling recipe unchanged. Non-CUDA devices
+and AuK-Flash use the native path. The first request may include Triton JIT
+compilation; the 32-step AuK checkpoint has been validated on H100 with FP32
+weights under BF16 autocast and with native BF16 weights.</p>
 </section>
 <section id="seedtts-evaluation">
 <h2>SeedTTS Evaluation<a class="headerlink" href="#seedtts-evaluation" title="Link to this heading">#</a></h2>
@@ -702,6 +730,7 @@ python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> <
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#speech-generation">Speech Generation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#speech-editing">Speech Editing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling">Sampling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dit-q-k-fusion">DiT Q/K fusion</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seedtts-evaluation">SeedTTS Evaluation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#upstream-parity">Upstream Parity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attribution">Attribution</a></li>
@@ -738,7 +767,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Sep 13, 2026.
+  Last updated on Oct 16, 2026.
   <br/>
 </p>
   </div>
