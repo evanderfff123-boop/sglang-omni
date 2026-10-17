@@ -61,7 +61,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 16, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 17, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -506,7 +506,7 @@
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#apple-silicon-mlx">Apple Silicon (MLX)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#apple-silicon-torch-mps">Apple Silicon (Torch MPS)</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-configuration">Server Configuration</a></li>
@@ -549,10 +549,10 @@
 <span class="k">)</span><span class="s2">"</span>
 </pre></div>
 </div>
-<section id="apple-silicon-mlx">
-<h3>Apple Silicon (MLX)<a class="headerlink" href="#apple-silicon-mlx" title="Link to this heading">#</a></h3>
+<section id="apple-silicon-torch-mps">
+<h3>Apple Silicon (Torch MPS)<a class="headerlink" href="#apple-silicon-torch-mps" title="Link to this heading">#</a></h3>
 <p>The Apple Silicon path requires macOS 14 or newer, Python 3.12, Homebrew, and
-SGLang’s MLX runtime. Audio decoding also requires Homebrew’s versioned FFmpeg 7 formula:</p>
+PyTorch with the MPS backend. Audio decoding also requires Homebrew’s versioned FFmpeg 7 formula:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>ffmpeg@7
 <span class="nb">export</span><span class="w"> </span><span class="nv">DYLD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span>ffmpeg@7<span class="k">)</span><span class="s2">/lib</span><span class="si">${</span><span class="nv">DYLD_LIBRARY_PATH</span><span class="p">:+:</span><span class="nv">$DYLD_LIBRARY_PATH</span><span class="si">}</span><span class="s2">"</span>
 </pre></div>
@@ -583,39 +583,21 @@ uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </s
 uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </pre></div>
 </div>
-<p>This installs MLX through SGLang. It does not install or use the <code class="docutils literal notranslate"><span class="pre">mlx-audio</span></code>
-package. Before downloading a model, verify both Metal and FFmpeg loading:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SGLANG_USE_MLX</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>python<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
-<span class="s">import mlx.core as mx</span>
+<p>Before downloading a model, verify both Metal and FFmpeg loading:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">import torch</span>
 <span class="s">from torchcodec.decoders import AudioDecoder</span>
 
-<span class="s">assert mx.metal.is_available()</span>
-<span class="s">print("MLX Metal and TorchCodec FFmpeg loading are available")</span>
+<span class="s">assert torch.backends.mps.is_available()</span>
+<span class="s">print("PyTorch MPS and TorchCodec FFmpeg loading are available")</span>
 <span class="s">PY</span>
 </pre></div>
 </div>
-<p>Use an MLX-converted Qwen3-ASR checkpoint and opt into the MLX runner:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">SGLANG_USE_MLX</span><span class="o">=</span><span class="m">1</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">DYLD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span>ffmpeg@7<span class="k">)</span><span class="s2">/lib</span><span class="si">${</span><span class="nv">DYLD_LIBRARY_PATH</span><span class="p">:+:</span><span class="nv">$DYLD_LIBRARY_PATH</span><span class="si">}</span><span class="s2">"</span>
+<p>Pass an official PyTorch Qwen3-ASR checkpoint. The Torch MPS path currently
+uses one device (<code class="docutils literal notranslate"><span class="pre">tp_size=1</span></code>), greedy decoding, and the eager
+<code class="docutils literal notranslate"><span class="pre">torch_native</span></code>/<code class="docutils literal notranslate"><span class="pre">sdpa</span></code> profile:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">DYLD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span>ffmpeg@7<span class="k">)</span><span class="s2">/lib</span><span class="si">${</span><span class="nv">DYLD_LIBRARY_PATH</span><span class="p">:+:</span><span class="nv">$DYLD_LIBRARY_PATH</span><span class="si">}</span><span class="s2">"</span>
 
-sgl-omni<span class="w"> </span>serve<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--model-path<span class="w"> </span>mlx-community/Qwen3-ASR-0.6B-4bit<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--model-name<span class="w"> </span>Qwen/Qwen3-ASR-0.6B<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--asr.engine.max_running_requests<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--port<span class="w"> </span><span class="m">8000</span>
-</pre></div>
-</div>
-<p>The MLX path currently supports one device (<code class="docutils literal notranslate"><span class="pre">tp_size=1</span></code>) and greedy decoding.
-Radix caching, chunked prefill, and CUDA graphs are not used by this path. The
-HTTP and SSE transcription interfaces below are the same as on CUDA;
-<code class="docutils literal notranslate"><span class="pre">stream=true</span></code> provides pseudo-streaming transcript deltas as tokens are decoded.
-The Apple paths do not provide sampling penalties or token logprobs yet. MLX
-can batch multiple requests, but <code class="docutils literal notranslate"><span class="pre">max_running_requests=1</span></code> is recommended when
-single-request latency matters; increase it only when throughput is preferred.</p>
-<p>To use the Torch MPS compatibility path instead, leave <code class="docutils literal notranslate"><span class="pre">SGLANG_USE_MLX</span></code> unset
-and pass an official PyTorch Qwen3-ASR checkpoint. It currently uses one device,
-greedy decoding, and the eager <code class="docutils literal notranslate"><span class="pre">torch_native</span></code>/<code class="docutils literal notranslate"><span class="pre">sdpa</span></code> profile:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">unset</span><span class="w"> </span>SGLANG_USE_MLX
 sgl-omni<span class="w"> </span>serve<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model-path<span class="w"> </span>Qwen/Qwen3-ASR-0.6B<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model-name<span class="w"> </span>Qwen/Qwen3-ASR-0.6B<span class="w"> </span><span class="se">\</span>
@@ -623,11 +605,14 @@ sgl-omni<span class="w"> </span>serve<span class="w"> </span><span class="se">\<
 <span class="w">  </span>--port<span class="w"> </span><span class="m">8000</span>
 </pre></div>
 </div>
+<p>Radix caching, chunked prefill, and CUDA graphs are not used by this path. The
+HTTP and SSE transcription interfaces below are the same as on CUDA;
+<code class="docutils literal notranslate"><span class="pre">stream=true</span></code> provides pseudo-streaming transcript deltas as tokens are decoded.
+The Apple path does not provide sampling penalties or token logprobs yet.</p>
 <p>The initial Torch MPS profile is bounded to a 2,048-token KV budget, uses
 <code class="docutils literal notranslate"><span class="pre">audio_chunking.max_audio_clip_s</span></code> for non-streaming chunks (30 seconds by
 default), and caps native/whole-upload requests at 60 seconds. Values above
-that qualified limit are rejected. Use the MLX path for long audio and the
-larger native context limit.</p>
+that qualified limit are rejected.</p>
 </section>
 </section>
 <section id="server-configuration">
@@ -977,7 +962,7 @@ does not emit word timestamps).</p></li>
 <li><p>A few unusual audio formats may not expose a readable duration; we fall
 back to the non-chunked path for those uploads.</p></li>
 <li><p>Streamed responses (<code class="docutils literal notranslate"><span class="pre">stream=true</span></code>) do not support chunking yet; a stream
-request runs as one engine request. MLX and CUDA accept audio up to the
+request runs as one engine request. CUDA accepts audio up to the
 model-native <code class="docutils literal notranslate"><span class="pre">max_native_clip_s</span></code> (1,200s), while Torch MPS accepts up to its
 qualified 60-second cap and returns HTTP 400 above that – use <code class="docutils literal notranslate"><span class="pre">stream=false</span></code>
 for longer uploads.</p></li>
@@ -1139,7 +1124,7 @@ On memory-constrained GPUs, use the memory-conservative override:</p></li>
 <code class="docutils literal notranslate"><span class="pre">/v1/realtime?intent=transcription</span></code> and requires <code class="docutils literal notranslate"><span class="pre">--enable-realtime</span></code>.</p></li>
 <li><p>Non-streaming uploads up to <code class="docutils literal notranslate"><span class="pre">max_total_audio_s</span></code> (default one hour) are
 transcribed in full via chunking; see Long Audio above. Streaming requests
-are limited to <code class="docutils literal notranslate"><span class="pre">max_native_clip_s</span></code> (1,200s) on MLX/CUDA; Torch MPS caps both
+are limited to <code class="docutils literal notranslate"><span class="pre">max_native_clip_s</span></code> (1,200s) on CUDA; Torch MPS caps both
 native and whole-upload requests at 60 seconds.</p></li>
 <li><p>Audio is resampled to 16 kHz before transcription.</p></li>
 </ul>
@@ -1194,7 +1179,7 @@ native and whole-upload requests at 60 seconds.</p></li>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#apple-silicon-mlx">Apple Silicon (MLX)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#apple-silicon-torch-mps">Apple Silicon (Torch MPS)</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-configuration">Server Configuration</a></li>
@@ -1244,7 +1229,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 16, 2026.
+  Last updated on Oct 17, 2026.
   <br/>
 </p>
   </div>

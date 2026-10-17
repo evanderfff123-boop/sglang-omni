@@ -61,7 +61,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 16, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 17, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -761,10 +761,8 @@ activations stay finite; this clamp is a no-op under <code class="docutils liter
 <section id="apple-silicon">
 <h2>Apple Silicon<a class="headerlink" href="#apple-silicon" title="Link to this heading">#</a></h2>
 <p>On macOS arm64, ARK-ASR-3B runs through the existing Torch/MPS compatibility
-path without a converted checkpoint or model-specific code changes. Leave
-<code class="docutils literal notranslate"><span class="pre">SGLANG_USE_MLX</span></code> unset:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">unset</span><span class="w"> </span>SGLANG_USE_MLX
-<span class="nb">export</span><span class="w"> </span><span class="nv">DYLD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span>ffmpeg@7<span class="k">)</span><span class="s2">/lib</span><span class="si">${</span><span class="nv">DYLD_LIBRARY_PATH</span><span class="p">:+:</span><span class="nv">$DYLD_LIBRARY_PATH</span><span class="si">}</span><span class="s2">"</span>
+path without a converted checkpoint or model-specific code changes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">DYLD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span>ffmpeg@7<span class="k">)</span><span class="s2">/lib</span><span class="si">${</span><span class="nv">DYLD_LIBRARY_PATH</span><span class="p">:+:</span><span class="nv">$DYLD_LIBRARY_PATH</span><span class="si">}</span><span class="s2">"</span>
 sgl-omni<span class="w"> </span>serve<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model-path<span class="w"> </span>AutoArk-AI/ARK-ASR-3B<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model-name<span class="w"> </span>AutoArk-AI/ARK-ASR-3B<span class="w"> </span><span class="se">\</span>
@@ -774,8 +772,7 @@ sgl-omni<span class="w"> </span>serve<span class="w"> </span><span class="se">\<
 </div>
 <p>This path was validated on a MacBook Air with an M4 and 16 GB of unified
 memory using the official checkpoint and <code class="docutils literal notranslate"><span class="pre">tests/data/query_to_cars.wav</span></code>. The
-server returned the expected transcript through <code class="docutils literal notranslate"><span class="pre">/v1/audio/transcriptions</span></code>.
-Set <code class="docutils literal notranslate"><span class="pre">SGLANG_USE_MLX=1</span></code> to select the native MLX path.</p>
+server returned the expected transcript through <code class="docutils literal notranslate"><span class="pre">/v1/audio/transcriptions</span></code>.</p>
 </section>
 <section id="marker-token-suppression">
 <h2>Marker-Token Suppression<a class="headerlink" href="#marker-token-suppression" title="Link to this heading">#</a></h2>
@@ -1026,7 +1023,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 16, 2026.
+  Last updated on Oct 17, 2026.
   <br/>
 </p>
   </div>

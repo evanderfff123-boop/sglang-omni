@@ -61,7 +61,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 16, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 17, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -582,6 +582,16 @@ control messages over ZMQ</p></li>
 <li><p>drain <code class="docutils literal notranslate"><span class="pre">scheduler.outbox</span></code> and convert scheduler output into control-plane
 messages</p></li>
 </ul>
+<p>A stage whose config lists <code class="docutils literal notranslate"><span class="pre">http_routes</span></code> also serves the ASGI app its
+scheduler returns from <code class="docutils literal notranslate"><span class="pre">http_app()</span></code>, on a Unix socket in the pipeline’s IPC
+runtime directory, from a thread with its own event loop. The app’s lifespan
+starts before the stage reports ready and ends when the stage stops, and the
+Omni HTTP server relays every request under those path prefixes to the
+socket as ASGI messages, streaming bodies both ways and passing a client
+disconnect on. A runtime that already lives in the stage process, such as a
+native engine with its own HTTP API, therefore serves that API without being
+imported into the HTTP process, and its routes answer 503 with the cause when
+the stage stops serving.</p>
 <p>The important invariant is that <code class="docutils literal notranslate"><span class="pre">Stage</span></code> does not branch on scheduler type.
 <code class="docutils literal notranslate"><span class="pre">SimpleScheduler</span></code>, <code class="docutils literal notranslate"><span class="pre">OmniScheduler</span></code>, <code class="docutils literal notranslate"><span class="pre">SessionScheduler</span></code> (stages that keep state
 per session), and streaming schedulers all present the same surface.</p>
@@ -792,7 +802,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 16, 2026.
+  Last updated on Oct 17, 2026.
   <br/>
 </p>
   </div>

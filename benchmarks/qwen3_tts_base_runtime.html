@@ -1,0 +1,1810 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Qwen3-TTS Base runtime research &#8212; SGLang</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=a64801f4" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=a64801f4" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=ccdb6887"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'benchmarks/qwen3_tts_base_runtime';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/js/qwen3_omni_server_generator.js?v=d7738e8a"></script>
+    <script src="../_static/js/ming_omni_server_generator.js?v=7979a72f"></script>
+    <link rel="icon" href="../_static/logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.8" />
+    <meta name="docbuild:last-update" content="Oct 17, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/sgl-omni-logo.svg" class="logo__image only-light" alt="SGLang - Home"/>
+    <img src="../_static/sgl-omni-logo.svg" class="logo__image only-dark pst-js-only" alt="SGLang - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">🚀 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">🚀 Installation — Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/higgs_tts.html">Higgs TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_diarization.html">Nemotron 3 Diarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/voxtral_tts.html">Voxtral TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/fishaudio_s2_pro.html">Fish Audio S2-Pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/fishaudio_drama3.html">Fish Audio Drama 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_tts.html">Qwen3 TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_tts.html">Ming-Omni-TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_tts.html">MOSS-TTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_tts_local.html">MOSS-TTS-Local</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/dots_tts.html">dots.tts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/minimax_music3.html">MiniMax Music 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/zonos2.html">ZONOS2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_asr.html">Qwen3-ASR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_asr.html">Fun-ASR-Nano</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/arkasr.html">ARK-ASR-3B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron3_5_asr.html">Nemotron 3.5 ASR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/moss_transcribe_diarize.html">MOSS-Transcribe-Diarize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/whisper_asr.html">Whisper ASR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_omni.html">Qwen3-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/minicpm_o.html">MiniCPM-o</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_omni.html">Ming-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/personaplex.html">PersonaPlex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/llada2_uni.html">LLaDA2.0-Uni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/auk.html">AuK</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">General Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/qwen3_omni.html">Omni Model Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/audio_translations.html">Audio Translations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/tts.html">TTS Model Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology.html">Process Topology, Replicas, and GPU Sharing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/tts_process_topology.html">TTS Process Topology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology_migration.html">Process Topology Migration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/apiserver_design.html">API Server Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/pipeline.html">Pipeline Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/config.html">Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/adding_parameters.html">Adding a Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/communication.html">Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/reference_encode_service.html">Reference Encode Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/profiler.html">Request-level profiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/qwen3_asr_concurrency_profile.html">Qwen3-ASR High-Concurrency Benchmark and Bottleneck Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_bench.html">Full-Duplex-Bench runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_metrics.html">Full-Duplex-Bench v1.0 unified metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/tts_bench.html">TTS benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/sgl-project/sglang-omni" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/sgl-project/sglang-omni/blob/main/docs/benchmarks/qwen3_tts_base_runtime.md?plain=1" target="_blank"
+   class="btn btn-sm btn-source-file-button dropdown-item"
+   title="Show source"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">Show source</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/sgl-project/sglang-omni/edit/main/docs/benchmarks/qwen3_tts_base_runtime.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/sgl-project/sglang-omni/issues/new?title=Issue%20on%20page%20%2Fbenchmarks/qwen3_tts_base_runtime.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/benchmarks/qwen3_tts_base_runtime.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Qwen3-TTS Base runtime research</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime-changes">Runtime changes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bucketed-whole-utterance-graphs">Bucketed whole-utterance graphs</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-both-size-bucket-candidate-validation-2026-10-15">Initial both-size bucket candidate validation (2026-10-15)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#independent-exact-frame-versus-bucket-comparison-2026-10-15">Independent exact-frame versus bucket comparison (2026-10-15)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-seed-0-6b-bucket-candidate-check-2026-10-15">Three-seed 0.6B bucket candidate check (2026-10-15)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#final-source-validation-2026-10-15">Final source validation (2026-10-15)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#earlier-native-padding-diagnostic">Earlier native-padding diagnostic</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-bucketing-three-seed-quality-follow-up-2026-10-15">Pre-bucketing three-seed quality follow-up (2026-10-15)</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#follow-up-environment-and-reproduction">Follow-up environment and reproduction</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-bucketing-paired-port-measurements-2026-10-14">Pre-bucketing paired port measurements (2026-10-14)</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#throughput-and-quality">Throughput and quality</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#startup-and-resident-memory">Startup and resident memory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduction">Reproduction</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-1-7b-experiment-identity">Historical 1.7B experiment identity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-1-7b-complete-results">Historical 1.7B complete results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-and-limits">Evidence and limits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-0-6b-submission-10">Historical 0.6B submission 10</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="qwen3-tts-base-runtime-research">
+<h1>Qwen3-TTS Base runtime research<a class="headerlink" href="#qwen3-tts-base-runtime-research" title="Link to this heading">#</a></h1>
+<p>This port recovers the Qwen3-TTS Base 1.7B candidate evaluated in OpenRSI
+submission 6 and the Base 0.6B candidate evaluated in submission 10. The historical complete candidates improved non-streaming
+concurrency-16 throughput by <strong>44.36% (0.6B)</strong> and <strong>26.15% (1.7B)</strong>;
+streaming throughput improved by <strong>7.17%</strong> and <strong>6.20%</strong>, respectively.
+These measurements use the historical source and are not a new benchmark of
+the current upstream port, or an isolated measurement of any one component.
+The older upstream comparisons below cover the exact-frame implementation.
+Their source revisions remain explicit. Separate Radix comparisons isolate
+the review-time bucketing candidate within the PR runtime. The final policy
+retains bucketing for 1.7B and exact-frame captures for 0.6B.</p>
+<section id="runtime-changes">
+<h2>Runtime changes<a class="headerlink" href="#runtime-changes" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Base cloning requests use the existing full prefill graph backend, with
+token buckets through 1,024 for 1.7B and the 8,192-token prefill budget for 0.6B. CustomVoice retains its existing 512-token
+ladder; VoiceDesign and unknown variants keep the breakable default.</p></li>
+<li><p>For 1.7B, whole-utterance CUDA vocoding uses 16-frame buckets through 256
+frames and batch sizes 1–4: up to 64 graphs. Requests are zero-padded to
+the smallest captured frame bucket and decoded audio is trimmed to the
+original length. Unsupported shapes, deterministic decoding and disabled
+graphs use the original tokenizer path.</p></li>
+<li><p>For 0.6B, whole-utterance CUDA vocoding preserves the native chunk/context
+boundaries (300/25 codec frames), uses exact lengths 1–325 for one or two
+requests (650 graphs), and uses a dedicated stream. Default non-streaming vocoder batching
+becomes two requests with no collection wait; explicit overrides win.
+Whole-utterance graphs require a recognized Base checkpoint size.</p></li>
+<li><p>Capture larger shapes first within a shared graph pool to limit reserved
+memory fragmentation. This adds startup work and resident graph memory.</p></li>
+<li><p>The initial incremental decoder launches its next cohort before resolving
+the previous one, retaining at most two in flight. Existing tail-decode
+routing, invalid-row handling and cancellation ownership remain in use.</p></li>
+<li><p>Fence each codec arena host index slot’s outstanding upload before ring
+reuse. The four-slot ring and index values are unchanged.</p></li>
+</ul>
+<p>Upstream already contains the historical invalid-row-mask transport mechanism
+in <a class="reference external" href="https://github.com/sgl-project/sglang-omni/pull/2548">#2548</a>. This port uses
+that implementation. It also preserves the follow-up scheduling in
+<a class="reference external" href="https://github.com/sgl-project/sglang-omni/pull/2400">#2400</a> and the first-chunk
+tail runner in <a class="reference external" href="https://github.com/sgl-project/sglang-omni/pull/2658">#2658</a>.</p>
+</section>
+<section id="bucketed-whole-utterance-graphs">
+<h2>Bucketed whole-utterance graphs<a class="headerlink" href="#bucketed-whole-utterance-graphs" title="Link to this heading">#</a></h2>
+<p>The review-time change adopts <a class="reference external" href="https://github.com/db-ol/sglang-omni/commit/ffd8a22f9008ac9b6a0dab03ffaf25896e22dda8">db-ol’s bucketing implementation</a>,
+retaining the original author attribution. For 1.7B it replaces up to 1,024
+exact-frame captures with 64 graphs. The candidate also reduced 0.6B to 42
+graphs, but the independent three-seed check below showed higher corpus WER
+in all three pairs. Commit <code class="docutils literal notranslate"><span class="pre">6075e99c902d1e9565110c20b5f155139dd7b4ad</span></code>
+therefore restores the 650 exact-frame 0.6B captures and disables frame
+padding for that holder. This is a conservative default-policy decision;
+the serving measurements do not establish that padding caused the shift.</p>
+<p>Capture remains in descending shape order within a shared pool. Only the
+1.7B whole-utterance holder enables frame padding; initial and follow-up
+streaming graph policies are unchanged. The 0.6B native 300/25-frame
+chunk/context boundaries and reference-prefix trimming remain in place.
+Static inputs are cleared before every replay; returned audio is cloned and
+trimmed to the original frame count.</p>
+<p>The tokenizer already zero-pads shorter requests to the longest request in
+a native batch. Batch composition can therefore change tensor shapes and
+floating-point results even without CUDA graphs. The causal decoder permits
+trailing padding, but bitwise equality with a narrower native call is not
+the contract for the bucketed path. The appropriate replay check compares
+the graph with eager execution at the same padded shape, then checks
+original-length trimming and fallback behavior.</p>
+<p><a class="reference external" href="https://github.com/sgl-project/sglang-omni/pull/2779#discussion_r4286208221">The reviewer reported</a>
+H200 SeedTTS EN non-streaming C16 results with interleaved seeds 42/43/44:
+mean startup decreased from 333 to 157 seconds for 1.7B and 317 to 150
+seconds for 0.6B over four launches each, with mean latency and WER within
+their observed run-to-run variation. These are reviewer-reported results;
+they were not independently recomputed from raw records in this evidence
+archive and are not pooled with the measurements below.</p>
+<section id="initial-both-size-bucket-candidate-validation-2026-10-15">
+<h3>Initial both-size bucket candidate validation (2026-10-15)<a class="headerlink" href="#initial-both-size-bucket-candidate-validation-2026-10-15" title="Link to this heading">#</a></h3>
+<p>The intermediate both-size bucket implementation in <code class="docutils literal notranslate"><span class="pre">6718550d76cc498fce830819879a7c5a6491ea88</span></code>
+was tested on one Radix H200 with Python 3.12, SGLang 0.5.21, PyTorch
+2.13.0+cu130, Transformers 5.12.1 and qwen-tts 0.1.1. The added tests
+passed: <strong>462 unit tests</strong>, with three Ascend-only skips and 193
+benchmark/accelerator cases deselected; <strong>10 real-checkpoint CUDA tests</strong>,
+with no skips. The GPU cases cover padded graph versus padded eager
+execution for both Base sizes, plus the existing 0.6B native chunk,
+reference-trim and fallback cases. Full pre-commit passed.</p>
+<p>Fresh bucketed servers reached health in <strong>240.8 seconds (1.7B)</strong> and
+<strong>180.5 seconds (0.6B)</strong> with <code class="docutils literal notranslate"><span class="pre">SGLANG_OMNI_STARTUP_TIMEOUT</span></code> unset, using
+the upstream 600-second limit. Each served two non-streaming and two
+streaming requests successfully after 16 excluded warmups. The observed
+health times have a 10-second polling resolution and include warm compiler
+caches. These single-launch observations verify startup in this Radix
+environment; they are not a paired startup-speedup estimate or a serving
+quality benchmark. The earlier VISION startup limitation remains documented
+below with its original source and environment.</p>
+<p>The 1.7B snapshot is <code class="docutils literal notranslate"><span class="pre">fd4b254389122332181a7c3db7f27e918eec64e3</span></code>; the
+0.6B snapshot is <code class="docutils literal notranslate"><span class="pre">5d83992436eae1d760afd27aff78a71d676296fc</span></code>. Both use
+BF16 and the default pipeline configurations, with Torch compile disabled
+uniformly. The runtime file SHA-256 is
+<code class="docutils literal notranslate"><span class="pre">84203399a0e92a471755097bb7a9a7b300cbe994a6d94363d91990456824b444</span></code>.
+These startup measurements precede the final 0.6B policy restoration and do
+not describe its current default. Final source validation is recorded below.</p>
+</section>
+<section id="independent-exact-frame-versus-bucket-comparison-2026-10-15">
+<h3>Independent exact-frame versus bucket comparison (2026-10-15)<a class="headerlink" href="#independent-exact-frame-versus-bucket-comparison-2026-10-15" title="Link to this heading">#</a></h3>
+<p>This additional pair isolates frame bucketing within the existing PR runtime:
+exact-frame <code class="docutils literal notranslate"><span class="pre">5f4de745afc9c2e7a6e5dea19513a9aaff959b82</span></code> versus the bucketed
+runtime from <code class="docutils literal notranslate"><span class="pre">6718550d76cc498fce830819879a7c5a6491ea88</span></code>, published with
+tests/documentation in <code class="docutils literal notranslate"><span class="pre">b6ece10ee6e77141b46dcb6efd307be33a0c21de</span></code>.
+It does not compare the full PR with its upstream branch point.
+Both Base sizes use one paired seed, 42, in non-streaming C16 mode. The
+0.6B bucket arm is the rejected candidate, not the final default. The final
+1.7B runtime path is unchanged from this measured bucket arm.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Base size (non-streaming C16)</p></th>
+<th class="head text-right"><p>Exact requests/s</p></th>
+<th class="head text-right"><p>Bucket requests/s</p></th>
+<th class="head text-right"><p>Change</p></th>
+<th class="head text-right"><p>Exact WER (%)</p></th>
+<th class="head text-right"><p>Bucket WER (%)</p></th>
+<th class="head text-right"><p>Exact SIM</p></th>
+<th class="head text-right"><p>Bucket SIM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.6B</p></td>
+<td class="text-right"><p>29.545</p></td>
+<td class="text-right"><p>28.703</p></td>
+<td class="text-right"><p>-2.85%</p></td>
+<td class="text-right"><p>1.6328</p></td>
+<td class="text-right"><p>2.6375</p></td>
+<td class="text-right"><p>70.3556</p></td>
+<td class="text-right"><p>70.1101</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.7B</p></td>
+<td class="text-right"><p>30.215</p></td>
+<td class="text-right"><p>30.100</p></td>
+<td class="text-right"><p>-0.38%</p></td>
+<td class="text-right"><p>1.1722</p></td>
+<td class="text-right"><p>1.0550</p></td>
+<td class="text-right"><p>71.5250</p></td>
+<td class="text-right"><p>71.0479</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>0.6B: ΔWER +1.0048 percentage points; ΔSIM -0.2455; exact/bucket token-cap hits 1/3, samples with WER &gt;50% 1/2.</p>
+<p>1.7B: ΔWER -0.1172 percentage points; ΔSIM -0.4771; exact/bucket token-cap hits 0/0, samples with WER &gt;50% 1/1.</p>
+<p>All four cohorts contain 1,088 unique successful requests and matching
+generation/WER/SIM/speed IDs, with zero failed requests or skipped scores.
+Full-corpus WER and mean cosine similarity times 100 were independently
+recomputed from checksum-verified archives. Token-cap hits and high-WER
+outliers are retained. One paired seed does not establish that observed
+differences are noise, prove quality equivalence or show statistical
+significance. These values are separate from the earlier three-seed study.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Base size</p></th>
+<th class="head text-right"><p>Exact / bucket startup (s)</p></th>
+<th class="head text-right"><p>Exact / bucket mean full latency (s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.6B</p></td>
+<td class="text-right"><p>333.1 / 180.1</p></td>
+<td class="text-right"><p>0.439 / 0.462</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.7B</p></td>
+<td class="text-right"><p>340.5 / 181.8</p></td>
+<td class="text-right"><p>0.525 / 0.528</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Both arms use the upstream 600-second startup limit, with no environment
+override. Health was polled every 10 seconds. Startup observations include
+warm compiler caches on a shared host, so the single pairs describe this
+environment and are not a controlled cold-start study. The separate
+default-timeout smoke checks above also exercised streaming requests.</p>
+<p>The four cohorts ran sequentially on the same Radix H200 and the pinned
+environment described above. Order: 0.6B exact/bucket, then 1.7B exact/bucket.
+Each starts a fresh server, excludes 16 warmup requests, and evaluates all
+1,088 SeedTTS EN samples in native order with concurrency 16, seed 42 and
+a 2,048-token cap. Client and scorer source is fixed at <code class="docutils literal notranslate"><span class="pre">94730a87</span></code>, identical
+for both arms. All inputs use the pinned revisions below; SIM uses batch
+one with complete waveforms and ASR retains its default concurrency 32.
+Server/client affinity is 16 physical CPU cores (0–15), without exclusive
+reservation. The bucket runtime/test hashes match <code class="docutils literal notranslate"><span class="pre">b6ece10e</span></code>; the later
+<code class="docutils literal notranslate"><span class="pre">6075e99c</span></code> restores the 0.6B policy as described above.</p>
+<p>Use the generation/scoring commands below with these two runtime sources,
+<code class="docutils literal notranslate"><span class="pre">qwen3_tts_0_6b.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">qwen3_tts_1_7b.yaml</span></code>, seed 42, and startup-timeout
+override unset. <a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-1.7b-runtime-d154/tree/a6a74c5688a1ff948b5740508cba62299e213e63/review-evidence/pr2779/20261015/radix-qwen06">0.6B audited numeric records and protocol</a>, <a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-1.7b-runtime-d154/tree/b14382514c885136769258e6f46677d586dfcc53/review-evidence/pr2779/20261015/radix-qwen17">1.7B audited numeric records and protocol</a>
+are backed up with remote byte verification; the evidence repositories
+require access. The public tables and protocol are self-contained.</p>
+</section>
+<section id="three-seed-0-6b-bucket-candidate-check-2026-10-15">
+<h3>Three-seed 0.6B bucket candidate check (2026-10-15)<a class="headerlink" href="#three-seed-0-6b-bucket-candidate-check-2026-10-15" title="Link to this heading">#</a></h3>
+<p>After the seed-42 shift, seeds 43 and 44 were declared before execution.
+The order was exact/bucket for 42, bucket/exact for 43, and exact/bucket for
+44. Sources, settings, scorers and inputs are the same as the preceding
+pair. The original seed 42 remains included. Each of the six cohorts has
+1,088 successful requests and matching generation/WER/SIM/speed IDs, with
+zero failures or skipped scores. All capped and high-WER samples remain.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Seed</p></th>
+<th class="head text-right"><p>Exact WER (%)</p></th>
+<th class="head text-right"><p>Bucket WER (%)</p></th>
+<th class="head text-right"><p>Δ WER (pp)</p></th>
+<th class="head text-right"><p>Exact SIM</p></th>
+<th class="head text-right"><p>Bucket SIM</p></th>
+<th class="head text-right"><p>Exact / bucket requests/s</p></th>
+<th class="head text-right"><p>Exact / bucket cap hits</p></th>
+<th class="head text-right"><p>Exact / bucket WER &gt;50% samples</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>42</p></td>
+<td class="text-right"><p>1.6328</p></td>
+<td class="text-right"><p>2.6375</p></td>
+<td class="text-right"><p>+1.0048</p></td>
+<td class="text-right"><p>70.3556</p></td>
+<td class="text-right"><p>70.1101</p></td>
+<td class="text-right"><p>29.545 / 28.703</p></td>
+<td class="text-right"><p>1 / 3</p></td>
+<td class="text-right"><p>1 / 2</p></td>
+</tr>
+<tr class="row-odd"><td><p>43</p></td>
+<td class="text-right"><p>1.2392</p></td>
+<td class="text-right"><p>1.3648</p></td>
+<td class="text-right"><p>+0.1256</p></td>
+<td class="text-right"><p>70.2263</p></td>
+<td class="text-right"><p>70.3008</p></td>
+<td class="text-right"><p>28.164 / 34.882</p></td>
+<td class="text-right"><p>2 / 1</p></td>
+<td class="text-right"><p>2 / 1</p></td>
+</tr>
+<tr class="row-even"><td><p>44</p></td>
+<td class="text-right"><p>1.1555</p></td>
+<td class="text-right"><p>1.2141</p></td>
+<td class="text-right"><p>+0.0586</p></td>
+<td class="text-right"><p>70.0344</p></td>
+<td class="text-right"><p>70.0432</p></td>
+<td class="text-right"><p>35.203 / 33.446</p></td>
+<td class="text-right"><p>1 / 1</p></td>
+<td class="text-right"><p>0 / 1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Equal-weight mean corpus WER is <strong>1.3425% exact / 1.7388% bucket</strong>. Mean
+paired ΔWER is <strong>+0.3963 percentage points</strong>, sample SD <strong>0.5280</strong>. Mean SIM
+is <strong>70.2055 / 70.1514</strong>; mean paired ΔSIM is <strong>-0.0541</strong>, sample SD
+<strong>0.1690</strong>. WER is higher for the bucket candidate in all three pairs;
+throughput and SIM deltas change sign. SD is descriptive over three pairs,
+not a significance or equivalence test.</p>
+<p>For seed 42, two capped samples account for 117 of the 120 additional word
+errors. Generated token counts differ for 1,005 of 1,088 request IDs, so
+this is not a fixed-codec decoder comparison and cannot attribute the WER
+shift to frame padding alone. The final policy restores the pre-bucketing
+0.6B capture shapes while retaining 1.7B bucketing. This removes the newly
+introduced 0.6B default change without discarding its unfavorable evidence.</p>
+<p><a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-1.7b-runtime-d154/tree/e003cf994a71befee4f3b44acb490b5f5710c88a/review-evidence/pr2779/20261015/radix-qwen06-three-seed">Audited per-sample numeric records, all six cohort summaries, predeclared
+seed order and paired statistics</a>
+are backed up with remote byte verification; repository access is required.</p>
+</section>
+<section id="final-source-validation-2026-10-15">
+<h3>Final source validation (2026-10-15)<a class="headerlink" href="#final-source-validation-2026-10-15" title="Link to this heading">#</a></h3>
+<p>Final runtime <code class="docutils literal notranslate"><span class="pre">6075e99c902d1e9565110c20b5f155139dd7b4ad</span></code> passed <strong>462
+unit tests</strong> (three Ascend-only skips, 193 benchmark/accelerator cases
+deselected) and <strong>10 real-checkpoint CUDA tests with no skips</strong> on the same
+Radix H200 environment. Four GPU cases check exact waveform equality for
+the production 0.6B native chunk/reference-trim and fallback paths. Six
+utility cases compare padded graph replay with padded eager decoding across
+both sizes; those tests explicitly enable padding for the 0.6B utility,
+whose production default is now disabled.</p>
+<p>Fresh final-source servers reached health in <strong>311.0 seconds (0.6B,
+exact frames)</strong> and <strong>190.1 seconds (1.7B, buckets)</strong>. Both retained the
+upstream 600-second timeout with no environment override and successfully
+served two non-streaming and two streaming requests after 16 excluded
+warmups. Health polling resolution is 10 seconds, with warm compiler caches
+on a shared host. These checks establish startup and serving in this Radix
+environment, not a paired speedup or a new quality measurement. Full
+pre-commit passed on the final source and this benchmark document.</p>
+<p>Runtime SHA-256:
+<code class="docutils literal notranslate"><span class="pre">57bde622dad03afdd71a608c4a50507d999e3df2c7237cd06b282ec8cd6ac3be</span></code>.
+Test-file SHA-256:
+<code class="docutils literal notranslate"><span class="pre">5e3177f123e41d1183db3e59b05db5efa8d26338bc2d4c471b5b95feb554557e</span></code>.</p>
+</section>
+<section id="earlier-native-padding-diagnostic">
+<h3>Earlier native-padding diagnostic<a class="headerlink" href="#earlier-native-padding-diagnostic" title="Link to this heading">#</a></h3>
+<p>A native-decoder padding diagnostic on 2026-10-15 provides a direct check of
+that contract. It used the pinned 1.7B tokenizer below, BF16, the configured
+29 fused SnakeBeta modules, H200, PyTorch 2.13.0+cu130, Transformers 5.12.1
+and qwen-tts 0.1.1, without the optional <code class="docutils literal notranslate"><span class="pre">flash-attn</span></code> package. The tokenizer
+used its native PyTorch fallback. The 66 cases combined frame lengths
+31/32/33/63/64/65/127/128/129/255/256, batch sizes 1/2/4 and fixture seeds
+7/11. Each batch retained its native longest length; shorter rows used the
+native zero-code padding. The alternative padded that longest length to the
+next power of two. Both outputs were trimmed to each row’s original length
+and reference-prefix boundary.</p>
+<p>All 66 identical-shape repeats and all 24 cases needing no extra padding
+were bitwise equal. Of the 42 cases with additional padding, 34 changed
+retained waveform samples. For example, a single 31-frame request padded to
+32 frames had maximum absolute difference 0.0541992 and mean absolute
+difference 0.00139271 after trimming five reference frames. Differences were
+also present outside its last two frames. The largest absolute difference
+over the matrix was 0.223145.</p>
+<p>These are synthetic valid codec IDs decoded by the real tokenizer, with
+eager execution on both sides. They demonstrate that padding and trimming
+do not preserve byte parity for this backend. They do not measure perceptual
+quality, serving performance or a CUDA-graph bucketing implementation.
+Result JSON SHA-256:
+<code class="docutils literal notranslate"><span class="pre">d4e9d5da648c5e5ecfd4c6030845736a1c8f3c7fef88135060370dcb4635c557</span></code>.
+<a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-1.7b-runtime-d154/tree/cf4a50d447d659624bdb32ba4591b0287f272ee6/review-evidence/pr2779/20261015/frame-padding">The complete fixture matrix and executed script</a>
+are retained in the evidence repository, which requires access.</p>
+<p>The first counterexample can be reproduced from this checkout with
+<code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code> pointing to the pinned 1.7B snapshot:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SGLANG_OMNI_TORCH_COMPILE_DEFAULT"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"0"</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sglang_omni.models.qwen3_tts.stages</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_qwen3_tts_tokenizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sglang_omni.utils.snake_beta</span><span class="w"> </span><span class="kn">import</span> <span class="n">fuse_vocoder_decoder</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">set_num_threads</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">set_num_interop_threads</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">load_qwen3_tts_tokenizer</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"MODEL_PATH"</span><span class="p">],</span>
+    <span class="n">device</span><span class="o">=</span><span class="s2">"cuda:0"</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="s2">"bfloat16"</span><span class="p">,</span>
+    <span class="n">attn_implementation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">decoder</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="n">fuse_vocoder_decoder</span><span class="p">(</span><span class="n">decoder</span><span class="p">)</span>
+<span class="n">quantizers</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">decoder_config</span><span class="o">.</span><span class="n">num_quantizers</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">()</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">7</span> <span class="o">*</span> <span class="mi">10000</span> <span class="o">+</span> <span class="mi">31</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">codes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">quantizers</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">)</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+<span class="n">padded</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">codes</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">():</span>
+    <span class="n">decoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">padded</span><span class="p">))</span>
+    <span class="n">native</span> <span class="o">=</span> <span class="n">decoder</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+    <span class="n">repeat</span> <span class="o">=</span> <span class="n">decoder</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+    <span class="n">bucketed</span> <span class="o">=</span> <span class="n">decoder</span><span class="p">(</span><span class="n">padded</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">native</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span> <span class="n">repeat</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+    <span class="n">native</span> <span class="o">=</span> <span class="n">native</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">1920</span> <span class="p">:</span> <span class="mi">31</span> <span class="o">*</span> <span class="mi">1920</span><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="n">bucketed</span> <span class="o">=</span> <span class="n">bucketed</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">1920</span> <span class="p">:</span> <span class="mi">31</span> <span class="o">*</span> <span class="mi">1920</span><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">((</span><span class="n">native</span> <span class="o">-</span> <span class="n">bucketed</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The diagnostic above checks narrower versus padded eager execution; it does
+not establish that the numerical difference is larger than the native
+batch-composition effect, or that frame bucketing is unsuitable. The new
+replay tests compare padded graphs with padded eager execution for both
+Base sizes. Disabling the existing initial_cuda_graph option retains the
+tokenizer fallback and also disables initial streaming graphs.</p>
+</section>
+</section>
+<section id="pre-bucketing-three-seed-quality-follow-up-2026-10-15">
+<h2>Pre-bucketing three-seed quality follow-up (2026-10-15)<a class="headerlink" href="#pre-bucketing-three-seed-quality-follow-up-2026-10-15" title="Link to this heading">#</a></h2>
+<p>For Base 1.7B, this follow-up adds paired seeds 43 and 44 and reruns seed
+42 in the same new environment. It does not pool the October 14 single
+pairs with these repetitions. Base remains the fixed branch point
+<code class="docutils literal notranslate"><span class="pre">fa4e6d1f1b4c962ecc223e1422f6e879f5ce1141</span></code>; evaluated head is
+<code class="docutils literal notranslate"><span class="pre">d8977e6f8814320bdbc3549218c872450912caa5</span></code>. These measurements predate the bucketing change and describe the
+exact-frame runtime, not the current bucketed implementation.</p>
+<p>Every arm/mode/seed used a fresh server, all 1,088 SeedTTS EN requests in
+native order, concurrency 16, a 2,048-token cap and 16 excluded warmups.
+Base ran first for seeds 42/44; head ran first for seed 43. All generation,
+WER, SIM and speed records have the same 1,088 IDs per cohort, zero failed
+requests and zero skipped scores. WER below is the full corpus edit-count
+ratio; SIM is mean WavLM cosine similarity multiplied by 100. Both were
+independently recomputed from the checksum-verified raw archives. All
+outliers and token-cap hits remain included.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode (C16)</p></th>
+<th class="head text-right"><p>Seed</p></th>
+<th class="head text-right"><p>Base WER (%)</p></th>
+<th class="head text-right"><p>Head WER (%)</p></th>
+<th class="head text-right"><p>Δ WER (pp)</p></th>
+<th class="head text-right"><p>Base SIM</p></th>
+<th class="head text-right"><p>Head SIM</p></th>
+<th class="head text-right"><p>Δ SIM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Non-streaming</p></td>
+<td class="text-right"><p>42</p></td>
+<td class="text-right"><p>0.9797</p></td>
+<td class="text-right"><p>1.1806</p></td>
+<td class="text-right"><p>+0.2010</p></td>
+<td class="text-right"><p>71.2558</p></td>
+<td class="text-right"><p>71.2574</p></td>
+<td class="text-right"><p>+0.0016</p></td>
+</tr>
+<tr class="row-odd"><td><p>Non-streaming</p></td>
+<td class="text-right"><p>43</p></td>
+<td class="text-right"><p>1.0215</p></td>
+<td class="text-right"><p>1.0718</p></td>
+<td class="text-right"><p>+0.0502</p></td>
+<td class="text-right"><p>71.4009</p></td>
+<td class="text-right"><p>71.3138</p></td>
+<td class="text-right"><p>-0.0872</p></td>
+</tr>
+<tr class="row-even"><td><p>Non-streaming</p></td>
+<td class="text-right"><p>44</p></td>
+<td class="text-right"><p>1.0466</p></td>
+<td class="text-right"><p>1.0550</p></td>
+<td class="text-right"><p>+0.0084</p></td>
+<td class="text-right"><p>71.4951</p></td>
+<td class="text-right"><p>71.2800</p></td>
+<td class="text-right"><p>-0.2150</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming</p></td>
+<td class="text-right"><p>42</p></td>
+<td class="text-right"><p>1.1471</p></td>
+<td class="text-right"><p>1.1722</p></td>
+<td class="text-right"><p>+0.0251</p></td>
+<td class="text-right"><p>71.5253</p></td>
+<td class="text-right"><p>71.3977</p></td>
+<td class="text-right"><p>-0.1276</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming</p></td>
+<td class="text-right"><p>43</p></td>
+<td class="text-right"><p>1.0299</p></td>
+<td class="text-right"><p>1.0634</p></td>
+<td class="text-right"><p>+0.0335</p></td>
+<td class="text-right"><p>71.1812</p></td>
+<td class="text-right"><p>71.3749</p></td>
+<td class="text-right"><p>+0.1936</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming</p></td>
+<td class="text-right"><p>44</p></td>
+<td class="text-right"><p>0.9964</p></td>
+<td class="text-right"><p>0.9964</p></td>
+<td class="text-right"><p>+0.0000</p></td>
+<td class="text-right"><p>71.3606</p></td>
+<td class="text-right"><p>71.3682</p></td>
+<td class="text-right"><p>+0.0076</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head text-right"><p>Mean base/head WER (%)</p></th>
+<th class="head text-right"><p>Mean Δ WER ± sample SD (pp)</p></th>
+<th class="head text-right"><p>Mean base/head SIM</p></th>
+<th class="head text-right"><p>Mean Δ SIM ± sample SD</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Non-streaming</p></td>
+<td class="text-right"><p>1.0159 / 1.1025</p></td>
+<td class="text-right"><p>+0.0865 ± 0.1013</p></td>
+<td class="text-right"><p>71.3839 / 71.2837</p></td>
+<td class="text-right"><p>-0.1002 ± 0.1089</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming</p></td>
+<td class="text-right"><p>1.0578 / 1.0773</p></td>
+<td class="text-right"><p>+0.0195 ± 0.0174</p></td>
+<td class="text-right"><p>71.3557 / 71.3802</p></td>
+<td class="text-right"><p>+0.0245 ± 0.1613</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Head WER was higher in 3/3 non-streaming and 2/3 streaming seeds.
+The means weight each seed equally; SD describes the three paired deltas.
+These repetitions show the observed variability but do not establish that
+a quality shift is noise, prove non-inferiority, or measure perceptual
+equivalence. No significance or quality-pass claim is made from three seeds.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head text-right"><p>Seed</p></th>
+<th class="head text-right"><p>Base/head max-token hits</p></th>
+<th class="head text-right"><p>Base/head samples with WER &gt;50%</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Non-streaming</p></td>
+<td class="text-right"><p>42</p></td>
+<td class="text-right"><p>0 / 1</p></td>
+<td class="text-right"><p>0 / 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Non-streaming</p></td>
+<td class="text-right"><p>43</p></td>
+<td class="text-right"><p>0 / 0</p></td>
+<td class="text-right"><p>0 / 0</p></td>
+</tr>
+<tr class="row-even"><td><p>Non-streaming</p></td>
+<td class="text-right"><p>44</p></td>
+<td class="text-right"><p>0 / 0</p></td>
+<td class="text-right"><p>0 / 0</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming</p></td>
+<td class="text-right"><p>42</p></td>
+<td class="text-right"><p>0 / 0</p></td>
+<td class="text-right"><p>0 / 1</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming</p></td>
+<td class="text-right"><p>43</p></td>
+<td class="text-right"><p>0 / 0</p></td>
+<td class="text-right"><p>0 / 0</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming</p></td>
+<td class="text-right"><p>44</p></td>
+<td class="text-right"><p>0 / 0</p></td>
+<td class="text-right"><p>0 / 0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="follow-up-environment-and-reproduction">
+<h3>Follow-up environment and reproduction<a class="headerlink" href="#follow-up-environment-and-reproduction" title="Link to this heading">#</a></h3>
+<p>The runs used one H200 per cohort on VISION, 16 allocated physical benchmark
+cores plus one separate monitoring core, and a 192 GiB host-memory allocation.
+The fixed Pyxis image SHA-256 is
+<code class="docutils literal notranslate"><span class="pre">319cb4ed277c809ac52bd422802efc4bb2e316fcb9fc01f33e36d1a6276fe86e</span></code>
+(derived from <code class="docutils literal notranslate"><span class="pre">lmsysorg/sglang</span></code> digest
+<code class="docutils literal notranslate"><span class="pre">06e4f2ed21afde4ff513cda65070124e727ba23ccaeff7712b8c40e1097d611f</span></code>).
+It uses SGLang 0.5.21, Python 3.12, PyTorch 2.13.0+cu130 and Transformers
+5.12.1. This is a different container from the October 14 comparison.
+All model, dataset, ASR and SIM input revisions/hashes remain those in the
+reproduction table below. Clients and scorers use the unchanged base source;
+SIM batch size is uniformly one with complete waveforms.</p>
+<p>The seed-42 non-streaming baseline completed in the preceding allocation
+on another H200 of the same host/image; its quality records are retained.
+Its health-probe delay makes its startup time invalid, and no throughput
+comparison is made for that pair across allocations. The remaining 11
+cohorts share the resumed allocation. These repetitions support the
+quality table, not a new pooled throughput claim.</p>
+<p><strong>Pre-bucketing startup limitation:</strong> an initial exact-frame head launch exceeded the upstream
+600-second startup timeout before any formal requests. After preserving
+that failure, both arms used <code class="docutils literal notranslate"><span class="pre">SGLANG_OMNI_STARTUP_TIMEOUT=1800</span></code> for all
+new launches. The imported successful baseline above used the default
+600 seconds. Extending the evaluation wait is not an upstream startup fix.</p>
+<p>The five valid baseline launches took about 180 seconds;
+the six head launches took 841–992 seconds. Health was polled every
+10 seconds, so these are first-observed-health times with that polling
+resolution. The previous 139/306-second warm-cache pair is specific to
+its October 14 environment and does not describe this deployment.</p>
+<p>Use the reproduction commands below with <code class="docutils literal notranslate"><span class="pre">--seed</span> <span class="pre">42</span></code>, <code class="docutils literal notranslate"><span class="pre">--seed</span> <span class="pre">43</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">--seed</span> <span class="pre">44</span></code> for both modes and both sources. For this allocation, replace
+the affinity with <code class="docutils literal notranslate"><span class="pre">0-3,11-12,14-19,26-29</span></code>, set the startup timeout to 1,800
+seconds and <code class="docutils literal notranslate"><span class="pre">SPEAKER_SAMPLES_DIR</span></code> to a writable node-local directory. Use
+a fresh available port for each TTS/ASR process and stop only the owned TTS
+process before scoring. Keep the pinned inputs and the remaining
+generation/scoring settings unchanged.</p>
+<p><a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-1.7b-runtime-d154/tree/f156f33b617a1f4d4871636009db26b6720178e1/review-evidence/pr2779/20261015/paired-quality">Audited per-seed summaries, compact per-sample scores and protocol</a>
+are backed up in the evidence repository, which requires access. The tables
+above are self-contained; the backup excludes dataset text, reference audio
+and generated WAVs. Audited summary SHA-256:
+<code class="docutils literal notranslate"><span class="pre">832b67d44483776d0659578a464a948cee1c42c0cdffd5be504604ce376ee047</span></code>.</p>
+</section>
+</section>
+<section id="pre-bucketing-paired-port-measurements-2026-10-14">
+<h2>Pre-bucketing paired port measurements (2026-10-14)<a class="headerlink" href="#pre-bucketing-paired-port-measurements-2026-10-14" title="Link to this heading">#</a></h2>
+<p>Both revisions ran sequentially on the same allocated NVIDIA H200
+(143,771 MiB, driver 595.71.05). Base is the original branch point
+<code class="docutils literal notranslate"><span class="pre">fa4e6d1f1b4c962ecc223e1422f6e879f5ce1141</span></code>; the measured PR head is
+<code class="docutils literal notranslate"><span class="pre">8becbc36f1fd78b1c3cd99d1b075201326b4e240</span></code>. This comparison does not use a
+moving <code class="docutils literal notranslate"><span class="pre">main</span></code>. Both source trees were clean, and all clients and scorers ran
+from the unchanged base checkout.</p>
+<p>Server and client affinity was CPU 0–15: 16 physical cores on the GPU-local
+NUMA node. Those CPUs were not exclusively reserved, and no 128 GiB host-memory
+cap was imposed for this follow-up. The container image was
+<code class="docutils literal notranslate"><span class="pre">docker.io/hongccc/sglang-omni&#64;sha256:ebe4239e29a764ee3a2806385c061c5fd438a26f01458e503d3822dcba5790df</span></code>,
+with SGLang upgraded to 0.5.21 as required by this checkout, Python 3.12,
+PyTorch 2.13.0+cu130 and Transformers 5.12.1.</p>
+<p>Each of the eight cohorts used the full 1,088-request SeedTTS EN split in
+native order, concurrency 16, seed 42 and a 2,048-token cap. A fresh server
+was started for each mode. Sixteen requests using the first reference were
+excluded as warmup; normal reference caching and default KV-cache sizing
+were retained. Weights were already downloaded. These are single runs,
+not three-seed means or estimates with confidence intervals.</p>
+<section id="throughput-and-quality">
+<h3>Throughput and quality<a class="headerlink" href="#throughput-and-quality" title="Link to this heading">#</a></h3>
+<p>WER is the full corpus edit-count ratio, including outliers. SIM is mean
+WavLM cosine similarity multiplied by 100, not a percentage of passing
+samples. Each row’s base and head generated 1,088 successful requests, and
+each WER/SIM calculation covered those same 1,088 IDs with zero failures or
+skips. The corpus WER and SIM mean were independently recomputed from the
+per-sample records.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Mode (C16)</p></th>
+<th class="head text-right"><p>Base requests/s</p></th>
+<th class="head text-right"><p>Head requests/s</p></th>
+<th class="head text-right"><p>Change</p></th>
+<th class="head text-right"><p>Base WER (%)</p></th>
+<th class="head text-right"><p>Head WER (%)</p></th>
+<th class="head text-right"><p>Base SIM</p></th>
+<th class="head text-right"><p>Head SIM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.6B</p></td>
+<td><p>Non-streaming</p></td>
+<td class="text-right"><p>21.058</p></td>
+<td class="text-right"><p>31.580</p></td>
+<td class="text-right"><p>+49.97%</p></td>
+<td class="text-right"><p>1.8923</p></td>
+<td class="text-right"><p>1.3816</p></td>
+<td class="text-right"><p>70.1584</p></td>
+<td class="text-right"><p>70.0585</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.6B</p></td>
+<td><p>Streaming</p></td>
+<td class="text-right"><p>27.073</p></td>
+<td class="text-right"><p>35.671</p></td>
+<td class="text-right"><p>+31.76%</p></td>
+<td class="text-right"><p>1.5323</p></td>
+<td class="text-right"><p>1.1639</p></td>
+<td class="text-right"><p>70.3511</p></td>
+<td class="text-right"><p>70.4384</p></td>
+</tr>
+<tr class="row-even"><td><p>1.7B</p></td>
+<td><p>Non-streaming</p></td>
+<td class="text-right"><p>24.430</p></td>
+<td class="text-right"><p>30.245</p></td>
+<td class="text-right"><p>+23.80%</p></td>
+<td class="text-right"><p>0.9462</p></td>
+<td class="text-right"><p>1.1387</p></td>
+<td class="text-right"><p>71.5595</p></td>
+<td class="text-right"><p>71.4940</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.7B</p></td>
+<td><p>Streaming</p></td>
+<td class="text-right"><p>32.223</p></td>
+<td class="text-right"><p>32.459</p></td>
+<td class="text-right"><p>+0.73%</p></td>
+<td class="text-right"><p>1.1304</p></td>
+<td class="text-right"><p>1.2560</p></td>
+<td class="text-right"><p>71.5773</p></td>
+<td class="text-right"><p>71.1164</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The 1.7B WER increased by 0.1926 percentage points in non-streaming and
+0.1256 points in streaming. Its streaming throughput difference is small,
+and its SIM decreased by 0.4609 points. These observations do not establish
+quality equivalence or a repeatable streaming speedup.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Mode</p></th>
+<th class="head text-right"><p>Base/head max-token hits</p></th>
+<th class="head text-right"><p>Base/head samples with WER &gt;50%</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.6B</p></td>
+<td><p>Non-streaming</p></td>
+<td class="text-right"><p>1 / 3</p></td>
+<td class="text-right"><p>2 / 2</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.6B</p></td>
+<td><p>Streaming</p></td>
+<td class="text-right"><p>1 / 0</p></td>
+<td class="text-right"><p>1 / 0</p></td>
+</tr>
+<tr class="row-even"><td><p>1.7B</p></td>
+<td><p>Non-streaming</p></td>
+<td class="text-right"><p>0 / 0</p></td>
+<td class="text-right"><p>0 / 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.7B</p></td>
+<td><p>Streaming</p></td>
+<td class="text-right"><p>0 / 1</p></td>
+<td class="text-right"><p>1 / 1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>No capped or high-WER sample was dropped. SIM used batch size 1 for every
+cohort with complete waveforms and the same scorer. The initial batch-8
+attempt exhausted memory while padding long 0.6B baseline outputs, including
+a 163.84-second sample; batch size was reduced uniformly without changing
+audio, scoring models or thresholds.</p>
+</section>
+<section id="startup-and-resident-memory">
+<h3>Startup and resident memory<a class="headerlink" href="#startup-and-resident-memory" title="Link to this heading">#</a></h3>
+<p>Startup is process spawn to the first healthy HTTP response, measured before
+the 16 excluded warmups. The second successful launch of each revision
+(streaming mode) provides the warm-cache comparison: compiler caches were
+warm, but each new process still captured its CUDA graphs.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head text-right"><p>Base startup (s)</p></th>
+<th class="head text-right"><p>Head startup (s)</p></th>
+<th class="head text-right"><p>Additional time (s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.6B</p></td>
+<td class="text-right"><p>179.079</p></td>
+<td class="text-right"><p>248.180</p></td>
+<td class="text-right"><p>69.101</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.7B</p></td>
+<td class="text-right"><p>138.569</p></td>
+<td class="text-right"><p>306.147</p></td>
+<td class="text-right"><p>167.577</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The preceding non-streaming launches took 329.675/243.170 seconds
+(base/head, 0.6B) and 154.100/349.664 seconds (1.7B). The first 0.6B base
+launch had cold compiler caches, so its longer time is not evidence that
+this PR reduces startup time. Each timing is one observation.</p>
+<p>Resident memory below is serving-process <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span> <span class="pre">used_gpu_memory</span></code> after
+the 16 excluded warmup requests, rather than a peak or an isolated graph
+allocation measurement.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Mode</p></th>
+<th class="head text-right"><p>Base resident memory (MiB)</p></th>
+<th class="head text-right"><p>Head resident memory (MiB)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.6B</p></td>
+<td><p>Non-streaming</p></td>
+<td class="text-right"><p>126068</p></td>
+<td class="text-right"><p>124386</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.6B</p></td>
+<td><p>Streaming</p></td>
+<td class="text-right"><p>123430</p></td>
+<td class="text-right"><p>124390</p></td>
+</tr>
+<tr class="row-even"><td><p>1.7B</p></td>
+<td><p>Non-streaming</p></td>
+<td class="text-right"><p>126494</p></td>
+<td class="text-right"><p>127638</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.7B</p></td>
+<td><p>Streaming</p></td>
+<td class="text-right"><p>123514</p></td>
+<td class="text-right"><p>124676</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Default automatic KV-cache sizing was retained, so total resident memory
+mixes weights, KV cache, graphs and allocator reservations. A lower total
+does not imply that graph capture is free. These measurements do not
+qualify the graph ladders for smaller GPUs.</p>
+</section>
+<section id="reproduction">
+<h3>Reproduction<a class="headerlink" href="#reproduction" title="Link to this heading">#</a></h3>
+<p>Pinned inputs:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Input</p></th>
+<th class="head"><p>Revision or SHA-256</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Qwen/Qwen3-TTS-12Hz-0.6B-Base</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5d83992436eae1d760afd27aff78a71d676296fc</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Qwen/Qwen3-TTS-12Hz-1.7B-Base</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fd4b254389122332181a7c3db7f27e918eec64e3</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">zhaochenyang20/seed-tts-eval-arrow</span></code> (EN)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">27f4c1adee83b5b29b7c4b375f6b976324bda308</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Qwen/Qwen3-ASR-1.7B</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">7278e1e70fe206f11671096ffdd38061171dd6e5</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>SIM <code class="docutils literal notranslate"><span class="pre">wavlm_large_finetune.pth</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">51f07e3b94d9e0262a6a675ef5a087be3dd09e8c62e9d886827f44f82fe7f94b</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>SIM <code class="docutils literal notranslate"><span class="pre">wavlm_large.pt</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6fb4b3c3e6aa567f0a997b30855859cb81528ee8078802af439f7b2da0bf100f</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The unchanged benchmark loader pins the dataset revision above. Set
+<code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code> and <code class="docutils literal notranslate"><span class="pre">ASR_PATH</span></code> to the local snapshots of the listed revisions,
+<code class="docutils literal notranslate"><span class="pre">MODEL_ID</span></code> to the checkpoint ID, <code class="docutils literal notranslate"><span class="pre">OUT</span></code> to a separate directory per cohort,
+and <code class="docutils literal notranslate"><span class="pre">PORT</span></code> to an unused port. Use <code class="docutils literal notranslate"><span class="pre">qwen3_tts_0_6b.yaml</span></code> or
+<code class="docutils literal notranslate"><span class="pre">qwen3_tts_1_7b.yaml</span></code> as <code class="docutils literal notranslate"><span class="pre">CONFIG</span></code>. Run the server from the selected base/head
+checkout, with the following environment also applied to the clients:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">HF_HOME</span><span class="o">=</span>/work/hf-cache
+<span class="nb">export</span><span class="w"> </span><span class="nv">SEEDTTS_SIM_CACHE_DIR</span><span class="o">=</span>/work/sim-cache
+<span class="nb">export</span><span class="w"> </span><span class="nv">SGLANG_OMNI_TORCH_COMPILE_DEFAULT</span><span class="o">=</span><span class="m">0</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">SGLANG_OMNI_STRICT_PORT</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">unset</span><span class="w"> </span>OMP_NUM_THREADS
+taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span>-15<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>sglang_omni.cli<span class="w"> </span>serve<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model-path<span class="w"> </span><span class="s2">"</span><span class="nv">$MODEL_PATH</span><span class="s2">"</span><span class="w"> </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>--port<span class="w"> </span><span class="s2">"</span><span class="nv">$PORT</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span><span class="s2">"examples/configs/</span><span class="nv">$CONFIG</span><span class="s2">"</span>
+</pre></div>
+</div>
+<p>From the base checkout in another shell, wait for <code class="docutils literal notranslate"><span class="pre">/health</span></code>, then use the
+same mode for both warmup and measurement (<code class="docutils literal notranslate"><span class="pre">MODE=()</span></code> for non-streaming,
+<code class="docutils literal notranslate"><span class="pre">MODE=(--stream)</span></code> for streaming; Bash array syntax):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">MODE</span><span class="o">=()</span>
+<span class="nv">COMMON</span><span class="o">=(</span>--model<span class="w"> </span><span class="s2">"</span><span class="nv">$MODEL_ID</span><span class="s2">"</span><span class="w"> </span>--meta<span class="w"> </span>zhaochenyang20/seed-tts-eval-arrow
+<span class="w">  </span>--lang<span class="w"> </span>en<span class="w"> </span>--concurrency<span class="w"> </span><span class="m">16</span><span class="w"> </span>--port<span class="w"> </span><span class="s2">"</span><span class="nv">$PORT</span><span class="s2">"</span><span class="w"> </span>--seed<span class="w"> </span><span class="m">42</span><span class="w"> </span>--max-new-tokens<span class="w"> </span><span class="m">2048</span><span class="o">)</span>
+taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span>-15<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>benchmarks.eval.benchmark_tts_seedtts<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMMON</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODE</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--generate-only<span class="w"> </span>--use-existing-server<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max-samples<span class="w"> </span><span class="m">1</span><span class="w"> </span>--warmup<span class="w"> </span><span class="m">15</span><span class="w"> </span>--output-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$OUT</span><span class="s2">/excluded-warmup"</span>
+nvidia-smi<span class="w"> </span>--query-compute-apps<span class="o">=</span>gpu_uuid,pid,process_name,used_gpu_memory<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--format<span class="o">=</span>csv,nounits
+taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span>-15<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>benchmarks.eval.benchmark_tts_seedtts<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMMON</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODE</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--generate-only<span class="w"> </span>--use-existing-server<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max-samples<span class="w"> </span><span class="m">1088</span><span class="w"> </span>--warmup<span class="w"> </span><span class="m">0</span><span class="w"> </span>--fingerprint<span class="w"> </span>--output-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$OUT</span><span class="s2">"</span>
+</pre></div>
+</div>
+<p>Stop the owned TTS server before scoring its saved WAVs. Run both scorers
+from the base checkout; ASR uses the default concurrency of 32. The runtime
+SIM override below leaves the repository and waveform lengths unchanged:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span>-15<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>benchmarks.eval.benchmark_tts_seedtts<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMMON</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODE</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--transcribe-only<span class="w"> </span>--skip-gpu-cleanup<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--asr-model-path<span class="w"> </span><span class="s2">"</span><span class="nv">$ASR_PATH</span><span class="s2">"</span><span class="w"> </span>--server-timeout<span class="w"> </span><span class="m">3600</span><span class="w"> </span>--output-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$OUT</span><span class="s2">"</span>
+taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span>-15<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">"import runpy; import benchmarks.tasks.tts as t; t.SPEAKER_SIMILARITY_BATCH_SIZE = 1; runpy.run_module('benchmarks.eval.benchmark_tts_seedtts', run_name='__main__')"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMMON</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">MODE</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--similarity-only<span class="w"> </span>--device<span class="w"> </span>cuda:0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$OUT</span><span class="s2">"</span>
+</pre></div>
+</div>
+<p>Saved evidence per cohort includes command arguments, source identities,
+startup/memory snapshots, <code class="docutils literal notranslate"><span class="pre">speed_results.json</span></code>, <code class="docutils literal notranslate"><span class="pre">generated.json</span></code>, and
+per-sample <code class="docutils literal notranslate"><span class="pre">wer_results.json</span></code> and <code class="docutils literal notranslate"><span class="pre">similarity_results.json</span></code>. This fixed
+English workload on one H200 does not establish multilingual,
+low-concurrency or smaller-device behavior.</p>
+</section>
+</section>
+<section id="historical-1-7b-experiment-identity">
+<h2>Historical 1.7B experiment identity<a class="headerlink" href="#historical-1-7b-experiment-identity" title="Link to this heading">#</a></h2>
+<p>The work was developed by an autonomous research agent using
+<a class="reference external" href="https://github.com/OpenRSI-Foundation/OpenRSI-Index/tree/main/RSI-Harness">RSI-Harness</a>,
+from <a class="reference external" href="https://github.com/OpenRSI-Foundation/OpenRSI-Index/discussions/154">OpenRSI proposal #154</a>.</p>
+<ul class="simple">
+<li><p>Initial source: <code class="docutils literal notranslate"><span class="pre">1523543056bf334bc2f4d69db23aad0a002cedf2</span></code>.</p></li>
+<li><p>Research run: <code class="docutils literal notranslate"><span class="pre">51d85322a9484e83bcf8242a5c020dad</span></code>, submission <code class="docutils literal notranslate"><span class="pre">agent-6</span></code>.</p></li>
+<li><p>Evaluated source inventory SHA-256:
+<code class="docutils literal notranslate"><span class="pre">228108a4b3e11d9e81ecfd109cb504921e732a711f98e77717f070c5f9842279</span></code>.</p></li>
+<li><p>Checkpoint: <code class="docutils literal notranslate"><span class="pre">Qwen/Qwen3-TTS-12Hz-1.7B-Base</span></code>, revision
+<code class="docutils literal notranslate"><span class="pre">fd4b254389122332181a7c3db7f27e918eec64e3</span></code>.</p></li>
+<li><p>Dataset: full SeedTTS EN, 1,088 requests, revision
+<code class="docutils literal notranslate"><span class="pre">27f4c1adee83b5b29b7c4b375f6b976324bda308</span></code>, in native order.</p></li>
+<li><p>One NVIDIA H200, 16 physical CPU cores on one NUMA node, 128 GiB host
+memory. SGLang 0.5.20, PyTorch 2.13.0+cu130.</p></li>
+<li><p>Non-streaming and streaming at concurrency 16, each using seeds 42/43/44;
+16 TTS warmups per run excluded from scoring. Native engine admission and
+decode graph limits remain 64/64; the maximum token cap is 2,048.</p></li>
+<li><p>Stock diagnostic ASR followed by independent original-source authoritative
+Qwen3-ASR-1.7B on the generated WAVs, concurrency 32 and 64 ASR warmups.</p></li>
+</ul>
+</section>
+<section id="historical-1-7b-complete-results">
+<h2>Historical 1.7B complete results<a class="headerlink" href="#historical-1-7b-complete-results" title="Link to this heading">#</a></h2>
+<p>Values are arithmetic means of all three per-run summaries, including latency
+percentiles. They are not percentiles pooled across runs. Baseline refers to
+the initial pristine version, rather than the preceding accepted candidate.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Metric</p></th>
+<th class="head text-right"><p>Pristine</p></th>
+<th class="head text-right"><p>Submission 6</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Non-streaming C16</p></td>
+<td><p>Requests/s</p></td>
+<td class="text-right"><p>21.1670</p></td>
+<td class="text-right"><p>26.7017 (+26.15%)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Non-streaming C16</p></td>
+<td><p>Mean full latency (s)</p></td>
+<td class="text-right"><p>0.7530</p></td>
+<td class="text-right"><p>0.5950</p></td>
+</tr>
+<tr class="row-even"><td><p>Non-streaming C16</p></td>
+<td><p>p99 full latency (s)</p></td>
+<td class="text-right"><p>1.5030</p></td>
+<td class="text-right"><p>0.9927</p></td>
+</tr>
+<tr class="row-odd"><td><p>Non-streaming C16</p></td>
+<td><p>p99 RTF</p></td>
+<td class="text-right"><p>0.4231</p></td>
+<td class="text-right"><p>0.1780</p></td>
+</tr>
+<tr class="row-even"><td><p>Non-streaming C16</p></td>
+<td><p>Corpus WER (%)</p></td>
+<td class="text-right"><p>1.0243</p></td>
+<td class="text-right"><p>1.0383</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td><p>Requests/s</p></td>
+<td class="text-right"><p>22.7613</p></td>
+<td class="text-right"><p>24.1733 (+6.20%)</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td><p>Mean first audio (ms)</p></td>
+<td class="text-right"><p>89.87</p></td>
+<td class="text-right"><p>75.13</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td><p>p95 first audio (ms)</p></td>
+<td class="text-right"><p>127.00</p></td>
+<td class="text-right"><p>114.57</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td><p>p99 first audio (ms)</p></td>
+<td class="text-right"><p>997.63</p></td>
+<td class="text-right"><p>252.80</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td><p>Mean full latency (s)</p></td>
+<td class="text-right"><p>0.6997</p></td>
+<td class="text-right"><p>0.6593</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td><p>p99 full latency (s)</p></td>
+<td class="text-right"><p>1.4773</p></td>
+<td class="text-right"><p>1.0790</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td><p>p99 RTF</p></td>
+<td class="text-right"><p>0.3554</p></td>
+<td class="text-right"><p>0.2006</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td><p>Corpus WER (%)</p></td>
+<td class="text-right"><p>1.0466</p></td>
+<td class="text-right"><p>1.0438</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td><p>C50 (%)</p></td>
+<td class="text-right"><p>99.85</p></td>
+<td class="text-right"><p>99.91</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>All prescribed throughput repetitions:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head text-right"><p>Seed</p></th>
+<th class="head text-right"><p>Pristine requests/s</p></th>
+<th class="head text-right"><p>Submission 6 requests/s</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Non-streaming C16</p></td>
+<td class="text-right"><p>42</p></td>
+<td class="text-right"><p>21.246</p></td>
+<td class="text-right"><p>26.707</p></td>
+</tr>
+<tr class="row-odd"><td><p>Non-streaming C16</p></td>
+<td class="text-right"><p>43</p></td>
+<td class="text-right"><p>21.116</p></td>
+<td class="text-right"><p>26.774</p></td>
+</tr>
+<tr class="row-even"><td><p>Non-streaming C16</p></td>
+<td class="text-right"><p>44</p></td>
+<td class="text-right"><p>21.139</p></td>
+<td class="text-right"><p>26.624</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td class="text-right"><p>42</p></td>
+<td class="text-right"><p>23.035</p></td>
+<td class="text-right"><p>24.313</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td class="text-right"><p>43</p></td>
+<td class="text-right"><p>22.565</p></td>
+<td class="text-right"><p>24.190</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td class="text-right"><p>44</p></td>
+<td class="text-right"><p>22.684</p></td>
+<td class="text-right"><p>24.017</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The complete candidate passed all 27 prescribed quality/performance gates,
+resource and cleanup checks. All 6,528 scored TTS requests and 96 TTS warmups
+completed with no failures or skips. Maximum observed GPU memory was
+135,553 MiB. The non-streaming WER increase of 0.0140 percentage points is
+retained; WER does not establish perceptual or speaker equivalence.</p>
+</section>
+<section id="evidence-and-limits">
+<h2>Evidence and limits<a class="headerlink" href="#evidence-and-limits" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-1.7b-runtime-d154/blob/main/logs/runs/51d85322a9484e83bcf8242a5c020dad/sglang-omni-qwen3-tts-base-1.7b-runtime/submissions/agent-6/test_output.txt">Complete Judge output</a>,
+<a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-1.7b-runtime-d154/blob/main/recovery/radix-20261010/latest/rolling-current.json">frozen accepted metrics</a>
+and the
+<a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-1.7b-runtime-d154/blob/main/recovery/radix-20261010/latest/workspace.tar.gz">research snapshot</a>
+retain the original feedback, hypothesis history and source diff. The evidence
+repository requires access; the tables above are self-contained.</p>
+<p>The historical experiment used a fixed public English workload and one
+allocation. The separate current-port comparison above does not provide
+low-concurrency, multilingual or smaller-device serving qualification. Graph capture can
+increase startup time and memory use. The port also retains newer upstream
+tail-decode and device abstractions, so byte identity with the historical
+candidate is not claimed. Current-port regression coverage and the exact
+validation environment are reported in the pull request.</p>
+</section>
+<section id="historical-0-6b-submission-10">
+<h2>Historical 0.6B submission 10<a class="headerlink" href="#historical-0-6b-submission-10" title="Link to this heading">#</a></h2>
+<p>Research run: <code class="docutils literal notranslate"><span class="pre">62937fcd31464d01b46ce685e6ca78e3</span></code>. Evaluated source inventory SHA-256: <code class="docutils literal notranslate"><span class="pre">96b563e447413d24e88a8ee9eeb75834ca2e6f4d9608c6bf66450eb9a159b1a4</span></code>.</p>
+<p>The 0.6B experiment used the same six-run workload and hardware envelope above. Its checkpoint was Qwen/Qwen3-TTS-12Hz-0.6B-Base. All 27 gates passed, with zero scored failures or skips.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Metric</p></th>
+<th class="head text-right"><p>Pristine</p></th>
+<th class="head text-right"><p>submission 10</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Non-streaming C16</p></td>
+<td><p>Requests/s</p></td>
+<td class="text-right"><p>21.3553</p></td>
+<td class="text-right"><p>30.8277 (+44.36%)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Non-streaming C16</p></td>
+<td><p>Audio seconds/s</p></td>
+<td class="text-right"><p>91.8010</p></td>
+<td class="text-right"><p>134.2343</p></td>
+</tr>
+<tr class="row-even"><td><p>Non-streaming C16</p></td>
+<td><p>Mean full latency (s)</p></td>
+<td class="text-right"><p>0.7453</p></td>
+<td class="text-right"><p>0.5150</p></td>
+</tr>
+<tr class="row-odd"><td><p>Non-streaming C16</p></td>
+<td><p>p99 full latency (s)</p></td>
+<td class="text-right"><p>1.6123</p></td>
+<td class="text-right"><p>0.8643</p></td>
+</tr>
+<tr class="row-even"><td><p>Non-streaming C16</p></td>
+<td><p>p99 RTF</p></td>
+<td class="text-right"><p>0.4133</p></td>
+<td class="text-right"><p>0.1525</p></td>
+</tr>
+<tr class="row-odd"><td><p>Non-streaming C16</p></td>
+<td><p>Corpus WER (%)</p></td>
+<td class="text-right"><p>1.2029</p></td>
+<td class="text-right"><p>1.2420</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td><p>Requests/s</p></td>
+<td class="text-right"><p>22.5917</p></td>
+<td class="text-right"><p>24.2120 (+7.17%)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td><p>Audio seconds/s</p></td>
+<td class="text-right"><p>98.1717</p></td>
+<td class="text-right"><p>106.4243</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td><p>Mean first audio (ms)</p></td>
+<td class="text-right"><p>93.0667</p></td>
+<td class="text-right"><p>74.0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td><p>p95 first audio (ms)</p></td>
+<td class="text-right"><p>121.0333</p></td>
+<td class="text-right"><p>114.1667</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td><p>p99 first audio (ms)</p></td>
+<td class="text-right"><p>1370.3000</p></td>
+<td class="text-right"><p>270.0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td><p>Mean full latency (s)</p></td>
+<td class="text-right"><p>0.7040</p></td>
+<td class="text-right"><p>0.6573</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td><p>p99 full latency (s)</p></td>
+<td class="text-right"><p>1.8830</p></td>
+<td class="text-right"><p>1.0883</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td><p>p99 RTF</p></td>
+<td class="text-right"><p>0.4273</p></td>
+<td class="text-right"><p>0.1965</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td><p>Corpus WER (%)</p></td>
+<td class="text-right"><p>1.2308</p></td>
+<td class="text-right"><p>1.2755</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td><p>C50 (%)</p></td>
+<td class="text-right"><p>99.6633</p></td>
+<td class="text-right"><p>99.9400</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>All prescribed 0.6B throughput repetitions:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head text-right"><p>Seed</p></th>
+<th class="head text-right"><p>Pristine requests/s</p></th>
+<th class="head text-right"><p>Submission 10 requests/s</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Non-streaming C16</p></td>
+<td class="text-right"><p>42</p></td>
+<td class="text-right"><p>21.709</p></td>
+<td class="text-right"><p>31.666</p></td>
+</tr>
+<tr class="row-odd"><td><p>Non-streaming C16</p></td>
+<td class="text-right"><p>43</p></td>
+<td class="text-right"><p>21.014</p></td>
+<td class="text-right"><p>31.319</p></td>
+</tr>
+<tr class="row-even"><td><p>Non-streaming C16</p></td>
+<td class="text-right"><p>44</p></td>
+<td class="text-right"><p>21.343</p></td>
+<td class="text-right"><p>29.498</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td class="text-right"><p>42</p></td>
+<td class="text-right"><p>22.899</p></td>
+<td class="text-right"><p>25.217</p></td>
+</tr>
+<tr class="row-even"><td><p>Streaming C16</p></td>
+<td class="text-right"><p>43</p></td>
+<td class="text-right"><p>22.759</p></td>
+<td class="text-right"><p>24.068</p></td>
+</tr>
+<tr class="row-odd"><td><p>Streaming C16</p></td>
+<td class="text-right"><p>44</p></td>
+<td class="text-right"><p>22.117</p></td>
+<td class="text-right"><p>23.351</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-0.6b-runtime-d154/blob/main/recovery/radix-20261010/latest/rolling-current.json">Frozen accepted metrics</a>, <a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-0.6b-runtime-d154/blob/main/recovery/radix-20261010/latest/baseline.json">pristine baseline</a>, <a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-0.6b-runtime-d154/blob/main/logs/runs/62937fcd31464d01b46ce685e6ca78e3/sglang-omni-qwen3-tts-base-0.6b-runtime/submissions/agent-10/test_output.txt">complete Judge output</a>, and <a class="reference external" href="https://github.com/OpenRSI-Foundation/sglang-omni-qwen3-tts-base-0.6b-runtime-d154/blob/main/recovery/radix-20261010/latest/workspace.tar.gz">research snapshot</a>. The evidence repository requires access; the tables above are self-contained.</p>
+<p>Submission 14 reached a higher non-streaming score but failed a streaming guard; the retained candidate is submission 10. Its static-input padding optimization is independently covered by <a class="reference external" href="https://github.com/sgl-project/sglang-omni/pull/2754">#2754</a>, so it is not duplicated here. The combined port also shares the 1.7B capture order and initial-cohort overlap changes. Consequently, neither historical result is a new measurement of this combined patch.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime-changes">Runtime changes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bucketed-whole-utterance-graphs">Bucketed whole-utterance graphs</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-both-size-bucket-candidate-validation-2026-10-15">Initial both-size bucket candidate validation (2026-10-15)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#independent-exact-frame-versus-bucket-comparison-2026-10-15">Independent exact-frame versus bucket comparison (2026-10-15)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-seed-0-6b-bucket-candidate-check-2026-10-15">Three-seed 0.6B bucket candidate check (2026-10-15)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#final-source-validation-2026-10-15">Final source validation (2026-10-15)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#earlier-native-padding-diagnostic">Earlier native-padding diagnostic</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-bucketing-three-seed-quality-follow-up-2026-10-15">Pre-bucketing three-seed quality follow-up (2026-10-15)</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#follow-up-environment-and-reproduction">Follow-up environment and reproduction</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-bucketing-paired-port-measurements-2026-10-14">Pre-bucketing paired port measurements (2026-10-14)</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#throughput-and-quality">Throughput and quality</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#startup-and-resident-memory">Startup and resident memory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduction">Reproduction</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-1-7b-experiment-identity">Historical 1.7B experiment identity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-1-7b-complete-results">Historical 1.7B complete results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-and-limits">Evidence and limits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-0-6b-submission-10">Historical 0.6B submission 10</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By SGLang-Omni Team
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025-2026, SGLang-Omni.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Oct 17, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
