@@ -60,7 +60,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 17, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 19, 2026"/>
   
     
     <script src="_static/searchtools.js"></script>
@@ -212,6 +212,7 @@
 <li class="toctree-l1"><a class="reference internal" href="get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_started/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="nav bd-sidenav">
@@ -236,15 +237,20 @@
 <li class="toctree-l1"><a class="reference internal" href="cookbook/qwen3_omni.html">Qwen3-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/ming_omni.html">Ming-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/ming3_audio.html">Ming-3.0-audio-flash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/ming3_tts.html">Ming-3.0-tts-tiny</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/ming3_asr.html">Ming-3.0-asr-tiny</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/personaplex.html">PersonaPlex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/llada2_uni.html">LLaDA2.0-Uni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/auk.html">AuK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/cosmos3_nano.html">Cosmos3 Nano serving</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">General Usage</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/qwen3_omni.html">Omni Model Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage/native_chat_stage.html">Native Chat Stage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/audio_translations.html">Audio Translations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/tts.html">TTS Model Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/process_topology.html">Process Topology, Replicas, and GPU Sharing</a></li>
@@ -252,6 +258,7 @@
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/process_topology_migration.html">Process Topology Migration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage/native_media_routes.html">Native Media Routes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -532,7 +539,7 @@
 <li><p><strong>Multi-Stage Pipeline</strong>: Flexible framework for orchestrating preprocessing, AR engine, codec, and vocoder stages across processes and GPUs.</p></li>
 <li><p><strong>Native SGLang Integration</strong>: Leverages SGLang’s RadixAttention, continuous batching, and CUDA Graph optimizations for the AR backbone.</p></li>
 <li><p><strong>OpenAI-Compatible Server</strong>: Drop-in <code class="docutils literal notranslate"><span class="pre">/v1/audio/speech</span></code>, <code class="docutils literal notranslate"><span class="pre">/v1/audio/transcriptions</span></code>, <code class="docutils literal notranslate"><span class="pre">/v1/audio/translations</span></code>, and <code class="docutils literal notranslate"><span class="pre">/v1/chat/completions</span></code> endpoints with real-time streaming support.</p></li>
-<li><p><strong>Broad Model Support</strong>: TTS (Higgs, Fish S2-Pro, Voxtral, Qwen3-TTS, MOSS-TTS / Local, Ming-Omni-TTS, dots.tts, ZONOS2), Music (MiniMax Music 3), ASR (Qwen3-ASR, Fun-ASR, ARK-ASR, Nemotron 3.5 ASR, Whisper, MOSS-Transcribe-Diarize), Omni (Qwen3-Omni, MiniCPM-o, Ming-Omni), and LLaDA2.0-Uni.</p></li>
+<li><p><strong>Broad Model Support</strong>: TTS (Higgs, Fish S2-Pro, Voxtral, Qwen3-TTS, MOSS-TTS / Local, Ming-Omni-TTS, Ming-3.0-TTS, dots.tts, ZONOS2), Music (MiniMax Music 3), ASR (Qwen3-ASR, Fun-ASR, ARK-ASR, Nemotron 3.5 ASR, Whisper, MOSS-Transcribe-Diarize, Ming-3.0-ASR), Omni (Qwen3-Omni, MiniCPM-o, Ming-Omni, Ming-3.0-audio), and LLaDA2.0-Uni.</p></li>
 </ul>
 </section>
 <section id="supported-models">
@@ -578,21 +585,29 @@
 <td><p>TTS</p></td>
 <td><p>Text-to-speech and zero-shot voice cloning</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://huggingface.co/dots-studio/dots.tts-mf">dots-studio/dots.tts-mf</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://huggingface.co/inclusionAI/Ming-3.0-tts-tiny">inclusionAI/Ming-3.0-tts-tiny</a></p></td>
+<td><p>TTS</p></td>
+<td><p>44.1 kHz voice cloning from one reference recording</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://huggingface.co/dots-studio/dots.tts-mf">dots-studio/dots.tts-mf</a></p></td>
 <td><p>TTS</p></td>
 <td><p>48 kHz continuous-latent TTS; also <code class="docutils literal notranslate"><span class="pre">dots.tts-soar</span></code> / <code class="docutils literal notranslate"><span class="pre">dots.tts-base</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://huggingface.co/Zyphra/zonos2">Zyphra/zonos2</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://huggingface.co/Zyphra/zonos2">Zyphra/zonos2</a></p></td>
 <td><p>TTS</p></td>
 <td><p>MoE TTS, 9 DAC codebooks, voice cloning</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://huggingface.co/MiniMaxAI/MiniMax-Music3">MiniMaxAI/MiniMax-Music3</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://huggingface.co/MiniMaxAI/MiniMax-Music3">MiniMaxAI/MiniMax-Music3</a></p></td>
 <td><p>Music</p></td>
 <td><p>Text-to-music; lyrics + caption → 32 kHz stereo song</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://huggingface.co/Qwen/Qwen3-ASR-1.7B">Qwen/Qwen3-ASR-1.7B</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://huggingface.co/Qwen/Qwen3-ASR-1.7B">Qwen/Qwen3-ASR-1.7B</a></p></td>
 <td><p>ASR</p></td>
 <td><p>Multilingual transcription with 30 language hints</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://huggingface.co/inclusionAI/Ming-3.0-asr-tiny">inclusionAI/Ming-3.0-asr-tiny</a></p></td>
+<td><p>ASR</p></td>
+<td><p>Chinese and English transcription</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://huggingface.co/FunAudioLLM/Fun-ASR-Nano-2512-hf">FunAudioLLM/Fun-ASR-Nano-2512-hf</a></p></td>
 <td><p>ASR</p></td>
@@ -630,7 +645,11 @@
 <td><p>Omni</p></td>
 <td><p>Streaming TTS</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://huggingface.co/inclusionAI/LLaDA2.0-Uni">inclusionAI/LLaDA2.0-Uni</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://huggingface.co/inclusionAI/Ming-3.0-audio-flash">inclusionAI/Ming-3.0-audio-flash</a></p></td>
+<td><p>Omni</p></td>
+<td><p>Transcription, audio chat, and 44.1 kHz speech</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://huggingface.co/inclusionAI/LLaDA2.0-Uni">inclusionAI/LLaDA2.0-Uni</a></p></td>
 <td><p>Multimodal</p></td>
 <td><p>Text + image understanding and generation</p></td>
 </tr>
@@ -645,6 +664,7 @@
 <li class="toctree-l1"><a class="reference internal" href="get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_started/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
@@ -671,17 +691,22 @@
 <li class="toctree-l1"><a class="reference internal" href="cookbook/qwen3_omni.html">Qwen3-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/ming_omni.html">Ming-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/ming3_audio.html">Ming-3.0-audio-flash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/ming3_tts.html">Ming-3.0-tts-tiny</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/ming3_asr.html">Ming-3.0-asr-tiny</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/personaplex.html">PersonaPlex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/llada2_uni.html">LLaDA2.0-Uni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook/auk.html">AuK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/cosmos3_nano.html">Cosmos3 Nano serving</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">General Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/qwen3_omni.html">Omni Model Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage/native_chat_stage.html">Native Chat Stage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/audio_translations.html">Audio Translations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/tts.html">TTS Model Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/process_topology.html">Process Topology, Replicas, and GPU Sharing</a></li>
@@ -689,6 +714,7 @@
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/process_topology_migration.html">Process Topology Migration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage/native_media_routes.html">Native Media Routes</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
@@ -792,7 +818,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 17, 2026.
+  Last updated on Oct 19, 2026.
   <br/>
 </p>
   </div>

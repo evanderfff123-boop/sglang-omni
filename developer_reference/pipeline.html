@@ -61,7 +61,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 17, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 19, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -211,6 +211,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="nav bd-sidenav">
@@ -235,15 +236,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/qwen3_omni.html">Qwen3-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_omni.html">Ming-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/ming3_audio.html">Ming-3.0-audio-flash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/ming3_tts.html">Ming-3.0-tts-tiny</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/ming3_asr.html">Ming-3.0-asr-tiny</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/personaplex.html">PersonaPlex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/llada2_uni.html">LLaDA2.0-Uni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/auk.html">AuK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/cosmos3_nano.html">Cosmos3 Nano serving</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">General Usage</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/qwen3_omni.html">Omni Model Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_chat_stage.html">Native Chat Stage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/audio_translations.html">Audio Translations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/tts.html">TTS Model Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology.html">Process Topology, Replicas, and GPU Sharing</a></li>
@@ -251,6 +257,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology_migration.html">Process Topology Migration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_media_routes.html">Native Media Routes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="current nav bd-sidenav">
@@ -511,6 +518,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omnischeduler">OmniScheduler</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simplescheduler">SimpleScheduler</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sessionscheduler">SessionScheduler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ummcontroller">UMMController</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code2wavscheduler">Code2WavScheduler</a></li>
 </ul>
 </li>
@@ -657,6 +665,47 @@ that window from its own per-call floor, and 0 runs with what is ready.</p>
 is ended alone. An exception raised by <code class="docutils literal notranslate"><span class="pre">append_batch</span></code> ends every session in
 that call. Sessions outside the failed call continue.</p>
 </section>
+<section id="ummcontroller">
+<h3>UMMController<a class="headerlink" href="#ummcontroller" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">UMMController</span></code> serves interleaved (UMM) requests that alternate between model
+phases, such as understanding, generation, and inspection of the generated
+media, until the model’s adapter completes them. It is the scheduler of the
+entry stage, which loops through ordinary phase stages on main’s stage graph:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>orchestrator -&gt; reasoner -&gt; orchestrator -&gt; generator -&gt; ... -&gt; output
+</pre></div>
+</div>
+<p>A model supplies a <code class="docutils literal notranslate"><span class="pre">UMMAdapter</span></code> with four callbacks. <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">advance</span></code>
+return a <code class="docutils literal notranslate"><span class="pre">UMMStep</span></code> that names the next phase and its request, or completes the
+request, together with the outputs accepted by that step. <code class="docutils literal notranslate"><span class="pre">usage</span></code> reports the
+bytes of the adapter’s retained state, and <code class="docutils literal notranslate"><span class="pre">close</span></code> releases that state once
+per request. Phase names are the model’s own: the orchestrator’s
+<code class="docutils literal notranslate"><span class="pre">factory.phases</span></code> maps each one to a stage, and two phases may share a stage.
+Each dispatch carries a continuation in its request metadata, so phase stages
+only need to return the request they received. Every callback receives the
+request’s <code class="docutils literal notranslate"><span class="pre">UMMContext</span></code>, whose <code class="docutils literal notranslate"><span class="pre">execution_id</span></code>, <code class="docutils literal notranslate"><span class="pre">request</span></code>, <code class="docutils literal notranslate"><span class="pre">deadline</span></code>,
+<code class="docutils literal notranslate"><span class="pre">remaining_dispatches</span></code>, <code class="docutils literal notranslate"><span class="pre">outputs</span></code>, and <code class="docutils literal notranslate"><span class="pre">shedding</span></code> the adapter only reads. An
+adapter that finds a request it cannot finish before its deadline, usually
+while it plans another one, calls <code class="docutils literal notranslate"><span class="pre">shed()</span></code> on that request’s context. The
+controller’s deadline sweep then fails it with the capacity error (HTTP 503,
+which tells the client to retry later), the pipeline aborts its queued and
+running phase work, and the request closes once with reason <code class="docutils literal notranslate"><span class="pre">shed</span></code>, just as a
+request that reaches its deadline fails with the <code class="docutils literal notranslate"><span class="pre">timeout_s</span></code> error (HTTP 500)
+and closes with reason <code class="docutils literal notranslate"><span class="pre">expired</span></code>.</p>
+<p>A step can also list phases in <code class="docutils literal notranslate"><span class="pre">dispatches</span></code> to run them at once, at most one per stage of a request. A step that starts no phase waits while others run, and <code class="docutils literal notranslate"><span class="pre">advance</span></code> reports each result as it returns, so an adapter whose phases finish out of order holds its outputs to publish them in model order.</p>
+<p>A pipeline config subclasses <code class="docutils literal notranslate"><span class="pre">UMMPipelineConfig</span></code> and declares an
+<code class="docutils literal notranslate"><span class="pre">orchestrator</span></code> stage (factory <code class="docutils literal notranslate"><span class="pre">create_umm_controller</span></code>, route_fn <code class="docutils literal notranslate"><span class="pre">route_umm</span></code>,
+stream_done_to_fn <code class="docutils literal notranslate"><span class="pre">umm_stream_done_targets</span></code>, <code class="docutils literal notranslate"><span class="pre">stream_to</span></code> and <code class="docutils literal notranslate"><span class="pre">next</span></code> naming
+<code class="docutils literal notranslate"><span class="pre">output</span></code>), an <code class="docutils literal notranslate"><span class="pre">output</span></code> stage in the same process (factory
+<code class="docutils literal notranslate"><span class="pre">create_umm_output_stage</span></code>, terminal, accepting streams before its payload),
+and the phase stages, each routing back to <code class="docutils literal notranslate"><span class="pre">orchestrator</span></code> without a
+<code class="docutils literal notranslate"><span class="pre">stream_to</span></code>. The orchestrator’s factory arguments set the adapter factory
+path, the phase map, and the required bounds: <code class="docutils literal notranslate"><span class="pre">max_dispatches</span></code>,
+<code class="docutils literal notranslate"><span class="pre">max_outputs</span></code>, <code class="docutils literal notranslate"><span class="pre">max_active</span></code> (which also caps the coordinator, never above the
+running+queued capacity of an engine phase stage), <code class="docutils literal notranslate"><span class="pre">max_retained_bytes</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">timeout_s</span></code>. The config rejects any other wiring, and a missing or
+non-positive bound, at load time. Accepted segments stream to the client in
+order through the output stage when the request streams.</p>
+</section>
 <section id="code2wavscheduler">
 <h3>Code2WavScheduler<a class="headerlink" href="#code2wavscheduler" title="Link to this heading">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">Code2WavScheduler</span></code> is a streaming vocoder scheduler. It handles:</p>
@@ -761,6 +810,7 @@ schedulers and communicate through relay, is out of scope for this runner.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omnischeduler">OmniScheduler</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simplescheduler">SimpleScheduler</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sessionscheduler">SessionScheduler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ummcontroller">UMMController</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code2wavscheduler">Code2WavScheduler</a></li>
 </ul>
 </li>
@@ -802,7 +852,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 17, 2026.
+  Last updated on Oct 19, 2026.
   <br/>
 </p>
   </div>

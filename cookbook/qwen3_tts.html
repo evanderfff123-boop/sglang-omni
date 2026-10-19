@@ -61,7 +61,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 17, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 19, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -211,6 +211,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="current nav bd-sidenav">
@@ -235,15 +236,20 @@
 <li class="toctree-l1"><a class="reference internal" href="qwen3_omni.html">Qwen3-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ming_omni.html">Ming-Omni</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ming3_audio.html">Ming-3.0-audio-flash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ming3_tts.html">Ming-3.0-tts-tiny</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ming3_asr.html">Ming-3.0-asr-tiny</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="personaplex.html">PersonaPlex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="llada2_uni.html">LLaDA2.0-Uni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fun_cosyvoice3.html">Fun-CosyVoice3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auk.html">AuK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cosmos3_nano.html">Cosmos3 Nano serving</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">General Usage</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/qwen3_omni.html">Omni Model Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_chat_stage.html">Native Chat Stage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/audio_translations.html">Audio Translations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/tts.html">TTS Model Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology.html">Process Topology, Replicas, and GPU Sharing</a></li>
@@ -251,6 +257,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology_migration.html">Process Topology Migration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/omni_router.html">SGLang-Omni Rust Router</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_media_routes.html">Native Media Routes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -708,9 +715,8 @@ A failed warmup stops the server. <code class="docutils literal notranslate"><sp
 </section>
 <section id="prefill-cuda-graphs">
 <h3>Prefill CUDA graphs<a class="headerlink" href="#prefill-cuda-graphs" title="Link to this heading">#</a></h3>
-<p>Every Qwen3-TTS checkpoint (Base, CustomVoice, VoiceDesign) defaults to a
-prefill CUDA graph with a token ladder up to 512: the full backend on
-CustomVoice, the breakable backend elsewhere.</p>
+<p>Qwen3-TTS replays prefills as CUDA graphs. Base and CustomVoice use the full
+backend, VoiceDesign the breakable backend.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Knob</p></th>
@@ -721,47 +727,36 @@ CustomVoice, the breakable backend elsewhere.</p>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--tts_engine.engine.cuda_graph_backend_prefill</span></code></p></td>
 <td><p>Prefill graph backend (<code class="docutils literal notranslate"><span class="pre">full</span></code>, <code class="docutils literal notranslate"><span class="pre">breakable</span></code> or <code class="docutils literal notranslate"><span class="pre">disabled</span></code>)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">full</span></code> on CustomVoice, <code class="docutils literal notranslate"><span class="pre">breakable</span></code> elsewhere</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">full</span></code> on Base and CustomVoice, <code class="docutils literal notranslate"><span class="pre">breakable</span></code> on VoiceDesign</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--tts_engine.engine.cuda_graph_bs_prefill</span></code></p></td>
-<td><p>Prefill token-count ladder to capture</p></td>
-<td><p>shared ladder through <code class="docutils literal notranslate"><span class="pre">512</span></code>, plus a <code class="docutils literal notranslate"><span class="pre">1</span></code> bucket</p></td>
+<td><p>Prefill token counts to capture</p></td>
+<td><p>a ladder from <code class="docutils literal notranslate"><span class="pre">1</span></code> up to the chunked prefill size</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--tts_engine.engine.cuda_graph_max_bs_prefill</span></code></p></td>
 <td><p>Cap for the ladder</p></td>
-<td><p>top of the ladder</p></td>
+<td><p>the chunked prefill size</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">full</span></code> captures the prefill transformer body, attention included, as one
-graph per token bucket; the codec head and sampling still run outside it.
-<code class="docutils literal notranslate"><span class="pre">breakable</span></code> captures per-layer segments and runs attention eagerly between
-them. Each backend is accepted only on models that declare it, so a stage that
-has not adopted <code class="docutils literal notranslate"><span class="pre">full</span></code> still rejects it. <code class="docutils literal notranslate"><span class="pre">full</span></code> also needs a prefill attention
-backend that captures an ordinary prefill batch, <code class="docutils literal notranslate"><span class="pre">fa3</span></code> or <code class="docutils literal notranslate"><span class="pre">flashinfer</span></code> in
-SGLang 0.5.21: with any other backend the CustomVoice default stays
-<code class="docutils literal notranslate"><span class="pre">breakable</span></code>, and an explicit <code class="docutils literal notranslate"><span class="pre">full</span></code> fails at startup. SGLang logs the full
-prefill backend as experimental and its own compatibility rules never
-auto-disable it, so the generation batch policy’s checks are what guard it
-here.</p>
-<p>The default is the shared ladder with one bucket added. A replay falls
-back to eager when its bucket exceeds twice the real token count, and the
-shared ladder starts at 4, so a 1-token prefill lands in bucket 4 and
-misses. Measured over 3203 prefills at 10 and 20 RPS, 1301 of them (40.6%)
-are exactly one token, and they are the only shapes that fall back: 2 and
-3 already replay inside bucket 4. Adding the single <code class="docutils literal notranslate"><span class="pre">1</span></code> bucket takes the
-fallback rate to zero.</p>
-<p>CustomVoice prompts are a few dozen tokens, where the breakable graph’s
-per-layer segments are launch-bound, so CustomVoice captures the prefill
-transformer body as one graph. The full backend is selected by the
-checkpoint’s <code class="docutils literal notranslate"><span class="pre">tts_model_type</span></code>; Base prefills also carry reference audio and
-keep the breakable backend until the full one is measured on them.</p>
-<p>Opt out with <code class="docutils literal notranslate"><span class="pre">--tts_engine.engine.cuda_graph_backend_prefill</span> <span class="pre">disabled</span></code>, or
-fall back to <code class="docutils literal notranslate"><span class="pre">breakable</span></code>. The default costs extra graph capture during
-startup. Raising <code class="docutils literal notranslate"><span class="pre">cuda_graph_max_bs_prefill</span></code> on its own regrows the default
-ladder to the new cap; declaring <code class="docutils literal notranslate"><span class="pre">cuda_graph_bs_prefill</span></code> yourself keeps your
-list as is.</p>
+<p><code class="docutils literal notranslate"><span class="pre">full</span></code> captures the whole prefill transformer, attention included, as one
+graph per token count. <code class="docutils literal notranslate"><span class="pre">breakable</span></code> captures the layers in segments and runs
+attention between them. <code class="docutils literal notranslate"><span class="pre">full</span></code> needs the <code class="docutils literal notranslate"><span class="pre">fa3</span></code>, <code class="docutils literal notranslate"><span class="pre">fa4</span></code> or <code class="docutils literal notranslate"><span class="pre">flashinfer</span></code> attention
+backend. With another attention backend, Base and CustomVoice use <code class="docutils literal notranslate"><span class="pre">breakable</span></code>,
+and an explicit <code class="docutils literal notranslate"><span class="pre">full</span></code> fails at startup.</p>
+<p>On Hopper GPUs the full graph runs its prefill attention on <code class="docutils literal notranslate"><span class="pre">fa4</span></code> and holds every
+running request, unless you set <code class="docutils literal notranslate"><span class="pre">--tts_engine.engine.attention_backend</span></code>,
+<code class="docutils literal notranslate"><span class="pre">--tts_engine.engine.prefill_attention_backend</span></code> or an FP8
+<code class="docutils literal notranslate"><span class="pre">--tts_engine.engine.kv_cache_dtype</span></code>. Decode keeps its own attention backend.</p>
+<p>The ladder reaches the chunked prefill size, which the server picks from the
+GPU’s memory (8192 tokens on an 80 GB GPU), so prefills batched together under
+load still replay. It starts at <code class="docutils literal notranslate"><span class="pre">1</span></code> because a prompt that is already cached
+prefills a single token.</p>
+<p>Opt out with <code class="docutils literal notranslate"><span class="pre">--tts_engine.engine.cuda_graph_backend_prefill</span> <span class="pre">disabled</span></code>. The
+default adds a few seconds of graph capture at startup. Setting
+<code class="docutils literal notranslate"><span class="pre">cuda_graph_max_bs_prefill</span></code> rebuilds the ladder up to the new cap, and declaring
+<code class="docutils literal notranslate"><span class="pre">cuda_graph_bs_prefill</span></code> yourself keeps your list as is.</p>
 <p>To change the ceiling, set <code class="docutils literal notranslate"><span class="pre">max_running_requests</span></code> and <code class="docutils literal notranslate"><span class="pre">max_queued_requests</span></code>
 together:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sgl-omni<span class="w"> </span>serve<span class="w"> </span><span class="se">\</span>
@@ -1066,6 +1061,14 @@ available as a rollback:</p>
 each: the default path holds 0.6% to 2.3% of streams underrun against 20.9%
 for the left-context decoder, with first playable audio at 55 to 58 ms
 against 82 to 89 ms.</p>
+<p>Each stream holds one of <code class="docutils literal notranslate"><span class="pre">codec_state_slots</span></code> (default 64, matching the default
+<code class="docutils literal notranslate"><span class="pre">max_running_requests</span></code>) while it decodes; streams past the slots decode eagerly
+on the left-context path. At startup the vocoder logs the decode graphs it
+captured and warns when the slots are fewer than the streams it may have to hold
+at once: the engine’s <code class="docutils literal notranslate"><span class="pre">max_running_requests</span></code> when the vocoder shares its
+process, and that times the engine replicas when the vocoder runs in its own
+process, since requests bind to its replicas round-robin. Raise
+<code class="docutils literal notranslate"><span class="pre">--vocoder.factory.codec_state_slots</span></code> together with <code class="docutils literal notranslate"><span class="pre">max_running_requests</span></code>.</p>
 <p>Intel XPU, Ascend NPU, CPU and Apple MPS decode synchronously by default. To opt
 in on Intel GPUs, follow the
 <a class="reference internal" href="../get_started/installation_xpu.html#qwen3-tts-text-to-speech-single-xpu"><span class="std std-ref">Qwen3-TTS XPU recipe</span></a>.</p>
@@ -1497,7 +1500,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 17, 2026.
+  Last updated on Oct 19, 2026.
   <br/>
 </p>
   </div>
