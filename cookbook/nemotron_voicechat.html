@@ -61,7 +61,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 19, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 20, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -206,11 +206,12 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">🚀 Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">🚀 Installation — Ascend NPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">Installation — CUDA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_apple_silicon.html">Installation — Apple Silicon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Installation — Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">Installation — Intel XPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">Installation — Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">Installation — MUSA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
@@ -237,7 +238,7 @@
 <li class="toctree-l1"><a class="reference internal" href="minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ming_omni.html">Ming-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ming3_audio.html">Ming-3.0-audio-flash</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ming3_tts.html">Ming-3.0-tts-tiny</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ming3_tts.html">Ming-3.0-TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ming3_asr.html">Ming-3.0-asr-tiny</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">NemotronLabs VoiceChat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="personaplex.html">PersonaPlex</a></li>
@@ -264,6 +265,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/apiserver_design.html">API Server Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/pipeline.html">Pipeline Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_interactive_model.html">Full Duplex Interactive Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/config.html">Config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/adding_parameters.html">Adding a Parameter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/communication.html">Communication</a></li>
@@ -516,6 +518,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-offline-example">Running the offline example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#realtime-conversation">Realtime conversation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#offline-request-parameters">Offline request parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tool-calling">Tool calling</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#known-limitations">Known limitations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tests">Tests</a></li>
 </ul>
@@ -596,12 +599,28 @@ It uses the checkpoint’s default prompt and voice.</p>
 </div>
 <p>Audio randomness is governed by the checkpoint’s own settings, read from <code class="docutils literal notranslate"><span class="pre">config.json</span></code> (<code class="docutils literal notranslate"><span class="pre">inference_noise_scale</span></code>, <code class="docutils literal notranslate"><span class="pre">inference_top_p_or_k</span></code>): the talker samples its codes with Gumbel-max component selection and Gaussian noise inside the MoG head, so two runs on the same input produce different code sequences and slightly different audio even though the text is identical. There is no <code class="docutils literal notranslate"><span class="pre">seed</span></code> control yet.</p>
 </section>
+<section id="tool-calling">
+<h2>Tool calling<a class="headerlink" href="#tool-calling" title="Link to this heading">#</a></h2>
+<p>VoiceChat can call configured Python functions during a conversation and use their results in its spoken replies. Tool calling is optional; no tools are enabled by default.</p>
+<p>To try the random-number example, run this command from the repository root:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">PYTHONPATH</span><span class="o">=</span>.<span class="w"> </span>sgl-omni<span class="w"> </span>serve<span class="w"> </span>--config<span class="w"> </span>examples/nemotron_voicechat/tool.yaml<span class="w"> </span>--enable-realtime<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+</pre></div>
+</div>
+<p>Connect your realtime client and ask, for example, “Give me a random number between one and fifty.” The server executes the tool and returns its result to the model automatically; the client does not need to handle tool calls.</p>
+<p>To use your own tools, copy <code class="docutils literal notranslate"><span class="pre">examples/nemotron_voicechat/tool.yaml</span></code> and update:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tools.&lt;name&gt;.function</span></code>: the OpenAI function schema, whose name must match the registry key.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tools.&lt;name&gt;.implementation</span></code>: the importable Python function path.</p></li>
+</ul>
+<p>Each tool is declared once. Set <code class="docutils literal notranslate"><span class="pre">tool_names</span></code> to a list of registered names to offer a subset; otherwise all registered tools are offered.</p>
+<p>Each function accepts an argument dictionary and returns a JSON-serializable value. See <code class="docutils literal notranslate"><span class="pre">examples/nemotron_voicechat/tools.py</span></code> for an example. Make your tool module importable in the server environment, then launch with <code class="docutils literal notranslate"><span class="pre">--config</span></code> pointing to your configuration file.</p>
+<p>Keep the realtime audio stream running, including silence while waiting for a reply. Stopping audio input can prevent the model from finishing its response.</p>
+</section>
 <section id="known-limitations">
 <h2>Known limitations<a class="headerlink" href="#known-limitations" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>The offline pipeline handles one request at a time (<code class="docutils literal notranslate"><span class="pre">max_running_requests=1</span></code> for both engines), without a barge-in or interrupt API.</p></li>
 <li><p>Single speaker (<code class="docutils literal notranslate"><span class="pre">Aria</span></code>, the checkpoint’s baked-in prompt latents).</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">function_head</span></code> tool-call channel is decoded and carried through but nothing acts on it.</p></li>
 <li><p>Classifier-free guidance is off (<code class="docutils literal notranslate"><span class="pre">guidance_scale=0</span></code>) although the checkpoint config enables it at 0.2.</p></li>
 <li><p>Talker output is not bit-identical to NeMo’s offline script even with deterministic sampling on both sides (about 82 % of quantizer cells and 63 of 150 frames agree on a 12 s fixture; transcripts and amplitude envelopes match). Known causes: the backbone and KV cache run in bfloat16 because SGLang’s attention backends and <code class="docutils literal notranslate"><span class="pre">sgl_kernel</span></code>’s Gemma RMSNorm have no fp32 path, while NeMo runs the whole talker in fp32; NeMo’s offline script enables classifier-free guidance by default; and NeMo’s offline recipe walks the system-prompt region before frame 0 (realtime convention here; see <code class="docutils literal notranslate"><span class="pre">prompt_region_steps</span></code>). The thinker is frame-exact with NeMo.</p></li>
 <li><p>NeMo decodes the perception encoder’s flush row as a 151st frame; this pipeline computes it but does not decode it, so replies are one frame (80 ms) shorter.</p></li>
@@ -664,6 +683,7 @@ It uses the checkpoint’s default prompt and voice.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-offline-example">Running the offline example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#realtime-conversation">Realtime conversation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#offline-request-parameters">Offline request parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tool-calling">Tool calling</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#known-limitations">Known limitations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tests">Tests</a></li>
 </ul>
@@ -699,7 +719,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 19, 2026.
+  Last updated on Oct 20, 2026.
   <br/>
 </p>
   </div>

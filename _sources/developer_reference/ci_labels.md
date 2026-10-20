@@ -51,8 +51,13 @@ Only PR Test and the selected stages actually run; a stage that is not selected 
 
 | Job | What it runs |
 | --- | --- |
-| `unit-test` | `pytest tests/ -m "not benchmark and not accelerator"`, with CUDA hidden from the process |
+| `unit-test-a` | First runtime-balanced partition of `pytest tests/ -m "not benchmark and not accelerator"`, with CUDA hidden |
+| `unit-test-b` | Second runtime-balanced partition of the same CPU unit-test suite, with CUDA hidden |
 | `unit-test-accelerator` | `pytest tests/ -m "accelerator and not benchmark"`, the unit tests that need a GPU |
+
+The CPU partitions run as independent matrix jobs with fail-fast disabled. Files stay intact and are balanced using `.github/unit_test_durations.json`. Pytest discovers new tests automatically; files without a timing entry receive a one-second estimate, and new cases in an existing file stay in that file's partition. Local pytest remains unpartitioned unless the CI plugin is explicitly loaded.
+
+The initial weights are per-file p90 elapsed estimates from three successful H100 CPU jobs: [118185861718](https://github.com/sgl-project/sglang-omni/actions/runs/39288752772/job/118185861718), [118197139172](https://github.com/sgl-project/sglang-omni/actions/runs/39292142439/job/118197139172) and [118244967308](https://github.com/sgl-project/sglang-omni/actions/runs/39305977181/job/118244967308). Each file has three observations. The estimates aggregate timestamp intervals between completed pytest cases, excluding initial collection; they are not isolated setup/call/teardown measurements. These are PR runs with different revisions, not scheduled main-branch observations. The weights are a committed snapshot, not an automatically refreshed model.
 
 `run-unit-test-ci-only` selects PR Test without selecting model or hardware stages. Other stage labels remain additive, so keep them and `run-all-ci` absent for unit tests only. Shared setup still runs, including model-weight provisioning. PR Test also runs whenever any other stage label selects a stage, the hardware stages included.
 

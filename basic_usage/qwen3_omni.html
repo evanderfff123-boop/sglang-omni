@@ -61,7 +61,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 19, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 20, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -206,11 +206,12 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">🚀 Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">🚀 Installation — Ascend NPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">🚀 Installation — Intel XPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">🚀 Installation — Intel CPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">🚀 Installation — MUSA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">Installation — CUDA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_apple_silicon.html">Installation — Apple Silicon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Installation — Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">Installation — Intel XPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">Installation — Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">Installation — MUSA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
@@ -237,7 +238,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/minicpm_o.html">MiniCPM-o</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming_omni.html">Ming-Omni</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming3_audio.html">Ming-3.0-audio-flash</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cookbook/ming3_tts.html">Ming-3.0-tts-tiny</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/ming3_tts.html">Ming-3.0-TTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/ming3_asr.html">Ming-3.0-asr-tiny</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/nemotron_voicechat.html">NemotronLabs VoiceChat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cookbook/personaplex.html">PersonaPlex</a></li>
@@ -264,6 +265,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/apiserver_design.html">API Server Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/pipeline.html">Pipeline Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_interactive_model.html">Full Duplex Interactive Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/config.html">Config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/adding_parameters.html">Adding a Parameter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/communication.html">Communication</a></li>
@@ -1005,6 +1007,7 @@ patience; <code class="docutils literal notranslate"><span class="pre">silence_d
 to its path (file or containing directory). The server never downloads it and
 verifies its SHA-256 on load. If the model is missing or invalid, the
 endpoint still works — semantic requests just fall back to <code class="docutils literal notranslate"><span class="pre">server_vad</span></code>.</p>
+<p>On the Session graph (<code class="docutils literal notranslate"><span class="pre">examples/qwen3_omni/session_h200.yaml</span></code>), <code class="docutils literal notranslate"><span class="pre">semantic_vad</span></code> is a node: declare <code class="docutils literal notranslate"><span class="pre">turn_detection:</span> <span class="pre">{stages:</span> <span class="pre">[turn_detection],</span> <span class="pre">inputs:</span> <span class="pre">[&quot;input:pcm16&quot;,</span> <span class="pre">&quot;input:session&quot;,</span> <span class="pre">&quot;vad:session&quot;]}</span></code> beside <code class="docutils literal notranslate"><span class="pre">vad</span></code>, let <code class="docutils literal notranslate"><span class="pre">dialog</span></code> read <code class="docutils literal notranslate"><span class="pre">turn_detection:session</span></code> in place of <code class="docutils literal notranslate"><span class="pre">vad:session</span></code> and publish <code class="docutils literal notranslate"><span class="pre">turn_detection:</span> <span class="pre">[session]</span></code> in place of <code class="docutils literal notranslate"><span class="pre">vad:</span> <span class="pre">[session]</span></code>; the stage loads the model from <code class="docutils literal notranslate"><span class="pre">pipecat-ai/smart-turn-v3</span></code> unless <code class="docutils literal notranslate"><span class="pre">factory.model_path</span></code> names a local copy. See <a class="reference internal" href="../developer_reference/full_duplex_interactive_model.html#turn-detection-node"><span class="std std-ref">Turn detection node</span></a>.</p>
 <p>Text arrives in <code class="docutils literal notranslate"><span class="pre">response.text.delta</span></code> events; spoken output arrives as
 base64-encoded mono 24 kHz PCM16 in <code class="docutils literal notranslate"><span class="pre">response.audio.delta</span></code> events, followed by
 <code class="docutils literal notranslate"><span class="pre">response.audio.done</span></code> and <code class="docutils literal notranslate"><span class="pre">response.done</span></code>.</p>
@@ -1422,7 +1425,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 19, 2026.
+  Last updated on Oct 20, 2026.
   <br/>
 </p>
   </div>
