@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
+    <script src="../_static/documentation_options.js?v=c52cfe39"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="prev" title="Installation — Intel CPU" href="installation_cpu.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 20, 2026"/>
+  <meta name="docsearch:version" content="0.1.9" />
+    <meta name="docbuild:last-update" content="Oct 22, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -260,6 +260,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_media_routes.html">Native Media Routes</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">MLX</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../mlx/index.html">MLX Path</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
@@ -278,7 +282,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
@@ -515,8 +518,8 @@
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">🐳 Option A: Docker</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-install-from-source">🛠️ Option B: Install from Source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">Option A: Docker</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-install-from-source">Option B: Install from Source</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verify">Verify</a></li>
 </ul>
             </nav>
@@ -540,22 +543,22 @@ environment first, then install SGLang-Omni as an overlay.</p>
 base SGLang environment, follow the SGLang Moore Threads GPU installation guide.</p>
 </section>
 <section id="option-a-docker">
-<h2>🐳 Option A: Docker<a class="headerlink" href="#option-a-docker" title="Link to this heading">#</a></h2>
-<p>Clone SGLang-Omni first. The installation below is pinned to SGLang <code class="docutils literal notranslate"><span class="pre">v0.5.21</span></code>.</p>
+<h2>Option A: Docker<a class="headerlink" href="#option-a-docker" title="Link to this heading">#</a></h2>
+<p>Clone SGLang-Omni first. The installation below is pinned to SGLang <code class="docutils literal notranslate"><span class="pre">v0.5.22</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/sgl-project/sglang-omni.git<span class="w"> </span>sglang-omni
 <span class="nv">omni_root</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="nb">cd</span><span class="w"> </span>sglang-omni<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">pwd</span><span class="k">)</span><span class="s2">"</span>
-git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>v0.5.21<span class="w"> </span>--single-branch<span class="w"> </span><span class="se">\</span>
+git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>v0.5.22<span class="w"> </span>--single-branch<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>https://github.com/sgl-project/sglang.git<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">omni_root</span><span class="si">}</span><span class="s2">/../sglang"</span>
 <span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">omni_root</span><span class="si">}</span><span class="s2">/../sglang"</span>
 docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>docker/musa.Dockerfile<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-t<span class="w"> </span>sglang:v0.5.21-musa520-s5000<span class="w"> </span>.
+<span class="w">  </span>-t<span class="w"> </span>sglang:v0.5.22-musa520-s5000<span class="w"> </span>.
 <span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">omni_root</span><span class="si">}</span><span class="s2">"</span>
 docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>docker/musa.Dockerfile<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">SGLANG_MUSA_IMAGE</span><span class="o">=</span>sglang:v0.5.21-musa520-s5000<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">SGLANG_MUSA_IMAGE</span><span class="o">=</span>sglang:v0.5.22-musa520-s5000<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-t<span class="w"> </span>sglang-omni:main-musa520-s5000<span class="w"> </span>.
 </pre></div>
 </div>
-<p>The base image is built from the immutable <code class="docutils literal notranslate"><span class="pre">v0.5.21</span></code> release tag, which
+<p>The base image is built from the immutable <code class="docutils literal notranslate"><span class="pre">v0.5.22</span></code> release tag, which
 includes <code class="docutils literal notranslate"><span class="pre">docker/musa.Dockerfile</span></code>.</p>
 <p>Run the image with MUSA devices exposed by the host runtime. If <code class="docutils literal notranslate"><span class="pre">mthreads</span></code> is
 already configured as the Docker default runtime on your host, omit
@@ -573,11 +576,11 @@ already configured as the Docker default runtime on your host, omit
 </div>
 </section>
 <section id="option-b-install-from-source">
-<h2>🛠️ Option B: Install from Source<a class="headerlink" href="#option-b-install-from-source" title="Link to this heading">#</a></h2>
-<p>Start from an environment where SGLang <code class="docutils literal notranslate"><span class="pre">v0.5.21</span></code> has been installed with MUSA
+<h2>Option B: Install from Source<a class="headerlink" href="#option-b-install-from-source" title="Link to this heading">#</a></h2>
+<p>Start from an environment where SGLang <code class="docutils literal notranslate"><span class="pre">v0.5.22</span></code> has been installed with MUSA
 support. If you build SGLang from source, clone the pinned tag rather than
 <code class="docutils literal notranslate"><span class="pre">main</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>--branch<span class="w"> </span>v0.5.21<span class="w"> </span><span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>--branch<span class="w"> </span>v0.5.22<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>https://github.com/sgl-project/sglang.git<span class="w"> </span>sglang
 </pre></div>
 </div>
@@ -711,8 +714,8 @@ from the SGLang MUSA environment.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">🐳 Option A: Docker</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-install-from-source">🛠️ Option B: Install from Source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">Option A: Docker</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-install-from-source">Option B: Install from Source</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verify">Verify</a></li>
 </ul>
   </nav></div>
@@ -747,7 +750,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 20, 2026.
+  Last updated on Oct 22, 2026.
   <br/>
 </p>
   </div>

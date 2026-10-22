@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
+    <script src="../_static/documentation_options.js?v=c52cfe39"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="prev" title="TTS Model Usage" href="tts.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 20, 2026"/>
+  <meta name="docsearch:version" content="0.1.9" />
+    <meta name="docbuild:last-update" content="Oct 22, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -260,6 +260,10 @@
 <li class="toctree-l1"><a class="reference internal" href="mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="native_media_routes.html">Native Media Routes</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">MLX</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../mlx/index.html">MLX Path</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
@@ -278,7 +282,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
@@ -664,6 +667,7 @@ each Process.</p>
 <p><code class="docutils literal notranslate"><span class="pre">replica_devices</span></code> sets the GPU each replica uses, including replica 0, and
 overrides the placement of every GPU stage inside that replica. CPU stages are
 unaffected and stay on the host.</p>
+<p>Configuration sources first resolve each field in precedence order: model defaults, then YAML, then CLI. Replica expansion then applies a separate placement rule: the final <code class="docutils literal notranslate"><span class="pre">replica_devices</span></code> overrides every non-CPU stage GPU in that process, even if the stage GPU came from CLI. This also applies to a single replica. Expansion logs one warning per affected logical stage with its declared GPU and all per-replica assignments. The resolved source configuration remains unchanged; expanded stage copies carry the effective devices. Remove <code class="docutils literal notranslate"><span class="pre">replica_devices</span></code> to use stage GPU assignments instead. This placement rule does not make other related settings override each other.</p>
 <p>A GPU Process with <code class="docutils literal notranslate"><span class="pre">num_replicas</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> must declare <code class="docutils literal notranslate"><span class="pre">replica_devices</span></code>: <code class="docutils literal notranslate"><span class="pre">N</span></code>
 device ids for a non-TP Process, <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">x</span> <span class="pre">T</span></code> for a Process with TP size <code class="docutils literal notranslate"><span class="pre">T</span></code>. Every
 GPU stage factory declares <code class="docutils literal notranslate"><span class="pre">device:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></code> and
@@ -951,7 +955,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 20, 2026.
+  Last updated on Oct 22, 2026.
   <br/>
 </p>
   </div>

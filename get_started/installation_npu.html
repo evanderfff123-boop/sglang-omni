@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
+    <script src="../_static/documentation_options.js?v=c52cfe39"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="prev" title="Installation — Apple Silicon" href="installation_apple_silicon.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 20, 2026"/>
+  <meta name="docsearch:version" content="0.1.9" />
+    <meta name="docbuild:last-update" content="Oct 22, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -260,6 +260,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_media_routes.html">Native Media Routes</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">MLX</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../mlx/index.html">MLX Path</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
@@ -278,7 +282,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
@@ -515,12 +518,12 @@
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker-recommended">🐳 Option A: Docker (recommended)</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker-recommended">Option A: Docker (recommended)</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a3-image-installation">A3 image installation</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#launch-the-server">Launch the server</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-manual-install">🛠️ Option B: Manual install</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-manual-install">Option B: Manual install</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Prerequisites</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install-sglang-omni">Install sglang-omni</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#torchcodec-installation-for-tts-models">TorchCodec installation for TTS models</a></li>
@@ -553,7 +556,7 @@ the image tag.</p>
 </div>
 </section>
 <section id="option-a-docker-recommended">
-<h2>🐳 Option A: Docker (recommended)<a class="headerlink" href="#option-a-docker-recommended" title="Link to this heading">#</a></h2>
+<h2>Option A: Docker (recommended)<a class="headerlink" href="#option-a-docker-recommended" title="Link to this heading">#</a></h2>
 <p>The ARM64 image includes SGLang-Omni source, the SGLang/CANN/PyTorch runtime
 selected by <a class="reference download internal" download="" href="../_downloads/0d99bcc0f40f47f83d89a01de5d3b447/pyproject_npu.toml"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">pyproject_npu.toml</span></code></span></a>, and common audio
 dependencies. Model weights, host drivers and TorchCodec are not included.
@@ -669,7 +672,7 @@ there should not be assumed to work unchanged on NPU.</p>
 </section>
 </section>
 <section id="option-b-manual-install">
-<h2>🛠️ Option B: Manual install<a class="headerlink" href="#option-b-manual-install" title="Link to this heading">#</a></h2>
+<h2>Option B: Manual install<a class="headerlink" href="#option-b-manual-install" title="Link to this heading">#</a></h2>
 <p>Install the Ascend software stack and NPU build of SGLang before installing
 <code class="docutils literal notranslate"><span class="pre">sglang-omni</span></code>. The helper script
 <a class="reference download internal" download="" href="../_downloads/47812adeb5aad40728a13ebdd72b804d/install_npu.sh"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">install_npu.sh</span></code></span></a> installs only
@@ -824,12 +827,12 @@ bash<span class="w"> </span>scripts/npu/install_npu_torchcodec.sh<span class="w"
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker-recommended">🐳 Option A: Docker (recommended)</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker-recommended">Option A: Docker (recommended)</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a3-image-installation">A3 image installation</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#launch-the-server">Launch the server</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-manual-install">🛠️ Option B: Manual install</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-manual-install">Option B: Manual install</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Prerequisites</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install-sglang-omni">Install sglang-omni</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#torchcodec-installation-for-tts-models">TorchCodec installation for TTS models</a></li>
@@ -868,7 +871,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 20, 2026.
+  Last updated on Oct 22, 2026.
   <br/>
 </p>
   </div>

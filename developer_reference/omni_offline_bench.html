@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
+    <script src="../_static/documentation_options.js?v=c52cfe39"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="prev" title="ASR benchmark runbook" href="asr_bench.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 20, 2026"/>
+  <meta name="docsearch:version" content="0.1.9" />
+    <meta name="docbuild:last-update" content="Oct 22, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -260,6 +260,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_media_routes.html">Native Media Routes</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">MLX</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../mlx/index.html">MLX Path</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="main.html">Architecture</a></li>
@@ -278,7 +282,6 @@
 <li class="toctree-l1"><a class="reference internal" href="asr_bench.html">ASR benchmark runbook</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rl_admin_control.html">RL Admin Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mlx.html">MLX Path</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
@@ -657,7 +660,7 @@ cat<span class="w"> </span><span class="s2">"</span><span class="nv">$BENCH_DIR<
 <span class="w">    </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$BENCH_DIR</span><span class="s2">/results:/results"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$BENCH_DIR</span><span class="s2">/sglang-omni:/sglang-omni"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--name<span class="w"> </span>omni-bench<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>hongccc/sglang-omni@sha256:ebe4239e29a764ee3a2806385c061c5fd438a26f01458e503d3822dcba5790df<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>hongccc/sglang-omni@sha256:06ed306707bcf3d9e9beb5ba7ce66f09a666cac11c23455ece50c34199c0e985<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>sleep<span class="w"> </span>infinity
 </pre></div>
 </div>
@@ -984,7 +987,7 @@ grep<span class="w"> </span>-H<span class="w"> </span>.<span class="w"> </span><
 <li><p><strong>The first start is slow.</strong> A start with an empty compile cache takes much longer than a warm start. One run starts three servers.</p></li>
 <li><p><strong>Video-AMME Talker is one batch.</strong> Ten requests do not fill 16 slots, so its throughput is mostly the completion time of that one batch. Small changes in one request move it.</p></li>
 <li><p><strong>seed-tts output length varies.</strong> The client samples at temperature 0.7 without a seed, as CI does. One long output can move throughput at concurrency 16 a lot. Check <code class="docutils literal notranslate"><span class="pre">seedtts.completion_tokens_sum</span></code> before reading a throughput change. Passing <code class="docutils literal notranslate"><span class="pre">--seed</span> <span class="pre">0</span></code> controls sampling variation, but does not guarantee identical outputs under concurrent scheduling. Record the seed and output lengths. CI sends no seed, so that setting differs from CI.</p></li>
-<li><p><strong>CI differs from these runs.</strong> CI wraps each stage in <code class="docutils literal notranslate"><span class="pre">.github/scripts/run_flaky_pytest.sh</span></code>, which runs a failed stage up to 3 times. The local test block does not, so a stage that fails only sometimes shows up here. CI gives the GPU pair 28 logical CPUs. This page gives it 56. Omni CI draws MiniCPM-o or Qwen3-Omni at random; the <code class="docutils literal notranslate"><span class="pre">run-omni-minicpm-o-4.5</span></code> label, with <code class="docutils literal notranslate"><span class="pre">run-omni-ci</span></code> or <code class="docutils literal notranslate"><span class="pre">run-all-ci</span></code>, selects MiniCPM-o.</p></li>
+<li><p><strong>CI differs from these runs.</strong> CI wraps each stage in <code class="docutils literal notranslate"><span class="pre">.github/scripts/run_flaky_pytest.sh</span></code>, which runs a failed stage up to 3 times. The local test block does not, so a stage that fails only sometimes shows up here. CI gives the GPU pair 28 logical CPUs. This page gives it 56. Omni CI draws MiniCPM-o or Qwen3-Omni at random; the <code class="docutils literal notranslate"><span class="pre">run-minicpm-o-4.5</span></code> label, with <code class="docutils literal notranslate"><span class="pre">run-omni-ci</span></code> or <code class="docutils literal notranslate"><span class="pre">run-all-ci</span></code>, selects MiniCPM-o.</p></li>
 <li><p><strong>Stages may fail on main.</strong> A stage can fail on main. Run it on an earlier commit to tell an existing failure from a new one.</p></li>
 <li><p><strong>Some datasets are CI subsets.</strong> <code class="docutils literal notranslate"><span class="pre">Video_AMME_ci</span></code>, <code class="docutils literal notranslate"><span class="pre">Video_MME_ci</span></code>, <code class="docutils literal notranslate"><span class="pre">seed-tts-eval-50-arrow</span></code>, <code class="docutils literal notranslate"><span class="pre">mmmu-ci-50</span></code> and <code class="docutils literal notranslate"><span class="pre">mmsu-ci-2000</span></code> are CI subsets hosted on Hugging Face. Their results are not full benchmark estimates.</p></li>
 <li><p><strong>Some CI subsets are not pinned.</strong> <code class="docutils literal notranslate"><span class="pre">seed-tts-eval-50-arrow</span></code>, <code class="docutils literal notranslate"><span class="pre">mmmu-ci-50</span></code> and <code class="docutils literal notranslate"><span class="pre">mmsu-ci-2000</span></code> load at whatever revision is cached. When this page was written, Hugging Face main was <code class="docutils literal notranslate"><span class="pre">351f38c8d5ea36deda18dd9218645cda8f5c91b3</span></code>, <code class="docutils literal notranslate"><span class="pre">ff72fd69cc7e0719e04a0ddb12d160de89c6fefe</span></code> and <code class="docutils literal notranslate"><span class="pre">5ae6ed4343a89566be6dd90023d529f1bd97802d</span></code>.</p></li>
@@ -1089,7 +1092,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 20, 2026.
+  Last updated on Oct 22, 2026.
   <br/>
 </p>
   </div>

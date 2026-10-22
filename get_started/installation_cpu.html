@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
+    <script src="../_static/documentation_options.js?v=c52cfe39"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="prev" title="Installation — Intel XPU" href="installation_xpu.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 20, 2026"/>
+  <meta name="docsearch:version" content="0.1.9" />
+    <meta name="docbuild:last-update" content="Oct 22, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -260,6 +260,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_media_routes.html">Native Media Routes</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">MLX</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../mlx/index.html">MLX Path</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
@@ -278,7 +282,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
@@ -516,8 +519,8 @@
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-separate-pyproject">Why a separate pyproject</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">🐳 Option A: Docker</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-manual-install">🛠️ Option B: Manual install</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">Option A: Docker</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-manual-install">Option B: Manual install</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verify">Verify</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#audio-decoding-fails-with-libtorchcodec-core-so">Audio decoding fails with <code class="docutils literal notranslate"><span class="pre">libtorchcodec_core*.so</span></code></a></li>
 </ul>
@@ -558,7 +561,7 @@ omits accelerator-only packages.</p>
 </ul>
 </section>
 <section id="option-a-docker">
-<h2>🐳 Option A: Docker<a class="headerlink" href="#option-a-docker" title="Link to this heading">#</a></h2>
+<h2>Option A: Docker<a class="headerlink" href="#option-a-docker" title="Link to this heading">#</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone the SGLang-omni repository</span>
 git<span class="w"> </span>clone<span class="w"> </span>https://github.com/sgl-project/sglang-omni.git
 <span class="nb">cd</span><span class="w"> </span>sglang-omni
@@ -574,7 +577,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </s
 with <code class="docutils literal notranslate"><span class="pre">pyproject_cpu.toml</span></code>. It sets <code class="docutils literal notranslate"><span class="pre">SGLANG_USE_CPU_ENGINE=1</span></code> for the runtime.</p>
 </section>
 <section id="option-b-manual-install">
-<h2>🛠️ Option B: Manual install<a class="headerlink" href="#option-b-manual-install" title="Link to this heading">#</a></h2>
+<h2>Option B: Manual install<a class="headerlink" href="#option-b-manual-install" title="Link to this heading">#</a></h2>
 <p>Create and activate an environment first:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/sgl-project/sglang-omni.git
 <span class="nb">cd</span><span class="w"> </span>sglang-omni
@@ -588,7 +591,7 @@ uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </s
 <p>Install the matching CPU SGLang build:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/sgl-project/sglang<span class="w"> </span>../sglang
 <span class="nb">cd</span><span class="w"> </span>../sglang
-git<span class="w"> </span>checkout<span class="w"> </span>v0.5.21
+git<span class="w"> </span>checkout<span class="w"> </span>v0.5.22
 
 <span class="nb">cd</span><span class="w"> </span>python
 cp<span class="w"> </span>pyproject_cpu.toml<span class="w"> </span>pyproject.toml
@@ -683,8 +686,8 @@ of them. Pin an older major if needed. Docker users get a supported major from
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-separate-pyproject">Why a separate pyproject</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">🐳 Option A: Docker</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-manual-install">🛠️ Option B: Manual install</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">Option A: Docker</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-manual-install">Option B: Manual install</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verify">Verify</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#audio-decoding-fails-with-libtorchcodec-core-so">Audio decoding fails with <code class="docutils literal notranslate"><span class="pre">libtorchcodec_core*.so</span></code></a></li>
 </ul>
@@ -722,7 +725,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 20, 2026.
+  Last updated on Oct 22, 2026.
   <br/>
 </p>
   </div>

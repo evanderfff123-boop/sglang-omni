@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
+    <script src="../_static/documentation_options.js?v=c52cfe39"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="prev" title="Installation — Ascend NPU" href="installation_npu.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 20, 2026"/>
+  <meta name="docsearch:version" content="0.1.9" />
+    <meta name="docbuild:last-update" content="Oct 22, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -260,6 +260,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_media_routes.html">Native Media Routes</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">MLX</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../mlx/index.html">MLX Path</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
@@ -278,7 +282,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
@@ -516,8 +519,8 @@
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-separate-pyproject">Why a separate pyproject</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">🐳 Option A: Docker</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-install-into-an-existing-xpu-env-recommended-here">🛠️ Option B: Install into an existing XPU env (recommended here)</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">Option A: Docker</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-install-into-an-existing-xpu-env-recommended-here">Option B: Install into an existing XPU env (recommended here)</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sglang-installed-separately">SGLang (installed separately)</a></li>
 </ul>
 </li>
@@ -593,7 +596,7 @@ for the oneAPI caveat.</p></li>
 </ul>
 </section>
 <section id="option-a-docker">
-<h2>🐳 Option A: Docker<a class="headerlink" href="#option-a-docker" title="Link to this heading">#</a></h2>
+<h2>Option A: Docker<a class="headerlink" href="#option-a-docker" title="Link to this heading">#</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>docker/xpu.Dockerfile<span class="w"> </span>-t<span class="w"> </span>sglang-omni:xpu<span class="w"> </span>.
 docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span>--shm-size<span class="w"> </span>32g<span class="w"> </span>--ipc<span class="w"> </span>host<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span>sglang-omni:xpu
 </pre></div>
@@ -602,7 +605,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </s
 source oneAPI — see <a class="reference internal" href="#runtime-environment-important"><span class="std std-ref">Runtime environment</span></a>.</p>
 </section>
 <section id="option-b-install-into-an-existing-xpu-env-recommended-here">
-<h2>🛠️ Option B: Install into an existing XPU env (recommended here)<a class="headerlink" href="#option-b-install-into-an-existing-xpu-env-recommended-here" title="Link to this heading">#</a></h2>
+<h2>Option B: Install into an existing XPU env (recommended here)<a class="headerlink" href="#option-b-install-into-an-existing-xpu-env-recommended-here" title="Link to this heading">#</a></h2>
 <p>The helper swaps in <code class="docutils literal notranslate"><span class="pre">pyproject_xpu.toml</span></code>, installs with the XPU index, then restores the CUDA one:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:sgl-project/sglang-omni.git
 <span class="nb">cd</span><span class="w"> </span>sglang-omni
@@ -634,7 +637,7 @@ cp<span class="w"> </span>-f<span class="w"> </span>.pyproject.cuda.bak<span cla
 It cannot be pinned even as a range: every published wheel requires <code class="docutils literal notranslate"><span class="pre">flashinfer_python[cu13]</span></code> and the
 <code class="docutils literal notranslate"><span class="pre">nvidia-*</span></code> runtime, so <strong>any</strong> specifier pulls the CUDA stack over <code class="docutils literal notranslate"><span class="pre">torch+xpu</span></code>. Build from source:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/sgl-project/sglang<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sglang
-git<span class="w"> </span>checkout<span class="w"> </span>v0.5.21<span class="w">   </span><span class="c1"># the pinned release</span>
+git<span class="w"> </span>checkout<span class="w"> </span>v0.5.22<span class="w">   </span><span class="c1"># the pinned release</span>
 <span class="nb">cd</span><span class="w"> </span>python<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cp<span class="w"> </span>pyproject_xpu.toml<span class="w"> </span>pyproject.toml
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span>--no-build-isolation<span class="w"> </span>--extra-index-url<span class="w"> </span>https://download.pytorch.org/whl/xpu
 pip<span class="w"> </span>install<span class="w"> </span>--no-deps<span class="w"> </span><span class="nv">xgrammar</span><span class="o">==</span><span class="m">0</span>.1.33
@@ -728,7 +731,7 @@ eager, so a transcript is never at stake.</p>
 <p>Qwen3-TTS needs the upstream <code class="docutils literal notranslate"><span class="pre">qwen-tts</span></code> package. Option A already includes it; for
 Option B install it here, because <code class="docutils literal notranslate"><span class="pre">pyproject_xpu.toml</span></code> deliberately does not pin it.
 <code class="docutils literal notranslate"><span class="pre">--no-deps</span></code> is required on both lines: <code class="docutils literal notranslate"><span class="pre">qwen-tts</span></code> pins Transformers 4.57.3, which
-would replace this project’s 5.12.1, and resolving <code class="docutils literal notranslate"><span class="pre">sox</span></code> lifts <code class="docutils literal notranslate"><span class="pre">numpy</span></code> past the
+would replace this project’s 5.19.0, and resolving <code class="docutils literal notranslate"><span class="pre">sox</span></code> lifts <code class="docutils literal notranslate"><span class="pre">numpy</span></code> past the
 <code class="docutils literal notranslate"><span class="pre">numba==0.65.1</span></code> ceiling. See
 <a class="reference internal" href="../cookbook/qwen3_tts.html"><span class="std std-doc">docs/cookbook/qwen3_tts.md</span></a>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>sox<span class="w">   </span><span class="c1"># the Python sox package shells out to it</span>
@@ -1091,8 +1094,8 @@ so concurrent requests raise throughput almost linearly.</p>
 <h3>Ming-Omni-TTS (16.8B-A3B MoE, two XPUs)<a class="headerlink" href="#ming-omni-tts-16-8b-a3b-moe-two-xpus" title="Link to this heading">#</a></h3>
 <p>The bf16 AR backbone does not fit one 24 GB card, so <code class="docutils literal notranslate"><span class="pre">tts_engine</span></code> runs with TP=2. Its joint
 RoPE is sgl-kernel’s SYCL JIT kernel, which needs <code class="docutils literal notranslate"><span class="pre">icpx</span></code> on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>; add the compiler directory
-alone rather than sourcing <code class="docutils literal notranslate"><span class="pre">setvars.sh</span></code>. Its fp32 MoE routing needs the <code class="docutils literal notranslate"><span class="pre">sglang-kernel-xpu</span></code> 0.3.0
-wheel that SGLang v0.5.21 pins; older sgl-kernel builds fail with
+alone rather than sourcing <code class="docutils literal notranslate"><span class="pre">setvars.sh</span></code>. Its fp32 MoE routing needs the <code class="docutils literal notranslate"><span class="pre">sglang-kernel-xpu</span></code>
+wheel that SGLang v0.5.22 pins (0.4.0); sgl-kernel builds older than 0.3.0 fail with
 <code class="docutils literal notranslate"><span class="pre">&quot;fused_topk_softmax_kernel&quot;</span> <span class="pre">not</span> <span class="pre">implemented</span> <span class="pre">for</span> <span class="pre">'Float'</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"/opt/intel/oneapi/compiler/latest/bin:</span><span class="nv">$PATH</span><span class="s2">"</span><span class="w"> </span><span class="nv">SGLANG_OMNI_STARTUP_TIMEOUT</span><span class="o">=</span><span class="m">1800</span>
 sgl-omni<span class="w"> </span>serve<span class="w"> </span>--model-path<span class="w"> </span>/path/to/Ming-omni-tts-16.8B-A3B<span class="w"> </span><span class="se">\</span>
@@ -1115,7 +1118,7 @@ in a graph.</p>
 — those CUDA-only transfer backends are omitted; tensors move through the <code class="docutils literal notranslate"><span class="pre">shm</span></code> relay instead.</p>
 </div></blockquote>
 <blockquote>
-<div><p>✅ Support status: <strong>Qwen3-ASR, Whisper ASR, Fun-ASR-Nano, Nemotron 3.5 ASR, MOSS-Transcribe-Diarize, Qwen3-TTS, Fun-CosyVoice3, ZONOS2,
+<div><p>Support status: <strong>Qwen3-ASR, Whisper ASR, Fun-ASR-Nano, Nemotron 3.5 ASR, MOSS-Transcribe-Diarize, Qwen3-TTS, Fun-CosyVoice3, ZONOS2,
 Qwen3-Omni, MiniMax Music 3, MiniCPM-o, Ming-Omni, Ming-Omni-TTS, Nemotron VoiceChat, PersonaPlex, AuK/AuK-Flash and dots.tts all serve end-to-end on Intel XPU</strong>
 (Qwen3-ASR, Whisper ASR, Fun-ASR-Nano, Nemotron 3.5 ASR, MOSS-Transcribe-Diarize, Qwen3-TTS, Fun-CosyVoice3, MiniCPM-o, PersonaPlex, AuK/AuK-Flash and dots.tts single-card;
 ZONOS2 single-card with decode graphs; MiniMax Music 3, Ming-Omni-TTS and Nemotron VoiceChat need two cards;
@@ -1175,8 +1178,8 @@ Qwen3-Omni thinker across 8 cards with tensor parallelism).</p>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-separate-pyproject">Why a separate pyproject</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">🐳 Option A: Docker</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-install-into-an-existing-xpu-env-recommended-here">🛠️ Option B: Install into an existing XPU env (recommended here)</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-docker">Option A: Docker</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-install-into-an-existing-xpu-env-recommended-here">Option B: Install into an existing XPU env (recommended here)</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sglang-installed-separately">SGLang (installed separately)</a></li>
 </ul>
 </li>
@@ -1234,7 +1237,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 20, 2026.
+  Last updated on Oct 22, 2026.
   <br/>
 </p>
   </div>

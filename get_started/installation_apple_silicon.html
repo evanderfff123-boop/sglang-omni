@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=7ed07c24"></script>
+    <script src="../_static/documentation_options.js?v=c52cfe39"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="prev" title="Installation — CUDA" href="installation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.8" />
-    <meta name="docbuild:last-update" content="Oct 20, 2026"/>
+  <meta name="docsearch:version" content="0.1.9" />
+    <meta name="docbuild:last-update" content="Oct 22, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -260,6 +260,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/mps_dp.html">Same-GPU Data Parallelism with CUDA MPS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_media_routes.html">Native Media Routes</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">MLX</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../mlx/index.html">MLX Path</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
@@ -278,7 +282,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/omni_offline_bench.html">MiniCPM-o offline benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/rl_admin_control.html">RL Admin Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../developer_reference/mlx.html">MLX Path</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/ci_labels.html">CI Workflows and Labels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/bump_version.html">Bumping the SGLang Pin</a></li>
 </ul>
@@ -534,7 +537,7 @@
 on macOS Apple Silicon (arm64) with <code class="docutils literal notranslate"><span class="pre">./install.sh</span></code>. CUDA users should follow
 the <a class="reference internal" href="installation.html"><span class="std std-doc">CUDA installation</span></a>.</p>
 <p>The native C++ MLX runtime under <code class="docutils literal notranslate"><span class="pre">sglang_omni_mlx/native/</span></code> has a separate build
-and run workflow. See the <a class="reference internal" href="../developer_reference/mlx.html"><span class="std std-doc">MLX path documentation</span></a>
+and run workflow. See the <a class="reference internal" href="../mlx/index.html"><span class="std std-doc">MLX path documentation</span></a>
 and the <a class="reference external" href="https://github.com/sgl-project/sglang-omni/blob/main/Voxt/backend/README.md">Voxt backend guide</a> for that path.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/sgl-project/sglang-omni.git<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sglang-omni
 ./install.sh
@@ -543,11 +546,11 @@ and the <a class="reference external" href="https://github.com/sgl-project/sglan
 </div>
 <p>The script is idempotent and creates (or reuses) <code class="docutils literal notranslate"><span class="pre">.venv-apple</span></code>, installs the
 Homebrew formulae <code class="docutils literal notranslate"><span class="pre">ffmpeg&#64;7</span></code> and <code class="docutils literal notranslate"><span class="pre">uv</span></code> (and <code class="docutils literal notranslate"><span class="pre">git</span></code> only when a working git is not
-already available), installs SGLang <code class="docutils literal notranslate"><span class="pre">v0.5.21</span></code> from source with its <code class="docutils literal notranslate"><span class="pre">all_mps</span></code>
+already available), installs SGLang <code class="docutils literal notranslate"><span class="pre">v0.5.22</span></code> from source with its <code class="docutils literal notranslate"><span class="pre">all_mps</span></code>
 extra, and installs this checkout with <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span></code>. SGLang’s optional Rust
 extensions are not needed by this Apple Silicon path and are skipped.
-<code class="docutils literal notranslate"><span class="pre">ffmpeg&#64;7</span></code> is intentional: <code class="docutils literal notranslate"><span class="pre">torchcodec==0.15.0</span></code> ships loaders for FFmpeg 4 through 8
-only, and the unversioned formula installs FFmpeg 9. At runtime, expose its libraries:</p>
+<code class="docutils literal notranslate"><span class="pre">ffmpeg&#64;7</span></code> is intentional: the installer pins one FFmpeg major, and
+<code class="docutils literal notranslate"><span class="pre">torchcodec==0.17.0</span></code> ships loaders for FFmpeg 4 through 9. At runtime, expose its libraries:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">DYLD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span>ffmpeg@7<span class="k">)</span><span class="s2">/lib</span><span class="si">${</span><span class="nv">DYLD_LIBRARY_PATH</span><span class="p">:+:</span><span class="nv">$DYLD_LIBRARY_PATH</span><span class="si">}</span><span class="s2">"</span>
 </pre></div>
 </div>
@@ -558,11 +561,11 @@ Homebrew’s bootstrapper. Use <code class="docutils literal notranslate"><span 
 disable Homebrew auto-update in CI, <code class="docutils literal notranslate"><span class="pre">SGLANG_OMNI_VENV=/path/to/venv</span></code> to choose a virtualenv, and
 <code class="docutils literal notranslate"><span class="pre">SGLANG_OMNI_EXTRAS=audar-tts,fun-cosyvoice3</span></code> to enable optional extras.
 The persistent SGLang source checkout defaults to
-<code class="docutils literal notranslate"><span class="pre">~/.cache/sglang-omni/sglang-v0.5.21</span></code> and can be changed with
+<code class="docutils literal notranslate"><span class="pre">~/.cache/sglang-omni/sglang-v0.5.22</span></code> and can be changed with
 <code class="docutils literal notranslate"><span class="pre">SGLANG_SOURCE_DIR</span></code>. Slow or proxied networks can override the installer’s uv
 defaults with <code class="docutils literal notranslate"><span class="pre">UV_HTTP_TIMEOUT</span></code> and <code class="docutils literal notranslate"><span class="pre">UV_HTTP_RETRIES</span></code>.</p>
 <p>This path currently supports macOS 14 or newer on <code class="docutils literal notranslate"><span class="pre">arm64</span></code> only (the pinned
-<code class="docutils literal notranslate"><span class="pre">torch==2.13.0</span></code>, <code class="docutils literal notranslate"><span class="pre">torchvision==0.28.0</span></code> and <code class="docutils literal notranslate"><span class="pre">torchcodec==0.15.0</span></code> wheels are built
+<code class="docutils literal notranslate"><span class="pre">torch==2.14.1</span></code>, <code class="docutils literal notranslate"><span class="pre">torchvision==0.29.1</span></code> and <code class="docutils literal notranslate"><span class="pre">torchcodec==0.17.0</span></code> wheels are built
 for <code class="docutils literal notranslate"><span class="pre">macosx_14_0_arm64</span></code>) and is intended for the Apple-Silicon Qwen3-ASR
 Torch-MPS path and the
 <a class="reference internal" href="../cookbook/fun_asr.html#apple-silicon"><span class="std std-ref">Fun-ASR Torch/MPS path</span></a>.
@@ -684,7 +687,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 20, 2026.
+  Last updated on Oct 22, 2026.
   <br/>
 </p>
   </div>
