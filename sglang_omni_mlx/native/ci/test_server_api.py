@@ -235,8 +235,10 @@ def test_a_disconnected_stream_stops_its_decode(server: Server) -> None:
     )
     response = connection.getresponse()
     assert response.status == 200
-    # Note (Jiaxin Deng): cancellation is checked between generated tokens, so
-    # give the request time to get past encoding and prefill.
+    # Note (evanderfan): disconnect at the first heartbeat. Cancellation is
+    # checked between generated tokens, so the deadline below also covers the
+    # rest of encoding and prefill.
+    assert response.readline() == b":\n"
     time.sleep(4.0)
     assert json.loads(server.request("GET", "/health")[1])["request_states"] == {
         "running": 1
