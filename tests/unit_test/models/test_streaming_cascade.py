@@ -36,7 +36,11 @@ from sglang_omni.models.streaming_cascade.config import (
     ComponentGraphConfig,
     StreamingCascadePipelineConfig,
 )
-from sglang_omni.models.streaming_cascade.dialog import CUT_REPLY_NOTE, heard_prefix
+from sglang_omni.models.streaming_cascade.dialog import (
+    CUT_REPLY_NOTE,
+    SHORT_UTTERANCE_NOTE,
+    heard_prefix,
+)
 from sglang_omni.models.streaming_cascade.generators import ChatDelta
 from sglang_omni.models.streaming_cascade.numerals import spoken_text
 from sglang_omni.models.streaming_cascade.recognizers import probe_realtime_service
@@ -1999,27 +2003,40 @@ async def test_openai_transcription_leaves_the_language_out_when_the_service_nam
 
 
 @pytest.mark.asyncio
-async def test_the_dialog_keeps_the_language_of_the_last_answered_turn():
+async def test_a_short_utterance_in_another_language_keeps_the_session_language():
     dialog = build({"kind": "dialog"})
-    outputs = await drain(
-        dialog,
-        [
-            transcript_chunk("数到三。", True, "Chinese"),
-            text_chunk("1,2,3.", 1),
-            control_chunk(TURN_DONE, turn=1),
+    turns = [
+        transcript_chunk("Count to three.", True, "English"),
+        transcript_chunk("Okay.", True, "English"),
+        transcript_chunk("嗯。", True, "Chinese"),
+        transcript_chunk("我们换个话题吧。", True, "Chinese"),
+    ]
+    inputs = []
+    for turn, utterance in enumerate(turns, 1):
+        inputs += [
+            utterance,
+            text_chunk("Sure.", turn),
+            control_chunk(TURN_DONE, turn=turn),
             control_chunk(COMMIT),
-            transcript_chunk("Again.", True),
-            text_chunk("1,2,3.", 2),
-            control_chunk(TURN_DONE, turn=2),
-            control_chunk(COMMIT),
-            transcript_chunk("Now in English.", True, "English"),
-        ],
-    )
-    languages = [o.payload.get("language") for o in outputs if o.format == MESSAGES]
-    assert languages == ["Chinese", "Chinese", "English"]
+        ]
+    outputs = await drain(dialog, inputs)
+    chunks = [o for o in outputs if o.format == MESSAGES]
+    assert [o.payload.get("language") for o in chunks] == [
+        "English",
+        "English",
+        "English",
+        "Chinese",
+    ]
+    note = SHORT_UTTERANCE_NOTE.format(language="English")
+    assert [messages_of(o)[0].content for o in chunks] == [
+        dialog.config.system_prompt,
+        dialog.config.system_prompt,
+        dialog.config.system_prompt + note,
+        dialog.config.system_prompt,
+    ]
     replacement = build({"kind": "dialog"})
     replacement.adopt(dialog)
-    assert replacement.language == "English"
+    assert replacement.language == "Chinese"
 
 
 @pytest.mark.asyncio
@@ -2073,11 +2090,13 @@ async def spoken_languages(spec: dict, deltas: list[TimedChunk]) -> list[str]:
 async def test_openai_speech_keeps_the_digits_of_a_chinese_script_sentence_tagged_english():
     deltas = [
         text_chunk("This year is 2024. ", 1, "English"),
+        text_chunk("We said 谢谢 in 2024. ", 1, "English"),
         text_chunk("今年是2024年。", 1, "English"),
     ]
     assert await spoken_requests({"language": "auto"}, deltas) == [
         ("English", "This year is twenty twenty four."),
-        ("English", "今年是2024年。"),
+        ("English", "We said 谢谢 in 2024."),
+        ("Chinese", "今年是2024年。"),
     ]
 
 
@@ -2099,6 +2118,25 @@ async def test_openai_speech_auto_language_follows_the_user(
         text_chunk("你好。", 1, user_language),
     ]
     assert await spoken_languages({"language": language}, deltas) == tags
+
+
+@pytest.mark.parametrize(
+    "session_language, sentence, tag",
+    [
+        ("English", "Hello there.", "English"),
+        ("English", "In Chinese, thank you is 谢谢.", "English"),
+        ("English", "你好。", "Chinese"),
+        ("Chinese", "Hello there.", "English"),
+        ("Chinese", "1, 2, 3.", "Chinese"),
+        ("Japanese", "こんにちは、東京。", "Japanese"),
+    ],
+)
+def test_a_sentence_whose_script_contradicts_the_session_is_tagged_by_its_script(
+    session_language, sentence, tag
+):
+    synthesizer = build({"kind": "openai_speech", **HTTP_SERVICE, "language": "auto"})
+    synthesizer.session_language = session_language
+    assert synthesizer.sentence_language(sentence) == tag
 
 
 def test_openai_speech_keeps_the_user_language_across_a_replacement():

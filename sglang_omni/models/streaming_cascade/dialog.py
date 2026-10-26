@@ -59,10 +59,18 @@ def heard_prefix(
 
 # note (Haoling Pu): a cut reply shown as is reads to the model as how it answers, and after a few interruptions it replies with fragments (#3063).
 CUT_REPLY_NOTE = "A reply of yours that ends with … was cut off when the user interrupted it; answer the latest message in full."
+# note (Haoling Pu): a short utterance or a noise ("嗯。", "Okay.") is often recognized in the wrong language, so it neither changes the session language nor leads the reply into its language.
+MIN_LANGUAGE_WORDS = 3
+MIN_LANGUAGE_CJK_CHARS = 3
+SHORT_UTTERANCE_NOTE = (
+    " The user's last message is too short to tell their language; reply in {language}."
+)
 
 
-def prompt_messages(messages: list[ChatMessage]) -> list[ChatMessage]:
-    """The history as the model reads it: a reply the listener cut ends with … under a system note, and only such a reply ends with …."""
+def prompt_messages(
+    messages: list[ChatMessage], short_utterance_language: str | None = None
+) -> list[ChatMessage]:
+    """The history as the model reads it: a reply the listener cut ends with … under a system note, only such a reply ends with …, and a short utterance in another language gets a system note asking for short_utterance_language."""
     prompt: list[ChatMessage] = []
     has_cut = False
     for message in messages:
@@ -76,12 +84,16 @@ def prompt_messages(messages: list[ChatMessage]) -> list[ChatMessage]:
             prompt.append(ChatMessage(role="assistant", content=content))
         else:
             prompt.append(message)
-    if has_cut:
-        prompt[0] = ChatMessage(
-            role="system", content=f"{prompt[0].content} {CUT_REPLY_NOTE}"
-        )
+    system = prompt[0].content
+    if short_utterance_language is not None:
+        system = system + SHORT_UTTERANCE_NOTE.format(language=short_utterance_language)
     else:
         pass
+    if has_cut:
+        system = f"{system} {CUT_REPLY_NOTE}"
+    else:
+        pass
+    prompt[0] = ChatMessage(role="system", content=system)
     return prompt
 
 
@@ -109,9 +121,11 @@ class Dialog(StreamComponent):
     reply's turn moves the cut back to what the listener heard; from then on
     each cut is published as reply.heard. A reply the history keeps nothing
     of when the next reply begins leaves no entry, and the next utterance
-    joins the user message it followed. The language the recognizer last
-    heard in an answered turn is the Session's language, and every messages
-    chunk carries it. A replacement adopts the history, the open reply and
+    joins the user message it followed. The language the recognizer heard in
+    the last utterance of at least 3 words or 3 Chinese characters is the
+    Session's language, and every messages chunk carries it; a shorter
+    utterance in another language leaves it, and that turn's prompt asks for
+    a reply in it. A replacement adopts the history, the open reply and
     the waiting utterances, so new
     settings apply at once and reach the next prompt.
 
@@ -333,7 +347,18 @@ class Dialog(StreamComponent):
                 )
             else:
                 self.messages.append(ChatMessage(role="user", content=text))
-            if language is not None:
+            cjk_chars = sum("\u4e00" <= char <= "\u9fff" for char in text)
+            is_clear = (
+                cjk_chars >= MIN_LANGUAGE_CJK_CHARS
+                or len(text.split()) >= MIN_LANGUAGE_WORDS
+            )
+            is_short_switch = (
+                not is_clear
+                and language is not None
+                and self.language is not None
+                and language != self.language
+            )
+            if language is not None and is_clear:
                 self.language = language
             else:
                 pass
@@ -344,5 +369,12 @@ class Dialog(StreamComponent):
             self.heard_ms = None
             return [
                 control_chunk(TURN_STARTED, turn=turn),
-                messages_chunk(prompt_messages(self.messages), turn, self.language),
+                messages_chunk(
+                    prompt_messages(
+                        self.messages,
+                        self.language if is_short_switch else None,
+                    ),
+                    turn,
+                    self.language,
+                ),
             ]

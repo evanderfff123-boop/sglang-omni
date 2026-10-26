@@ -490,7 +490,7 @@ Turns the running text of the `asr` stage into utterances: partial transcripts w
 
 ### `dialog`
 
-Keeps the conversation history, opens a turn for each final transcript and sends the history to the language model. An utterance that arrives during a reply waits for it to end; speech that starts during a reply interrupts it, and so does speech that started after the utterance ended and has not stopped when the reply begins, so that reply ends before any of it is heard.
+Keeps the conversation history, opens a turn for each final transcript and sends the history to the language model. An utterance that arrives during a reply waits for it to end; speech that starts during a reply interrupts it, and so does speech that started after the utterance ended and has not stopped when the reply begins, so that reply ends before any of it is heard. The language the recognizer heard in the last utterance of at least 3 words or 3 Chinese characters is the session language; a shorter utterance in another language, often a noise such as "嗯。", keeps it, and the system message for that turn asks for a reply in the session language.
 
 | Option | Type | Default | Effect |
 | --- | --- | --- | --- |
@@ -527,7 +527,7 @@ Every sentence is its own request, and Qwen3-TTS samples each request with a fre
 | `voice` | string | `default` | The `voice` field; for Qwen3-TTS CustomVoice a built-in speaker, `default` meaning `Vivian`. |
 | `reference_audio_path` | string | `""` | A WAV the speech service reads, for voice cloning. |
 | `reference_text` | string | `""` | The transcript of the reference, sent with it when set. |
-| `language` | string | `""` | The language tag: empty sends none; `auto` tags every sentence with the language the recognizer last heard in an answered turn; any other name tags every sentence with that name. With a fixed name, and with `auto` before the recognizer has named a language, a sentence containing Chinese characters is tagged `Chinese`; `auto` tags the others `English` until then. |
+| `language` | string | `""` | The language tag: empty sends none; `auto` tags every sentence with the dialog's session language, except a sentence whose script contradicts it (mostly Chinese characters in a non-CJK session, or Latin letters and no Chinese characters in a Chinese or Cantonese session), as in a reply the user asked for in another language, which is tagged `Chinese` or `English` by its script; any other name tags every sentence with that name. With a fixed name, and with `auto` before the session language is known, a sentence containing Chinese characters is tagged `Chinese`; `auto` tags the others `English` until then. |
 | `max_sentence_words` | integer > 0 | `24` | The most words sent in one request. A longer sentence is cut into requests of at most this many words and at least half as many, at a comma, colon or dash when one falls in that range; the first request of such a sentence waits for up to half as many words more, so its rest is never a word or two on its own. |
 | `api_key_env` | string | `OPENAI_API_KEY` | As above. |
 | `timeout_s` | number > 0 | `120` | The request timeout. |

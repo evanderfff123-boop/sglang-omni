@@ -45,6 +45,11 @@ def has_chinese_characters(sentence: str) -> bool:
     return any("\u4e00" <= char <= "\u9fff" for char in sentence)
 
 
+CHINESE_LANGUAGES = frozenset({"Chinese", "Cantonese"})
+CJK_LANGUAGES = CHINESE_LANGUAGES | {"Japanese", "Korean"}
+LATIN_WORD = re.compile(r"[A-Za-z]+")
+
+
 class OpenAISpeechSynthesizerConfig(ComponentConfig):
     """Sentence-chunked `/v1/audio/speech` streaming PCM, one request per sentence.
 
@@ -145,9 +150,25 @@ class OpenAISpeechSynthesizer(TurnSpeaker):
 
     def sentence_language(self, sentence: str) -> str:
         """The language tag of one sentence."""
-        if self.config.language == "auto" and self.session_language is not None:
+        chinese_characters = sum("\u4e00" <= char <= "\u9fff" for char in sentence)
+        is_chinese = chinese_characters > 0
+        # note (Haoling Pu): a sentence whose script contradicts the session language, as in a reply the user asked for in another language, is tagged by its script; an English sentence quoting 谢谢 stays English.
+        latin_words = len(LATIN_WORD.findall(sentence))
+        is_switched = (
+            chinese_characters > latin_words
+            and self.session_language not in CJK_LANGUAGES
+        ) or (
+            not is_chinese
+            and latin_words > 0
+            and self.session_language in CHINESE_LANGUAGES
+        )
+        if (
+            self.config.language == "auto"
+            and self.session_language is not None
+            and not is_switched
+        ):
             return self.session_language
-        elif has_chinese_characters(sentence):
+        elif is_chinese:
             # Note (Junnan Li): A sentence with CJK characters is spoken as Chinese whatever the configured language, so a reply in the user's language keeps the right tag.
             return "Chinese"
         elif self.config.language == "auto":
