@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Measure turn-based latency over the native /v1/realtime protocol with server VAD.
+"""Measure turn-based latency over the native /v1/realtime protocol with server or semantic VAD.
 
 Streams one 16 kHz mono PCM16 WAV at real time, N turns in one session, and
 reports per turn, from the moment the client sent the last speech sample:
@@ -61,21 +61,25 @@ class RealtimeClient:
                 pass
         raise TimeoutError(f"{event_type} did not arrive")
 
-    async def configure(self, instructions: str, silence_duration_ms: int) -> dict:
-        """Ask for text and audio with server VAD; return the session.updated event."""
+    async def configure(
+        self,
+        instructions: str,
+        turn_detection_type: str,
+        silence_duration_ms: int,
+        eagerness: str,
+    ) -> dict:
+        """Ask for text and audio with the chosen turn detection; return the session.updated event."""
+        turn_detection = (
+            {"type": "semantic_vad", "eagerness": eagerness}
+            if turn_detection_type == "semantic_vad"
+            else {"type": "server_vad", "silence_duration_ms": silence_duration_ms}
+        )
         await self.send(
             "session.update",
             session={
                 "instructions": instructions,
                 "output_modalities": ["text", "audio"],
-                "audio": {
-                    "input": {
-                        "turn_detection": {
-                            "type": "server_vad",
-                            "silence_duration_ms": silence_duration_ms,
-                        }
-                    }
-                },
+                "audio": {"input": {"turn_detection": turn_detection}},
             },
         )
         return await self.wait_for("session.updated")
@@ -189,7 +193,9 @@ async def run(
     turns: int,
     instructions: str,
     silence_s: float,
+    turn_detection_type: str,
     silence_ms: int,
+    eagerness: str,
 ) -> None:
     pcm = read_pcm16(audio, silence_s)
     async with websockets.connect(url, max_size=MAX_FRAME_BYTES) as websocket:
@@ -199,7 +205,9 @@ async def run(
             raise RuntimeError(f"expected session.created, got {created['type']}")
         else:
             pass
-        updated = await client.configure(instructions, silence_ms)
+        updated = await client.configure(
+            instructions, turn_detection_type, silence_ms, eagerness
+        )
         granted = updated["session"]["sglang"]["granted"]
         if granted.get("interaction") != "turn_based":
             raise RuntimeError(f"server did not grant turn_based: {granted}")
@@ -226,10 +234,22 @@ def main() -> None:
         help="Trailing silence appended to the WAV in each turn.",
     )
     parser.add_argument(
+        "--turn-detection",
+        choices=("server_vad", "semantic_vad"),
+        default="server_vad",
+        help="Realtime turn_detection.type.",
+    )
+    parser.add_argument(
         "--silence-ms",
         type=int,
         default=800,
         help="Server VAD turn_detection.silence_duration_ms.",
+    )
+    parser.add_argument(
+        "--eagerness",
+        choices=("low", "medium", "high", "auto"),
+        default="medium",
+        help="Semantic VAD turn_detection.eagerness.",
     )
     parser.add_argument(
         "--instructions",
@@ -243,7 +263,9 @@ def main() -> None:
             arguments.turns,
             arguments.instructions,
             arguments.silence_s,
+            arguments.turn_detection,
             arguments.silence_ms,
+            arguments.eagerness,
         )
     )
 
