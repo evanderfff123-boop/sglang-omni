@@ -144,6 +144,8 @@ def test_native_websocket_partial_tail_continuation_and_close() -> None:
         )
         update = receive_until(websocket, "session.updated")[-1]
         assert update["session"]["audio"]["output"]["format"]["rate"] == 22050
+        # Note (ruoyu): The adapter answers response.cancel with not_supported, so a page must treat its stop button as a local mute.
+        assert update["session"]["sglang"]["granted"]["supports_cancel"] is False
         append_audio(websocket, 0, 640, 0)
         receive_until(websocket, "sglang.input_audio.accepted")
         assert client.chunks == []
