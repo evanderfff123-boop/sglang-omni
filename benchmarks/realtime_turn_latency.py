@@ -15,6 +15,7 @@ import json
 import time
 import uuid
 import wave
+from typing import Literal
 
 import websockets
 from websockets.asyncio.client import ClientConnection
@@ -26,6 +27,9 @@ PACKET_BYTES = INPUT_SAMPLE_RATE * PACKET_MS // 1000 * 2
 RECV_TIMEOUT_S = 180
 MAX_FRAME_BYTES = 16 * 1024 * 1024
 IGNORED_EVENTS = ("sglang.unit.done", "sglang.input_audio.accepted")
+
+TurnDetectionType = Literal["server_vad", "semantic_vad"]
+Eagerness = Literal["low", "medium", "high", "auto"]
 
 
 class RealtimeClient:
@@ -64,9 +68,9 @@ class RealtimeClient:
     async def configure(
         self,
         instructions: str,
-        turn_detection_type: str,
         silence_duration_ms: int,
-        eagerness: str,
+        turn_detection_type: TurnDetectionType = "server_vad",
+        eagerness: Eagerness = "medium",
     ) -> dict:
         """Ask for text and audio with the chosen turn detection; return the session.updated event."""
         turn_detection = (
@@ -193,9 +197,9 @@ async def run(
     turns: int,
     instructions: str,
     silence_s: float,
-    turn_detection_type: str,
     silence_ms: int,
-    eagerness: str,
+    turn_detection_type: TurnDetectionType = "server_vad",
+    eagerness: Eagerness = "medium",
 ) -> None:
     pcm = read_pcm16(audio, silence_s)
     async with websockets.connect(url, max_size=MAX_FRAME_BYTES) as websocket:
@@ -206,7 +210,7 @@ async def run(
         else:
             pass
         updated = await client.configure(
-            instructions, turn_detection_type, silence_ms, eagerness
+            instructions, silence_ms, turn_detection_type, eagerness
         )
         granted = updated["session"]["sglang"]["granted"]
         if granted.get("interaction") != "turn_based":
@@ -243,13 +247,13 @@ def main() -> None:
         "--silence-ms",
         type=int,
         default=800,
-        help="Server VAD turn_detection.silence_duration_ms.",
+        help="Server VAD turn_detection.silence_duration_ms; ignored with semantic_vad.",
     )
     parser.add_argument(
         "--eagerness",
         choices=("low", "medium", "high", "auto"),
         default="medium",
-        help="Semantic VAD turn_detection.eagerness.",
+        help="Semantic VAD turn_detection.eagerness; ignored with server_vad.",
     )
     parser.add_argument(
         "--instructions",
@@ -263,8 +267,8 @@ def main() -> None:
             arguments.turns,
             arguments.instructions,
             arguments.silence_s,
-            arguments.turn_detection,
             arguments.silence_ms,
+            arguments.turn_detection,
             arguments.eagerness,
         )
     )
