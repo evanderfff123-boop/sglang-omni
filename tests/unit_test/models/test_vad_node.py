@@ -85,7 +85,7 @@ class Node:
         ]
 
 
-def scripted(script):
+def scripted(script, stage_config: VADConfig | None = None):
     """VAD hooks whose sessions detect from `script`, and the detectors they built."""
     detectors = []
 
@@ -93,7 +93,7 @@ def scripted(script):
         detectors.append(ScriptedDetector(script, config))
         return detectors[-1]
 
-    return VADHooks(VADConfig(), new_detector), detectors
+    return VADHooks(stage_config or VADConfig(), new_detector), detectors
 
 
 def test_boundaries_follow_the_input_timeline_and_commit_resets_the_detector():
@@ -124,13 +124,20 @@ def test_boundaries_follow_the_input_timeline_and_commit_resets_the_detector():
 
 
 def test_configure_changes_the_turn_detection_of_one_session_only():
-    hooks, _ = scripted([])
-    hooks.config = VADConfig(silence_duration_ms=160)
+    """A session that set silence_duration_ms for server_vad kept it after switching to semantic_vad, and a threshold set back to null kept the previous threshold, instead of the stage defaults."""
+    hooks, _ = scripted([], VADConfig(silence_duration_ms=160))
     a = Node(hooks, "a")
     b = Node(hooks, "b", params={"turn_detection": {"threshold": 0.9}})
-    assert (a.detector.config, b.detector.config.threshold) == (
+    semantic_turn_detection = {
+        "type": "semantic_vad",
+        "eagerness": "high",
+        "silence_duration_ms": 800,
+    }
+    c = Node(hooks, "c", params={"turn_detection": semantic_turn_detection})
+    assert (a.detector.config, b.detector.config.threshold, c.detector.config) == (
         VADConfig(silence_duration_ms=160),
         0.9,
+        VADConfig(silence_duration_ms=160),
     )
     turn_detection = {"type": "server_vad", "silence_duration_ms": 800}
     a.control(CONFIGURE, instructions="Be brief.", turn_detection=turn_detection)
@@ -138,14 +145,11 @@ def test_configure_changes_the_turn_detection_of_one_session_only():
     assert b.detector.config == VADConfig(threshold=0.9, silence_duration_ms=160)
     a.control(CONFIGURE, instructions="Be terse.")
     assert a.detector.config == VADConfig(silence_duration_ms=800)
-    a.control(
-        CONFIGURE,
-        turn_detection={
-            "type": "semantic_vad",
-            "eagerness": "high",
-            "silence_duration_ms": 800,
-        },
-    )
+    a.control(CONFIGURE, turn_detection={**turn_detection, "threshold": 0.6})
+    assert a.detector.config == VADConfig(threshold=0.6, silence_duration_ms=800)
+    a.control(CONFIGURE, turn_detection={**turn_detection, "threshold": None})
+    assert a.detector.config == VADConfig(silence_duration_ms=800)
+    a.control(CONFIGURE, turn_detection=semantic_turn_detection)
     assert a.detector.config == VADConfig(silence_duration_ms=160)
     with pytest.raises(ValueError, match="turn_detection must be an object"):
         a.control(CONFIGURE, turn_detection=3)
