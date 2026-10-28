@@ -112,7 +112,7 @@ class TurnSpeaker(Replier):
                 chunk.turn in replies.interrupted
                 or chunk.payload.get("text") == WAIT_REPLY
             ):
-                # Note (Junnan Li): The generator may emit a few deltas after the interrupt before it stops, and a [WAIT] reply is silent.
+                # Note (Junnan Li): The generator may emit a few deltas after the interrupt before it stops.
                 pass
             elif chunk.format == TEXT_DELTA:
                 if not replies.is_running(chunk.turn):

@@ -23,6 +23,7 @@ from sglang_omni.config.manager import ConfigManager
 from sglang_omni.config.runtime import resolve_stage_factory_args
 from sglang_omni.models.streaming_cascade.alignment import AlignmentConfig
 from sglang_omni.models.streaming_cascade.base import (
+    WAIT_REPLY,
     ChatMessage,
     Replies,
     audio_chunk,
@@ -44,7 +45,7 @@ from sglang_omni.models.streaming_cascade.dialog import (
     DialogConfig,
     heard_prefix,
 )
-from sglang_omni.models.streaming_cascade.generators import ChatDelta
+from sglang_omni.models.streaming_cascade.generators import WAIT_REPLY_NOTE, ChatDelta
 from sglang_omni.models.streaming_cascade.numerals import spoken_text
 from sglang_omni.models.streaming_cascade.recognizers import probe_realtime_service
 from sglang_omni.models.streaming_cascade.running_transcript import (
@@ -766,7 +767,10 @@ async def test_the_next_request_to_the_language_model_has_no_empty_answer():
     generator.client = httpx.AsyncClient(transport=httpx.MockTransport(answer))
     await drain(generator, [prompt])
     assert bodies[0]["messages"] == [
-        {"role": "system", "content": dialog.config.system_prompt},
+        {
+            "role": "system",
+            "content": f"{dialog.config.system_prompt} {WAIT_REPLY_NOTE}",
+        },
         {"role": "user", "content": "question wait, what?"},
     ]
 
@@ -2415,6 +2419,59 @@ async def test_chat_deltas_carry_the_language_of_their_messages():
         (1, {"text": "2.", "language": "Chinese"}),
         (2, {"text": "1, "}),
         (2, {"text": "2."}),
+    ]
+
+
+@pytest.mark.asyncio
+async def test_wait_replies_hold_speech_and_collapse_in_the_prompt():
+    """A [WAIT] reply streamed in pieces emits one [WAIT] delta for the dialog, is skipped by speech synthesis, and collapses consecutive waited turns in the prompt."""
+    generator = build({"kind": "openai_chat", **HTTP_SERVICE})
+
+    async def complete(messages):
+        for content in (" [", "WAIT", "] "):
+            yield ChatDelta(content=content)
+
+    generator.complete = complete
+    gen_outputs = await drain(
+        generator,
+        [
+            messages_chunk(
+                [
+                    ChatMessage(
+                        role="user",
+                        content="Wait until I finish before replying.",
+                    )
+                ],
+                1,
+                "English",
+            )
+        ],
+    )
+    assert [o.payload for o in gen_outputs if o.format == TEXT_DELTA] == [
+        {"text": WAIT_REPLY, "language": "English"}
+    ]
+    assert await spoken_requests({"language": "auto"}, gen_outputs[:-1]) == []
+
+    dialog = build({"kind": "dialog"})
+    outputs = await drain(
+        dialog,
+        [
+            transcript_chunk("Wait until I finish before replying.", True, "English"),
+            text_chunk(WAIT_REPLY, 1),
+            control_chunk(TURN_DONE, turn=1),
+            control_chunk(COMMIT),
+            transcript_chunk("Um...", True, "English"),
+            text_chunk(WAIT_REPLY, 2),
+            control_chunk(TURN_DONE, turn=2),
+            control_chunk(COMMIT),
+            transcript_chunk("What is the capital of France?", True, "English"),
+        ],
+    )
+    assert prompts(outputs)[-1] == [
+        ("system", dialog.config.system_prompt),
+        ("user", "Wait until I finish before replying. Um..."),
+        ("assistant", WAIT_REPLY),
+        ("user", "What is the capital of France?"),
     ]
 
 
