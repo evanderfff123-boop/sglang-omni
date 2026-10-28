@@ -8,6 +8,7 @@ import httpx
 from pydantic import BaseModel, Field, field_validator
 
 from sglang_omni.models.streaming_cascade.base import (
+    WAIT_REPLY,
     ChatMessage,
     ComponentConfig,
     Replier,
@@ -29,6 +30,7 @@ CHAT_REQUEST_FIELDS = frozenset(
     {"model", "messages", "stream", "max_tokens", "temperature"}
 )
 WARM_UP_MESSAGES = [ChatMessage(role="user", content="Hi")]
+WAIT_REPLY_NOTE = f"When the user asks you to wait, hold on, listen, not interrupt, or not reply until they finish speaking, output only {WAIT_REPLY} instead of acknowledging that you will wait, and keep outputting {WAIT_REPLY} on hesitation fillers or partial items until the user finishes their thought or asks a question."
 
 
 class OpenAIChatGeneratorConfig(ComponentConfig):
@@ -99,15 +101,51 @@ class OpenAIChatGenerator(Replier):
         language: str | None,
         emit: ChunkEmitter,
     ) -> None:
-        """Stream the reply's text deltas, each carrying the user's language for the synthesizer."""
+        """Stream the reply's text deltas, each carrying the user's language for the synthesizer; a [WAIT] reply is emitted as a single [WAIT] delta for the dialog history."""
+        buffered = ""
+        is_streaming = False
         async for delta in self.complete(messages):
-            if delta.content:
+            if not delta.content:
+                continue
+            elif is_streaming:
                 emit(text_chunk(delta.content, turn, language))
             else:
-                pass
+                buffered += delta.content
+                stripped = buffered.lstrip()
+                if stripped and not (
+                    WAIT_REPLY.startswith(stripped) or stripped.startswith(WAIT_REPLY)
+                ):
+                    emit(text_chunk(buffered, turn, language))
+                    buffered = ""
+                    is_streaming = True
+                elif (
+                    len(stripped) > len(WAIT_REPLY)
+                    and stripped[len(WAIT_REPLY) :].strip()
+                ):
+                    emit(text_chunk(buffered, turn, language))
+                    buffered = ""
+                    is_streaming = True
+                else:
+                    pass
+        if not is_streaming and buffered.strip() == WAIT_REPLY:
+            emit(text_chunk(WAIT_REPLY, turn, language))
+        elif not is_streaming and buffered:
+            emit(text_chunk(buffered, turn, language))
+        else:
+            pass
         emit(control_chunk(TURN_DONE, turn=turn))
 
     def request_body(self, messages: list[ChatMessage]) -> dict[str, object]:
+        if messages and messages[0].role == "system":
+            messages = [
+                ChatMessage(
+                    role="system",
+                    content=f"{messages[0].content} {WAIT_REPLY_NOTE}",
+                ),
+                *messages[1:],
+            ]
+        else:
+            pass
         body: dict[str, object] = {
             "model": self.config.model,
             "messages": [message_dict(message) for message in messages],

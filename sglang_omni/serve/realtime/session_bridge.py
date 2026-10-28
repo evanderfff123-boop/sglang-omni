@@ -436,11 +436,14 @@ class SessionBridge(InteractionAdapter):
         return [InputTranscription(item_id, payload["text"], payload["is_final"])]
 
     def on_text_delta(self, output: OutputChunk) -> list[OutputEvent]:
-        events = self.start_response(output.turn)
         text = output.payload["text"]
-        self.response_text += text
-        events.append(TextDelta(self.response_id, self.response_item_id, text))
-        return events
+        if text == "[WAIT]":
+            return []
+        else:
+            events = self.start_response(output.turn)
+            self.response_text += text
+            events.append(TextDelta(self.response_id, self.response_item_id, text))
+            return events
 
     def on_audio(self, output: OutputChunk) -> list[OutputEvent]:
         events = self.start_response(output.turn)

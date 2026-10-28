@@ -23,6 +23,7 @@ from sglang_omni.audio.spoken_prefix import (
 from sglang_omni.models.streaming_cascade.base import (
     PROBE_TIMEOUT_S,
     SPEECH_SAMPLE_RATE_HZ,
+    WAIT_REPLY,
     ComponentConfig,
     StreamComponent,
     control_chunk,
@@ -282,7 +283,9 @@ class Alignment(StreamComponent):
         sentences: asyncio.Queue[SentenceAudio | HeardAudio | None],
     ) -> None:
         event = control_type(chunk)
-        if chunk.format == TEXT_DELTA:
+        if chunk.format == TEXT_DELTA and chunk.payload.get("text") == WAIT_REPLY:
+            pass
+        elif chunk.format == TEXT_DELTA:
             reply = self.reply_of(chunk.turn)
             reply.text += str(chunk.payload["text"])
             language = chunk_language(chunk)

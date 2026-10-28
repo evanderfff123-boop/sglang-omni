@@ -12,6 +12,7 @@ from pydantic import Field
 
 from sglang_omni.models.streaming_cascade.base import (
     SPEECH_SAMPLE_RATE_HZ,
+    WAIT_REPLY,
     ComponentConfig,
     Replier,
     Replies,
@@ -107,8 +108,11 @@ class TurnSpeaker(Replier):
 
         async def handle(chunk: TimedChunk, replies: Replies) -> None:
             nonlocal deltas
-            if chunk.format == TEXT_DELTA and chunk.turn in replies.interrupted:
-                # Note (Junnan Li): The generator may emit a few deltas after the interrupt before it stops.
+            if chunk.format == TEXT_DELTA and (
+                chunk.turn in replies.interrupted
+                or chunk.payload.get("text") == WAIT_REPLY
+            ):
+                # Note (Junnan Li): The generator may emit a few deltas after the interrupt before it stops, and a [WAIT] reply is silent.
                 pass
             elif chunk.format == TEXT_DELTA:
                 if not replies.is_running(chunk.turn):

@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Literal
 from pydantic import Field
 
 from sglang_omni.models.streaming_cascade.base import (
+    WAIT_REPLY,
     ChatMessage,
     ComponentConfig,
     StreamComponent,
@@ -67,7 +68,7 @@ CUT_REPLY_NOTE = "A reply of yours that ends with … was cut off when the user 
 
 
 def prompt_messages(messages: list[ChatMessage]) -> list[ChatMessage]:
-    """The history as the model reads it: a reply the listener cut ends with … under a system note, and only such a reply ends with …."""
+    """The history as the model reads it: a reply the listener cut ends with … under a system note, only such a reply ends with …, and consecutive turns where the assistant waited with [WAIT] collapse into one waited turn before the latest user message."""
     prompt: list[ChatMessage] = []
     has_cut = False
     for message in messages:
@@ -78,7 +79,19 @@ def prompt_messages(messages: list[ChatMessage]) -> list[ChatMessage]:
         elif message.role == "assistant":
             # note (Haoling Pu): the model sometimes ends a finished reply with …, which would read as cut and was followed by an empty reply in a live run.
             content = message.content.rstrip().removesuffix("…")
-            prompt.append(ChatMessage(role="assistant", content=content))
+            if (
+                content == WAIT_REPLY
+                and len(prompt) >= 3
+                and prompt[-2].role == "assistant"
+                and prompt[-2].content == WAIT_REPLY
+            ):
+                prompt[-3] = ChatMessage(
+                    role="user",
+                    content=f"{prompt[-3].content} {prompt[-1].content}",
+                )
+                prompt.pop()
+            else:
+                prompt.append(ChatMessage(role="assistant", content=content))
         else:
             prompt.append(message)
     if has_cut:
