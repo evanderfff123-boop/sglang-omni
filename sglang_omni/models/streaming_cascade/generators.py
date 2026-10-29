@@ -100,7 +100,7 @@ class OpenAIChatGenerator(Replier):
         language: str | None,
         emit: ChunkEmitter,
     ) -> None:
-        """Stream the reply's text deltas, each carrying the user's language for the synthesizer; a [WAIT] reply is emitted as a single [WAIT] delta for the dialog history, and text after a leading [WAIT] streams without it."""
+        """Stream the reply's text deltas, each carrying the user's language for the synthesizer."""
         buffered = ""
         is_streaming = False
         async for delta in self.complete(messages):

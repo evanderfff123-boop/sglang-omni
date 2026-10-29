@@ -25,7 +25,6 @@ SESSION_UNIT_MS = 200
 MAX_HISTORY_CHARS = 64 * 1024
 # {"text": str, "language"?: str}, one increment of a reply
 TEXT_DELTA = "text_delta"
-# The whole text of a reply that holds speech while the user keeps talking; no speech or client text follows it
 WAIT_REPLY = "[WAIT]"
 # {"messages": [{"role", "content"}, ...], "language"?: str}
 MESSAGES = "messages"

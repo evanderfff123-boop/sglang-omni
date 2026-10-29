@@ -68,7 +68,7 @@ CUT_REPLY_NOTE = "A reply of yours that ends with … was cut off when the user 
 
 
 def prompt_messages(messages: list[ChatMessage]) -> list[ChatMessage]:
-    """The history as the model reads it: a reply the listener cut ends with … under a system note, only such a reply ends with …, and consecutive turns where the assistant waited with [WAIT] collapse into one waited turn before the latest user message."""
+    """The history as the model reads it: a reply the listener cut ends with … under a system note, only such a reply ends with …, and consecutive [WAIT] turns collapse into one before the latest user message."""
     prompt: list[ChatMessage] = []
     has_cut = False
     for message in messages:
