@@ -2431,9 +2431,7 @@ async def test_chat_deltas_carry_the_language_of_their_messages():
         (("[", "Note] Hi."), ["[Note] Hi."], ["[Note] Hi."]),
     ],
 )
-async def test_a_wait_reply_is_one_wait_delta_and_never_spoken(
-    pieces, texts, spoken
-):
+async def test_a_wait_reply_is_one_wait_delta_and_never_spoken(pieces, texts, spoken):
     """A reply that went on after a leading [WAIT] reached speech synthesis with [WAIT] in its text; a [WAIT] reply alone is one delta that speech synthesis skips."""
     generator = build({"kind": "openai_chat", **HTTP_SERVICE})
 
