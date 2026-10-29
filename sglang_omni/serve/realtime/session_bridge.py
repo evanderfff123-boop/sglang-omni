@@ -46,6 +46,7 @@ from sglang_omni.proto.streams import (
     TURN_INTERRUPTED,
     TURN_QUEUED,
     TURN_STARTED,
+    WAIT_REPLY,
     ImagePort,
     SessionPorts,
 )
@@ -439,7 +440,7 @@ class SessionBridge(InteractionAdapter):
 
     def on_text_delta(self, output: OutputChunk) -> list[OutputEvent]:
         text = output.payload["text"]
-        if text == "[WAIT]":
+        if text == WAIT_REPLY:
             return []
         else:
             events = self.start_response(output.turn)

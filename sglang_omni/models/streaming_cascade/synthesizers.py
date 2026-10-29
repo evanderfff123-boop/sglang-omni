@@ -12,7 +12,6 @@ from pydantic import Field
 
 from sglang_omni.models.streaming_cascade.base import (
     SPEECH_SAMPLE_RATE_HZ,
-    WAIT_REPLY,
     ComponentConfig,
     Replier,
     Replies,
@@ -30,6 +29,7 @@ from sglang_omni.proto.streams import (
     REPLY_PROGRESS,
     TEXT_DELTA,
     TURN_DONE,
+    WAIT_REPLY,
     chunk_language,
     control_type,
 )

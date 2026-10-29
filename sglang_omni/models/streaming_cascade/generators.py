@@ -8,7 +8,6 @@ import httpx
 from pydantic import BaseModel, Field, field_validator
 
 from sglang_omni.models.streaming_cascade.base import (
-    WAIT_REPLY,
     ChatMessage,
     ComponentConfig,
     Replier,
@@ -22,7 +21,7 @@ from sglang_omni.models.streaming_cascade.base import (
     text_chunk,
 )
 from sglang_omni.proto.session import TimedChunk
-from sglang_omni.proto.streams import MESSAGES, TURN_DONE, chunk_language
+from sglang_omni.proto.streams import MESSAGES, TURN_DONE, WAIT_REPLY, chunk_language
 from sglang_omni.scheduling.session import ChunkEmitter
 
 # The request fields this kind sets itself; `extra_body` adds others.
@@ -101,35 +100,36 @@ class OpenAIChatGenerator(Replier):
         language: str | None,
         emit: ChunkEmitter,
     ) -> None:
-        """Stream the reply's text deltas, each carrying the user's language for the synthesizer; a [WAIT] reply is emitted as a single [WAIT] delta for the dialog history."""
+        """Stream the reply's text deltas, each carrying the user's language for the synthesizer; a [WAIT] reply is emitted as a single [WAIT] delta for the dialog history, and text after a leading [WAIT] streams without it."""
         buffered = ""
         is_streaming = False
         async for delta in self.complete(messages):
             if not delta.content:
-                continue
+                pass
             elif is_streaming:
                 emit(text_chunk(delta.content, turn, language))
             else:
                 buffered += delta.content
                 stripped = buffered.lstrip()
-                if stripped and not (
-                    WAIT_REPLY.startswith(stripped) or stripped.startswith(WAIT_REPLY)
-                ):
+                if WAIT_REPLY.startswith(stripped):
+                    pass
+                elif not stripped.startswith(WAIT_REPLY):
                     emit(text_chunk(buffered, turn, language))
-                    buffered = ""
                     is_streaming = True
-                elif (
-                    len(stripped) > len(WAIT_REPLY)
-                    and stripped[len(WAIT_REPLY) :].strip()
-                ):
-                    emit(text_chunk(buffered, turn, language))
-                    buffered = ""
+                elif stripped.removeprefix(WAIT_REPLY).strip():
+                    emit(
+                        text_chunk(
+                            stripped.removeprefix(WAIT_REPLY).lstrip(), turn, language
+                        )
+                    )
                     is_streaming = True
                 else:
                     pass
-        if not is_streaming and buffered.strip() == WAIT_REPLY:
+        if is_streaming:
+            pass
+        elif buffered.strip() == WAIT_REPLY:
             emit(text_chunk(WAIT_REPLY, turn, language))
-        elif not is_streaming and buffered:
+        elif buffered:
             emit(text_chunk(buffered, turn, language))
         else:
             pass

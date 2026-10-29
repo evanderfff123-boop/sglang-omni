@@ -37,7 +37,6 @@ else:
 
 SPEECH_SAMPLE_RATE_HZ = 24000
 PROBE_TIMEOUT_S = 10.0
-WAIT_REPLY = "[WAIT]"
 # Note (Junnan Li): A word ending in a period ends a sentence even after an abbreviation such as "Dr.", which then becomes its own short sentence.
 SENTENCE_END = re.compile(r"[.!?;。！？；…]+[\"')\]”’」』）]*$")
 # Note (Junnan Li): CJK text has no spaces between sentences, so a sentence also ends inside a word once its punctuation run is followed by more text.

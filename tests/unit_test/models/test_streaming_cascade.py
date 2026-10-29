@@ -23,7 +23,6 @@ from sglang_omni.config.manager import ConfigManager
 from sglang_omni.config.runtime import resolve_stage_factory_args
 from sglang_omni.models.streaming_cascade.alignment import AlignmentConfig
 from sglang_omni.models.streaming_cascade.base import (
-    WAIT_REPLY,
     ChatMessage,
     Replies,
     audio_chunk,
@@ -77,6 +76,7 @@ from sglang_omni.proto.streams import (
     TURN_INTERRUPTED,
     TURN_QUEUED,
     TURN_STARTED,
+    WAIT_REPLY,
     AudioPort,
     SessionPorts,
     control_type,
@@ -2423,35 +2423,39 @@ async def test_chat_deltas_carry_the_language_of_their_messages():
 
 
 @pytest.mark.asyncio
-async def test_wait_replies_hold_speech_and_collapse_in_the_prompt():
-    """A [WAIT] reply streamed in pieces emits one [WAIT] delta for the dialog, is skipped by speech synthesis, and collapses consecutive waited turns in the prompt."""
+@pytest.mark.parametrize(
+    ("pieces", "texts", "spoken"),
+    [
+        ((" [", "WAIT", "] "), [WAIT_REPLY], []),
+        (("[WAIT", "] Sure,", " go on."), ["Sure,", " go on."], ["Sure, go on."]),
+        (("[", "Note] Hi."), ["[Note] Hi."], ["[Note] Hi."]),
+    ],
+)
+async def test_a_wait_reply_is_one_wait_delta_and_never_spoken(
+    pieces, texts, spoken
+):
+    """A reply that went on after a leading [WAIT] reached speech synthesis with [WAIT] in its text; a [WAIT] reply alone is one delta that speech synthesis skips."""
     generator = build({"kind": "openai_chat", **HTTP_SERVICE})
 
     async def complete(messages):
-        for content in (" [", "WAIT", "] "):
+        for content in pieces:
             yield ChatDelta(content=content)
 
     generator.complete = complete
-    gen_outputs = await drain(
+    outputs = await drain(
         generator,
-        [
-            messages_chunk(
-                [
-                    ChatMessage(
-                        role="user",
-                        content="Wait until I finish before replying.",
-                    )
-                ],
-                1,
-                "English",
-            )
-        ],
+        [messages_chunk([ChatMessage(role="user", content="Hold on.")], 1, "English")],
     )
-    assert [o.payload for o in gen_outputs if o.format == TEXT_DELTA] == [
-        {"text": WAIT_REPLY, "language": "English"}
-    ]
-    assert await spoken_requests({"language": "auto"}, gen_outputs[:-1]) == []
+    assert [o.payload["text"] for o in outputs if o.format == TEXT_DELTA] == texts
+    requests = await spoken_requests({"language": "auto"}, outputs[:-1])
+    assert [text for _, text in requests] == spoken
+    system = generator.request_body([ChatMessage(role="system", content="Be brief.")])
+    assert system["messages"][0]["content"] == f"Be brief. {WAIT_REPLY_NOTE}"
 
+
+@pytest.mark.asyncio
+async def test_consecutive_waited_turns_collapse_in_the_prompt():
+    """Several [WAIT] turns in a row made the model repeat [WAIT] after the user finished; they collapse into one waited turn before the latest user message."""
     dialog = build({"kind": "dialog"})
     outputs = await drain(
         dialog,

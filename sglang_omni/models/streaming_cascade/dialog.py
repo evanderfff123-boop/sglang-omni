@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING, Literal
 from pydantic import Field
 
 from sglang_omni.models.streaming_cascade.base import (
-    WAIT_REPLY,
     ChatMessage,
     ComponentConfig,
     StreamComponent,
@@ -35,6 +34,7 @@ from sglang_omni.proto.streams import (
     TURN_INTERRUPTED,
     TURN_QUEUED,
     TURN_STARTED,
+    WAIT_REPLY,
     chunk_language,
     control_type,
 )

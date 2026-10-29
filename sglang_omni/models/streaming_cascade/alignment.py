@@ -23,7 +23,6 @@ from sglang_omni.audio.spoken_prefix import (
 from sglang_omni.models.streaming_cascade.base import (
     PROBE_TIMEOUT_S,
     SPEECH_SAMPLE_RATE_HZ,
-    WAIT_REPLY,
     ComponentConfig,
     StreamComponent,
     control_chunk,
@@ -44,6 +43,7 @@ from sglang_omni.proto.streams import (
     REPLY_PROGRESS,
     TEXT_DELTA,
     TRUNCATE,
+    WAIT_REPLY,
     chunk_language,
     control_type,
 )
