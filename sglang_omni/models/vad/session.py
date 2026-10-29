@@ -59,7 +59,7 @@ DetectorFactory = Callable[[VADConfig], SpeechDetector]
 def turn_detection_config(
     config: VADConfig, settings: Mapping[str, object]
 ) -> VADConfig:
-    """The stage defaults config with the turn_detection fields settings sets; silence_duration_ms applies only to server_vad."""
+    """`config` with the `turn_detection` fields `settings` sets; `silence_duration_ms` applies only to `server_vad`."""
     turn_detection = settings.get("turn_detection")
     if turn_detection is None:
         return config
@@ -141,7 +141,11 @@ class VADHooks(SessionHooks):
                 session.origin_ms = None
             else:
                 session.detector.config = turn_detection_config(
-                    self.config, chunk.payload
+                    replace(
+                        session.detector.config,
+                        silence_duration_ms=self.config.silence_duration_ms,
+                    ),
+                    chunk.payload,
                 )
                 session.is_enabled = True
         elif chunk.format == SESSION_CONTROL:
