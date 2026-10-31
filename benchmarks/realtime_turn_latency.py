@@ -20,6 +20,8 @@ from typing import Literal
 import websockets
 from websockets.asyncio.client import ClientConnection
 
+from sglang_omni.audio.semantic_vad import SemanticVADConfig
+
 INPUT_SAMPLE_RATE = 16000
 OUTPUT_BYTES_PER_SECOND = 24000 * 2
 PACKET_MS = 100
@@ -27,6 +29,8 @@ PACKET_BYTES = INPUT_SAMPLE_RATE * PACKET_MS // 1000 * 2
 RECV_TIMEOUT_S = 180
 MAX_FRAME_BYTES = 16 * 1024 * 1024
 IGNORED_EVENTS = ("sglang.unit.done", "sglang.input_audio.accepted")
+# Note (evanderfan): the last speech frame can end past the WAV, so the detector's wait alone left the turn open.
+SILENCE_MARGIN_MS = 2 * PACKET_MS
 
 TurnDetectionType = Literal["server_vad", "semantic_vad"]
 Eagerness = Literal["low", "medium", "high", "auto"]
@@ -110,6 +114,22 @@ class RealtimeClient:
         return next(
             sent for start_ms, sent in reversed(self.sent_at) if start_ms <= audio_ms
         )
+
+
+def required_silence_ms(
+    turn_detection_type: TurnDetectionType, silence_ms: int, eagerness: Eagerness
+) -> int:
+    """The trailing silence that ends a turn whatever its end-of-turn score; auto takes the longest preset."""
+    if turn_detection_type == "server_vad":
+        wait_ms = silence_ms
+    elif eagerness == "auto":
+        wait_ms = max(
+            SemanticVADConfig.from_eagerness(preset).max_pause_ms
+            for preset in ("low", "medium", "high")
+        )
+    else:
+        wait_ms = SemanticVADConfig.from_eagerness(eagerness).max_pause_ms
+    return wait_ms + SILENCE_MARGIN_MS
 
 
 def read_pcm16(path: str, silence_s: float) -> bytes:
@@ -234,8 +254,8 @@ def main() -> None:
     parser.add_argument(
         "--silence-s",
         type=float,
-        default=1.5,
-        help="Trailing silence appended to the WAV in each turn.",
+        default=None,
+        help="Trailing silence appended to the WAV in each turn; at least the selected turn detection's longest wait.",
     )
     parser.add_argument(
         "--turn-detection",
@@ -260,6 +280,18 @@ def main() -> None:
         default="Answer in one spoken English sentence of at most 25 words.",
     )
     arguments = parser.parse_args()
+    required_silence_s = (
+        required_silence_ms(
+            arguments.turn_detection, arguments.silence_ms, arguments.eagerness
+        )
+        / 1000
+    )
+    if arguments.silence_s is None:
+        arguments.silence_s = required_silence_s
+    elif arguments.silence_s < required_silence_s:
+        parser.error(f"--silence-s must be at least {required_silence_s} s")
+    else:
+        pass
     asyncio.run(
         run(
             arguments.url,
