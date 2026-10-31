@@ -121,21 +121,20 @@ class Dialog(StreamComponent):
     reply's turn moves the cut back to what the listener heard; from then on
     each cut is published as reply.heard. In a graph that sends audio, the
     next reply after an interrupted one begins once the delivered audio or a
-    truncate bounds the cut, so its prompt holds what could have been heard of it, and these
-    reports keep cutting the ended reply until a later reply ends, other
-    than one interrupted before its first text, so one that arrives after
-    the next reply began still cuts the history later prompts read. A reply
-    the history keeps nothing of leaves no entry once an utterance follows
-    it, and that utterance joins the user message the reply answered. The
-    Session's language is language when configured, and otherwise the
-    language the recognizer heard in the last utterance of at least 3 words
-    or 3 Chinese, Japanese or Korean characters, and every messages chunk
-    carries it; a shorter utterance leaves it unchanged, and when the
-    recognizer heard another language in it, that turn's latest user message
-    asks for a reply in the Session's language. A replacement adopts the
-    history, the open reply and
-    the waiting utterances, so new
-    settings apply at once and reach the next prompt.
+    truncate bounds the cut, so its prompt holds what could have been heard of
+    it, and these reports keep cutting the ended reply until a later reply
+    ends, other than one interrupted before its first text, so one that
+    arrives after the next reply began still cuts the history later prompts
+    read. A reply the history keeps nothing of leaves no entry once an
+    utterance follows it, and that utterance joins the user message the reply
+    answered. The language the recognizer heard in the last utterance of at
+    least 3 words or 3 Chinese, Japanese or Korean characters is the
+    Session's language, and every messages chunk carries it; a shorter
+    utterance leaves it unchanged, and when the recognizer heard another
+    language in it, that turn's latest user message asks for a reply in the
+    Session's language. A replacement adopts the history, the open reply and
+    the waiting utterances, so new settings apply at once and reach the next
+    prompt.
 
     Speech that started after an utterance ended and has not stopped when
     the utterance's reply begins is speech over that reply, so the reply
@@ -401,6 +400,12 @@ class Dialog(StreamComponent):
             is_clear = (
                 len(CJK_CHAR.findall(text)) >= MIN_LANGUAGE_CJK_CHARS
                 or len(text.split()) >= MIN_LANGUAGE_WORDS
+            )
+            is_short_switch = (
+                not is_clear
+                and language is not None
+                and self.language is not None
+                and language != self.language
             )
             if language is not None and is_clear:
                 self.language = language
