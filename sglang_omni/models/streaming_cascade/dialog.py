@@ -401,12 +401,6 @@ class Dialog(StreamComponent):
                 len(CJK_CHAR.findall(text)) >= MIN_LANGUAGE_CJK_CHARS
                 or len(text.split()) >= MIN_LANGUAGE_WORDS
             )
-            is_short_switch = (
-                not is_clear
-                and language is not None
-                and self.language is not None
-                and language != self.language
-            )
             if language is not None and is_clear:
                 self.language = language
             else:
