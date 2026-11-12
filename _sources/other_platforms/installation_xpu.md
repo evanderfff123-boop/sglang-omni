@@ -2,7 +2,7 @@
 
 Install SGLang-Omni on Intel GPUs (XPU). For the upstream runtime, see the
 [SGLang Intel XPU guide](https://docs.sglang.io/docs/hardware-platforms/xpu).
-For NVIDIA GPUs, use the [CUDA installation](./installation.md).
+For NVIDIA GPUs, use the [CUDA installation](../get_started/installation.md).
 
 ## Prerequisites
 
@@ -52,7 +52,7 @@ PYTHON=$(which python) scripts/xpu/install_xpu.sh
 
 Pick extras with `--extras` (comma-separated). `[eval]` adds SeedTTS/WER tools
 and tests; `[all]` is an alias. See [Fun-CosyVoice3](#fun-cosyvoice3-text-to-speech-single-xpu),
-[ZONOS2](#zonos2-moe-tts-single-xpu), and [Audar-TTS](#audar-tts-v1-turbo-arabic-tts-with-voice-cloning-single-xpu)
+[Zonos2](#zonos2-moe-tts-single-xpu), and [Audar-TTS](#audar-tts-v1-turbo-arabic-tts-with-voice-cloning-single-xpu)
 for their optional dependencies.
 
 ```bash
@@ -210,6 +210,36 @@ Add `--enable-realtime` to accept native 16 kHz mono PCM16 over `/v1/realtime`.
 The streaming encoder captures its subsequent-window batch sizes at startup on XPU as on CUDA, which roughly halves the steady-state streaming window; pass `--asr.factory.enable_encoder_cuda_graph false` to run entirely eager. See the [Nemotron cookbook](../cookbook/nemotron3_5_asr.md) for request parameters.
 
 **Expected result:** The JSON response contains the transcription and segment timestamps.
+
+### Hy-SimulMT (speech translation, multi-XPU tensor parallel)
+
+The 57 GiB of bf16 weights do not fit one 24 GB card, so the single-card configuration in the [cookbook](../cookbook/hy_simulmt.md) needs tensor parallelism here. Four cards are the minimum: each rank then holds 14.37 GiB of weights and `--mem-fraction-static 0.75` leaves room for a 3.56 GiB KV cache (155321 tokens), measured on Arc Pro B60.
+
+**Launch**
+
+```bash
+sgl-omni serve \
+  --model-path /path/to/Hy-SimulMT-30B-A3B \
+  --asr.tp_size 4 --asr.gpu "[0, 1, 2, 3]" \
+  --mem-fraction-static 0.75 \
+  --enable-realtime \
+  --host 0.0.0.0 --port 8000
+```
+
+**Request**
+
+```bash
+# Chinese speech to English text:
+curl -s -X POST http://localhost:8000/v1/audio/translations \
+  -F "file=@chinese.wav" -F "language=zh" -F "response_format=json"
+# English speech to Chinese text, over the shared transcription route:
+curl -s -X POST http://localhost:8000/v1/audio/transcriptions \
+  -F "file=@english.wav" -F "language=en" -F "response_format=json"
+```
+
+Decode graphs capture on XPU for this model and stay on by default, as on CUDA. On the four-rank layout above the tensor-parallel all-reduce is recorded in that capture, checked by replaying a captured all-reduce against its eager result on every rank. That measurement does not carry to wider layouts: the oneCCL 2022.1.1 which `torch==2.14.0+xpu` pins has been seen elsewhere to drop a captured collective without raising, which a decode graph then replays as a no-op, so re-check that before raising `--asr.tp_size` and pass `--asr.engine.disable_cuda_graph true` if it does not hold.
+
+**Expected result:** The JSON response contains the translated text in `text`.
 
 ### Qwen3-TTS (text-to-speech, single XPU)
 
@@ -466,9 +496,9 @@ solver parameters.
 
 **Expected result:** Play `output.wav` to hear the generated 48 kHz mono audio.
 
-### ZONOS2 (MoE TTS, single XPU)
+### Zonos2 (MoE TTS, single XPU)
 
-ZONOS2 needs the Descript DAC codec. `--no-deps` is required:
+Zonos2 needs the Descript DAC codec. `--no-deps` is required:
 `descript-audiotools==0.7.2` pins `protobuf<3.20`, which would downgrade this
 environment's `protobuf` to 3.19.6. The other packages on the line are the codec's
 own dependencies.
@@ -501,7 +531,7 @@ curl -s -X POST http://localhost:8000/v1/audio/speech \
   -o out.wav
 ```
 
-On XPU, ZONOS2 keeps its MoE experts in bf16 and leaves `torch.compile` off; decode
+On XPU, Zonos2 keeps its MoE experts in bf16 and leaves `torch.compile` off; decode
 graphs stay on by default. All three are applied automatically.
 
 **Expected result:** Play `out.wav` to hear the input in the reference voice.
@@ -771,9 +801,9 @@ Health check for any of the above: `curl http://localhost:8000/v1/models`.
 > **Expected on XPU:** `Failed to import mooncake` / `Failed to import nixl` warnings are harmless
 > — those CUDA-only transfer backends are omitted; tensors move through the `shm` relay instead.
 
-> Support status: **Qwen3-ASR, Whisper ASR, Fun-ASR-Nano, Nemotron 3.5 ASR, MOSS-Transcribe-Diarize, Qwen3-TTS, Fun-CosyVoice3, ZONOS2,
+> Support status: **Qwen3-ASR, Whisper ASR, Fun-ASR-Nano, Nemotron 3.5 ASR, MOSS-Transcribe-Diarize, Qwen3-TTS, Fun-CosyVoice3, Zonos2,
 > Audar-TTS, Qwen3-Omni, MiniMax Music 3, MiniCPM-o, Ming-Omni, Ming-Omni-TTS, Nemotron VoiceChat, PersonaPlex, AuK/AuK-Flash and dots.tts all serve end-to-end on Intel XPU**
 > (Qwen3-ASR, Whisper ASR, Fun-ASR-Nano, Nemotron 3.5 ASR, MOSS-Transcribe-Diarize, Qwen3-TTS, Fun-CosyVoice3, Audar-TTS, MiniCPM-o, PersonaPlex, AuK/AuK-Flash and dots.tts single-card;
-> ZONOS2 single-card with decode graphs; MiniMax Music 3, Ming-Omni-TTS and Nemotron VoiceChat need two cards;
+> Zonos2 single-card with decode graphs; MiniMax Music 3, Ming-Omni-TTS and Nemotron VoiceChat need two cards;
 > Ming-Omni chat single-card and speech two-card, with the thinker offloaded to host memory;
 > Qwen3-Omni thinker across 8 cards with tensor parallelism).

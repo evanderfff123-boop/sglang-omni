@@ -33,8 +33,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=a64801f4" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=a64801f4" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=3b484c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=3b484c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/voxt_anim.css?v=478594e0" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -51,9 +52,10 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cookbook/minicpm_o';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
-    <script src="../_static/js/sidebar_company_toggle.js?v=7622d557"></script>
+    <script src="../_static/js/sidebar_company_toggle.js?v=4014cbb0"></script>
     <script src="../_static/js/qwen3_omni_server_generator.js?v=d7738e8a"></script>
     <script src="../_static/js/ming_omni_server_generator.js?v=7979a72f"></script>
+    <script src="../_static/js/voxt_anim.js?v=f52a6c88"></script>
     <link rel="icon" href="../_static/logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -62,7 +64,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.2.0" />
-    <meta name="docbuild:last-update" content="Nov 05, 2026"/>
+    <meta name="docbuild:last-update" content="Nov 12, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -208,21 +210,40 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to SGLang-Omni</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/apiserver_quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/troubleshooting.html">Troubleshooting</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other Platforms</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Voxt</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../get_started/installation_apple_silicon.html">Apple Silicon</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../mlx/index.html">Native MLX / Voxt</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../get_started/voxt.html">Quickstart</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../get_started/voxt-tutorials/en/index.html">Voxt tutorials</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/en/start.html">Install Voxt and download a speech model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/en/byok.html">Set up Voxt with your own API key (BYOK)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/en/translate.html">Translate with Voxt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/en/transcribe.html">Transcribe what you say with Voxt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/en/rewrite.html">Rewrite text with Voxt</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Ascend NPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">Intel XPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">Intel CPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">Moore Threads MUSA</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../get_started/voxt-tutorials/index.html">Voxt 上手教程</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/start.html">安装 Voxt 和下载语音识别模型</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/byok.html">用自己的 API Key 配置 Voxt（BYOK）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/translate.html">用 Voxt 翻译</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/transcribe.html">用 Voxt 把说的话转录成文字</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/rewrite.html">用 Voxt 改写文字（转写）</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other Platforms</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../other_platforms/installation_apple_silicon.html">Apple Silicon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../other_platforms/installation_npu.html">Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../other_platforms/installation_xpu.html">Intel XPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../other_platforms/installation_cpu.html">Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../other_platforms/installation_musa.html">Moore Threads MUSA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="current nav bd-sidenav">
@@ -288,7 +309,8 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="companies/zyphra.html">Zyphra</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="zonos2.html">ZONOS2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zonos2.html">Zonos2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zonos3.html">Zonos3</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="companies/autoark_ai.html">AutoArk AI</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -310,6 +332,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_chat_stage.html">Native Chat Stage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/audio_translations.html">Audio Translations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/tts.html">TTS Model Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/asr.html">ASR Model Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology.html">Process Topology, Replicas, and GPU Sharing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/tts_process_topology.html">TTS Process Topology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology_migration.html">Process Topology Migration</a></li>
@@ -320,6 +343,11 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/main.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_reference/contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../developer_reference/mlx/index.html">Native MLX</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../developer_reference/mlx/long_audio.html">Qwen3-ASR long-recording measurements</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/apiserver_design.html">API Server Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/pipeline.html">Pipeline Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/config.html">Config</a></li>
@@ -329,7 +357,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/profiler.html">Request-level profiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/qwen3_asr_concurrency_profile.html">Qwen3-ASR High-Concurrency Benchmark and Bottleneck Profile</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/full_duplex_guide.html">Full-Duplex Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../developer_reference/duplex_load_generator_pacing.html">Duplex Load Generator Pacing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/tts_bench.html">TTS benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/tts_model_integration.html">TTS Model Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_reference/asr_bench.html">ASR benchmark runbook</a></li>
@@ -575,6 +602,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-usage">Normal Usage</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-chat-inputs">Video Chat Inputs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#native-full-duplex-ability">Native Full-Duplex Ability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#realtime-venus">Realtime-Venus</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#text-to-speech">Text to speech</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#speculative-decoding">Speculative Decoding</a></li>
 </ul>
@@ -613,7 +641,7 @@
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
 <p>Follow <a class="reference internal" href="../get_started/installation.html"><span class="std std-doc">Installation</span></a>, then run from the repository root.</p>
-<p>For Intel GPUs, follow the <a class="reference internal" href="../get_started/installation_xpu.html#minicpm-o-4-5-omni-chat-and-speech-single-xpu"><span class="std std-ref">MiniCPM-o XPU recipe</span></a>.</p>
+<p>For Intel GPUs, follow the <a class="reference internal" href="../other_platforms/installation_xpu.html#minicpm-o-4-5-omni-chat-and-speech-single-xpu"><span class="std std-ref">MiniCPM-o XPU recipe</span></a>.</p>
 <p>Chat with speech output:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>sglang_omni.cli<span class="w"> </span>serve<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-o-4_5<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
 </pre></div>
@@ -625,7 +653,7 @@
 </section>
 <section id="ascend-npu">
 <h2>Ascend NPU<a class="headerlink" href="#ascend-npu" title="Link to this heading">#</a></h2>
-<p>See <a class="reference internal" href="../get_started/installation_npu.html#minicpm-o"><span class="std std-ref">Installation — NPU</span></a>
+<p>See <a class="reference internal" href="../other_platforms/installation_npu.html#minicpm-o"><span class="std std-ref">Installation — NPU</span></a>
 for the NPU launch command, configuration, and validated versions.</p>
 </section>
 <section id="normal-usage">
@@ -671,7 +699,21 @@ Those pixel options do not bound the initial native-resolution allocation.</p>
 </section>
 <section id="native-full-duplex-ability">
 <h2>Native Full-Duplex Ability<a class="headerlink" href="#native-full-duplex-ability" title="Link to this heading">#</a></h2>
-<p>MiniCPM-o 4.5 also serves live full-duplex voice and video calls on <code class="docutils literal notranslate"><span class="pre">/v1/realtime</span></code>. Launching, settings, the browser demo and the protocol are in <a class="reference internal" href="../developer_reference/full_duplex_guide.html#native-full-duplex-minicpm-o"><span class="std std-ref">Full Duplex Interactive Model</span></a>.</p>
+<p>MiniCPM-o 4.5 also serves live full-duplex voice and video calls on <code class="docutils literal notranslate"><span class="pre">/v1/realtime</span></code>. Launching, settings, the browser demo, the protocol and benchmarking are in <a class="reference internal" href="../developer_reference/full_duplex_guide.html#native-full-duplex-minicpm-o"><span class="std std-ref">Full-Duplex Guide</span></a>.</p>
+</section>
+<section id="realtime-venus">
+<h2>Realtime-Venus<a class="headerlink" href="#realtime-venus" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://huggingface.co/inclusionAI/Realtime-Venus">Realtime-Venus</a> is a pair of MiniCPM-o 4.5 fine-tunes from inclusionAI: Realtime-Venus-Omni for audio-visual full-duplex calls and Realtime-Venus-Audio for audio-only chat and calls. Both keep the MiniCPM-o weight layout and serve with the commands on this page.</p>
+<p>The two checkpoints are subdirectories of one repository, and each config.json points at the repository’s config.yaml, so download them with the repository’s script, which keeps config.yaml beside the model directories:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hf<span class="w"> </span>download<span class="w"> </span>inclusionAI/Realtime-Venus<span class="w"> </span>download_models.py<span class="w"> </span>--local-dir<span class="w"> </span>.
+python<span class="w"> </span>download_models.py<span class="w"> </span>--model<span class="w"> </span>omni<span class="w"> </span>--local-dir<span class="w"> </span>Realtime-Venus
+</pre></div>
+</div>
+<p>Pass the model directory, not the repository id, and serve a full-duplex call with the session variant:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>sglang_omni.cli<span class="w"> </span>serve<span class="w"> </span>--model-path<span class="w"> </span>Realtime-Venus/Realtime-Venus-Omni<span class="w"> </span>--variant<span class="w"> </span>session<span class="w"> </span>--enable-realtime<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--model</span> <span class="pre">audio</span></code> downloads Realtime-Venus-Audio instead; it serves chat, speech and full-duplex calls with the MiniCPM-o 4.5 commands.</p>
 </section>
 <section id="text-to-speech">
 <h2>Text to speech<a class="headerlink" href="#text-to-speech" title="Link to this heading">#</a></h2>
@@ -691,8 +733,7 @@ Those pixel options do not bound the initial native-resolution allocation.</p>
 <p>The Thinker can verify tokens proposed by a DSpark draft trained on its own answers to text, audio, image and video prompts, <a class="reference external" href="https://huggingface.co/Qun1023/MiniCPM-o-4_5-thinker-DSpark-mm"><code class="docutils literal notranslate"><span class="pre">Qun1023/MiniCPM-o-4_5-thinker-DSpark-mm</span></code></a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>sglang_omni.cli<span class="w"> </span>serve<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-o-4_5<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--thinker.engine.speculative_algorithm<span class="w"> </span>DSPARK<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--thinker.engine.speculative_draft_model_path<span class="w"> </span>Qun1023/MiniCPM-o-4_5-thinker-DSpark-mm<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--thinker.engine.speculative_dspark_block_size<span class="w"> </span><span class="m">7</span>
+<span class="w">  </span>--thinker.engine.speculative_draft_model_path<span class="w"> </span>Qun1023/MiniCPM-o-4_5-thinker-DSpark-mm
 </pre></div>
 </div>
 <p>An EAGLE3 draft for Qwen3-8B, such as <a class="reference external" href="https://huggingface.co/Tengyunw/qwen3_8b_eagle3"><code class="docutils literal notranslate"><span class="pre">Tengyunw/qwen3_8b_eagle3</span></code></a>, runs with <code class="docutils literal notranslate"><span class="pre">--thinker.engine.speculative_algorithm</span> <span class="pre">EAGLE3</span></code>, <code class="docutils literal notranslate"><span class="pre">speculative_num_steps</span> <span class="pre">3</span></code>, <code class="docutils literal notranslate"><span class="pre">speculative_eagle_topk</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">speculative_num_draft_tokens</span> <span class="pre">4</span></code>.</p>
@@ -701,7 +742,7 @@ Those pixel options do not bound the initial native-resolution allocation.</p>
 <li><p><strong>Speech output.</strong> The Talker reads one Thinker hidden row per text token, and the draft’s layer capture keeps the row of every verified token, so a speech server accepts drafts that verify one linear block per request: a chain EAGLE3 draft (<code class="docutils literal notranslate"><span class="pre">speculative_eagle_topk</span> <span class="pre">1</span></code>), DFlash or DSpark. Qwen3-8B DFlash drafts mask with token 151669, which is <code class="docutils literal notranslate"><span class="pre">&lt;image&gt;</span></code> in MiniCPM-o, so they accept almost no tokens here.</p></li>
 <li><p><strong>Supported settings.</strong> DSpark uses static verification. DFlash and DSpark reject a request seed for sampled verification; greedy and prefill-only requests still accept a seed. Speech verification supports at most 8,192 hidden rows per batch, including graph padding. Prefill storage follows the configured token ceiling; text-only serving does not allocate speech hidden buffers.</p></li>
 <li><p><strong>Sampling.</strong> <code class="docutils literal notranslate"><span class="pre">length_penalty</span></code> applies to every verified token. Requests with <code class="docutils literal notranslate"><span class="pre">repetition_penalty</span></code>, <code class="docutils literal notranslate"><span class="pre">frequency_penalty</span></code>, <code class="docutils literal notranslate"><span class="pre">presence_penalty</span></code>, <code class="docutils literal notranslate"><span class="pre">min_p</span></code> or logprobs are rejected, because the draft workers cannot reproduce them. A prefill-only request keeps them, since the runner’s own sampler draws its single token on the target prefill and never reaches a verify.</p></li>
-<li><p><strong>Scheduling.</strong> Async decode is turned off, and so is the stage’s own mixed-chunk default. An explicit <code class="docutils literal notranslate"><span class="pre">enable_mixed_chunk</span></code> is refused rather than silently turned off.</p></li>
+<li><p><strong>Scheduling.</strong> Speculative decoding runs with async decode overlap enabled, while the stage’s own mixed-chunk default is turned off. An explicit <code class="docutils literal notranslate"><span class="pre">enable_mixed_chunk</span></code> is refused rather than silently turned off.</p></li>
 <li><p><strong>Startup.</strong> The thinker serves EAGLE3, DFlash and DSpark only, and <code class="docutils literal notranslate"><span class="pre">speculative_algorithm</span></code> and <code class="docutils literal notranslate"><span class="pre">speculative_draft_model_path</span></code> are given together. <code class="docutils literal notranslate"><span class="pre">max_seq_len</span></code> stays within the draft’s own <code class="docutils literal notranslate"><span class="pre">max_position_embeddings</span></code>, so raising it for long video prompts needs a draft whose context reaches that far.</p></li>
 </ul>
 </section>
@@ -759,6 +800,7 @@ Those pixel options do not bound the initial native-resolution allocation.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-usage">Normal Usage</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-chat-inputs">Video Chat Inputs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#native-full-duplex-ability">Native Full-Duplex Ability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#realtime-venus">Realtime-Venus</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#text-to-speech">Text to speech</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#speculative-decoding">Speculative Decoding</a></li>
 </ul>
@@ -794,7 +836,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Nov 05, 2026.
+  Last updated on Nov 12, 2026.
   <br/>
 </p>
   </div>

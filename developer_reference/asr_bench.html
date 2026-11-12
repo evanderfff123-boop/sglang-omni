@@ -33,8 +33,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=a64801f4" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=a64801f4" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=3b484c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom_log.css?v=3b484c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/voxt_anim.css?v=478594e0" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -51,9 +52,10 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'developer_reference/asr_bench';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
-    <script src="../_static/js/sidebar_company_toggle.js?v=7622d557"></script>
+    <script src="../_static/js/sidebar_company_toggle.js?v=4014cbb0"></script>
     <script src="../_static/js/qwen3_omni_server_generator.js?v=d7738e8a"></script>
     <script src="../_static/js/ming_omni_server_generator.js?v=7979a72f"></script>
+    <script src="../_static/js/voxt_anim.js?v=f52a6c88"></script>
     <link rel="icon" href="../_static/logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -62,7 +64,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.2.0" />
-    <meta name="docbuild:last-update" content="Nov 05, 2026"/>
+    <meta name="docbuild:last-update" content="Nov 12, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -208,21 +210,40 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to SGLang-Omni</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/apiserver_quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started/troubleshooting.html">Troubleshooting</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other Platforms</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Voxt</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../get_started/installation_apple_silicon.html">Apple Silicon</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../mlx/index.html">Native MLX / Voxt</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../get_started/voxt.html">Quickstart</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../get_started/voxt-tutorials/en/index.html">Voxt tutorials</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/en/start.html">Install Voxt and download a speech model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/en/byok.html">Set up Voxt with your own API key (BYOK)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/en/translate.html">Translate with Voxt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/en/transcribe.html">Transcribe what you say with Voxt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/en/rewrite.html">Rewrite text with Voxt</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_npu.html">Ascend NPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_xpu.html">Intel XPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_cpu.html">Intel CPU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started/installation_musa.html">Moore Threads MUSA</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../get_started/voxt-tutorials/index.html">Voxt 上手教程</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/start.html">安装 Voxt 和下载语音识别模型</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/byok.html">用自己的 API Key 配置 Voxt（BYOK）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/translate.html">用 Voxt 翻译</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/transcribe.html">用 Voxt 把说的话转录成文字</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../get_started/voxt-tutorials/rewrite.html">用 Voxt 改写文字（转写）</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other Platforms</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../other_platforms/installation_apple_silicon.html">Apple Silicon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../other_platforms/installation_npu.html">Ascend NPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../other_platforms/installation_xpu.html">Intel XPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../other_platforms/installation_cpu.html">Intel CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../other_platforms/installation_musa.html">Moore Threads MUSA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cookbook</span></p>
 <ul class="nav bd-sidenav">
@@ -288,7 +309,8 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../cookbook/companies/zyphra.html">Zyphra</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../cookbook/zonos2.html">ZONOS2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/zonos2.html">Zonos2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/zonos3.html">Zonos3</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../cookbook/companies/autoark_ai.html">AutoArk AI</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -310,6 +332,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/native_chat_stage.html">Native Chat Stage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/audio_translations.html">Audio Translations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/tts.html">TTS Model Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage/asr.html">ASR Model Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology.html">Process Topology, Replicas, and GPU Sharing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/tts_process_topology.html">TTS Process Topology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../basic_usage/process_topology_migration.html">Process Topology Migration</a></li>
@@ -320,6 +343,11 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="main.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution_guide.html">Contribution Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlx/index.html">Native MLX</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlx/long_audio.html">Qwen3-ASR long-recording measurements</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="apiserver_design.html">API Server Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pipeline.html">Pipeline Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Config</a></li>
@@ -329,7 +357,6 @@
 <li class="toctree-l1"><a class="reference internal" href="profiler.html">Request-level profiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qwen3_asr_concurrency_profile.html">Qwen3-ASR High-Concurrency Benchmark and Bottleneck Profile</a></li>
 <li class="toctree-l1"><a class="reference internal" href="full_duplex_guide.html">Full-Duplex Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="duplex_load_generator_pacing.html">Duplex Load Generator Pacing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tts_bench.html">TTS benchmark runbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tts_model_integration.html">TTS Model Integration</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">ASR benchmark runbook</a></li>
@@ -629,7 +656,7 @@
 </tbody>
 </table>
 </div>
-<p>CI stage 1 also has <code class="docutils literal notranslate"><span class="pre">aishell4_long90</span></code>, one 90 minute sample stitched together from three <code class="docutils literal notranslate"><span class="pre">aishell4_long</span></code> clips. It only runs through pytest (see <a class="reference internal" href="#run-the-ci-tests"><span class="std std-ref">Run the CI tests</span></a>). CI stage 2 runs one of the three models per CI run, picked at random unless a <code class="docutils literal notranslate"><span class="pre">run-fun-asr-nano-2512</span></code>, <code class="docutils literal notranslate"><span class="pre">run-qwen3-asr-1.7b</span></code> or <code class="docutils literal notranslate"><span class="pre">run-whisper-large-v3</span></code> label is set with <code class="docutils literal notranslate"><span class="pre">run-asr-ci</span></code> or <code class="docutils literal notranslate"><span class="pre">run-all-ci</span></code>.</p>
+<p>CI stage 1 also has <code class="docutils literal notranslate"><span class="pre">aishell4_long90</span></code>, one 90 minute sample stitched together from three <code class="docutils literal notranslate"><span class="pre">aishell4_long</span></code> clips. It only runs through pytest (see <a class="reference internal" href="#run-the-ci-tests"><span class="std std-ref">Run the CI tests</span></a>). CI stage 2 runs one of the three models per CI run, picked at random unless a <code class="docutils literal notranslate"><span class="pre">run-fun-asr-nano-2512</span></code>, <code class="docutils literal notranslate"><span class="pre">run-qwen3-asr-1.7b</span></code> or <code class="docutils literal notranslate"><span class="pre">run-whisper-large-v3</span></code> label is set with <code class="docutils literal notranslate"><span class="pre">run-asr-ci</span></code>.</p>
 <p>This page uses one server on one GPU, with the same datasets, concurrency and request settings as CI.</p>
 </section>
 <section id="variables">
@@ -758,7 +785,7 @@ python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </sp
 <p>Each block starts a server for one model, runs EN and ZH, then stops the server. Run the blocks one at a time.</p>
 <p>In every block, the <code class="docutils literal notranslate"><span class="pre">curl</span></code> line must print <code class="docutils literal notranslate"><span class="pre">PORT_FREE</span></code>, the <code class="docutils literal notranslate"><span class="pre">timeout</span> <span class="pre">1800</span></code> line <code class="docutils literal notranslate"><span class="pre">SERVER_READY</span></code> and the last line <code class="docutils literal notranslate"><span class="pre">GPU_FREE</span></code>. The <code class="docutils literal notranslate"><span class="pre">timeout</span> <span class="pre">1800</span></code> line stops waiting as soon as the server process exits, and then prints the end of <code class="docutils literal notranslate"><span class="pre">server.log</span></code> instead of <code class="docutils literal notranslate"><span class="pre">SERVER_READY</span></code>. If <code class="docutils literal notranslate"><span class="pre">GPU_FREE</span></code> does not print, some server processes survived the <code class="docutils literal notranslate"><span class="pre">kill</span></code>. Restart the container as in Step 4 and redo the run. The <code class="docutils literal notranslate"><span class="pre">setsid</span></code> line starts the server in its own process group, so <code class="docutils literal notranslate"><span class="pre">kill</span></code> stops all of it. Each client run prints a line ending with <code class="docutils literal notranslate"><span class="pre">evaluated=1088/1088</span></code> (EN) or <code class="docutils literal notranslate"><span class="pre">evaluated=2020/2020</span></code> (ZH). The client exits with code 0 even when it skipped samples, so check <a class="reference internal" href="#coverage"><span class="std std-ref">coverage</span></a> after the run.</p>
 <section id="qwen3-asr-1-7b">
-<h3>Qwen3-ASR-1.7B<a class="headerlink" href="#qwen3-asr-1-7b" title="Link to this heading">#</a></h3>
+<span id="qwen3-asr-17b"></span><h3>Qwen3-ASR-1.7B<a class="headerlink" href="#qwen3-asr-1-7b" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$OUT</span>/qwen3
 curl<span class="w"> </span>-sf<span class="w"> </span>localhost:8000/health<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>PORT_FREE
 setsid<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">'echo $$ &gt; "$1"; shift; exec "$@"'</span><span class="w"> </span>_<span class="w"> </span><span class="nv">$OUT</span>/qwen3/server.pid<span class="w"> </span><span class="se">\</span>
@@ -818,7 +845,7 @@ timeout<span class="w"> </span><span class="m">600</span><span class="w"> </span
 <section id="step-6-run-moss-transcribe-diarize">
 <h2>Step 6: Run MOSS-Transcribe-Diarize<a class="headerlink" href="#step-6-run-moss-transcribe-diarize" title="Link to this heading">#</a></h2>
 <p>The server arguments and request settings match the CI test (<code class="docutils literal notranslate"><span class="pre">tests/test_model/test_asr_ci_multi_speaker.py</span></code>). Like CI, one server serves all four datasets. The checks are the same as in Step 5. Each client line must also print <code class="docutils literal notranslate"><span class="pre">CLIENT_OK</span></code>. The client exits with code 0, and so prints <code class="docutils literal notranslate"><span class="pre">CLIENT_OK</span></code>, only when every request succeeded. Otherwise it prints an error or an <code class="docutils literal notranslate"><span class="pre">Evaluation</span> <span class="pre">failed</span></code> line.</p>
-<p>For <code class="docutils literal notranslate"><span class="pre">movies800times</span></code> CI sends no <code class="docutils literal notranslate"><span class="pre">max_new_tokens</span></code>, so the server picks a budget scaled to the audio length, and the request timeout is 300 s. The client CLI always sends <code class="docutils literal notranslate"><span class="pre">--max-new-tokens</span></code> (default 65536) and has no flag to send none. So the two <code class="docutils literal notranslate"><span class="pre">movies800times</span></code> lines below call the client with that default set to <code class="docutils literal notranslate"><span class="pre">None</span></code>. The <code class="docutils literal notranslate"><span class="pre">aishell4_long</span></code> and <code class="docutils literal notranslate"><span class="pre">googletime</span></code> lines use the CLI defaults (65536 tokens, 1800 s), as CI does.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">movies800times</span></code> CI sends no <code class="docutils literal notranslate"><span class="pre">max_new_tokens</span></code>, so the server picks a budget scaled to the audio length, and the request timeout is 300 s. The client’s dataset presets match CI: no budget for <code class="docutils literal notranslate"><span class="pre">movies800times</span></code>, and 65536 tokens with an 1800 s timeout for <code class="docutils literal notranslate"><span class="pre">aishell4_long</span></code> and <code class="docutils literal notranslate"><span class="pre">googletime</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$OUT</span>/moss_td
 curl<span class="w"> </span>-sf<span class="w"> </span>localhost:8000/health<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>PORT_FREE
 setsid<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">'echo $$ &gt; "$1"; shift; exec "$@"'</span><span class="w"> </span>_<span class="w"> </span><span class="nv">$OUT</span>/moss_td/server.pid<span class="w"> </span><span class="se">\</span>
@@ -826,10 +853,10 @@ setsid<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </s
 <span class="w">    </span>--asr.engine.max_running_requests<span class="w"> </span><span class="m">16</span><span class="w"> </span>--asr.engine.cuda_graph_max_bs<span class="w"> </span><span class="m">16</span><span class="w"> </span>--mem-fraction-static<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>&gt;<span class="w"> </span><span class="nv">$OUT</span>/moss_td/server.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
 timeout<span class="w"> </span><span class="m">1800</span><span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">'until curl -sf localhost:8000/health &gt; /dev/null; do sleep 5; grep -q "^State:[[:space:]]*[A-Y]" /proc/$(cat "$1")/status 2&gt;/dev/null || exit 1; done'</span><span class="w"> </span>_<span class="w"> </span><span class="nv">$OUT</span>/moss_td/server.pid<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>SERVER_READY<span class="w"> </span><span class="o">||</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="nv">$OUT</span>/moss_td/server.log
-python<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import sys, benchmarks.eval.benchmark_asr_transcribe_diarize as b; b.DEFAULT_MAX_NEW_TOKENS = None; sys.exit(b.main(sys.argv[1:]))'</span><span class="w"> </span><span class="se">\</span>
+python<span class="w"> </span>-m<span class="w"> </span>benchmarks.eval.benchmark_asr_transcribe_diarize<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--use-existing-server<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span>--dataset<span class="w"> </span>movies800times<span class="w"> </span>--max-concurrency<span class="w"> </span><span class="m">16</span><span class="w"> </span>--request-timeout-s<span class="w"> </span><span class="m">300</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--output-dir<span class="w"> </span><span class="nv">$OUT</span>/moss_td/movies800times<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>CLIENT_OK
-python<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import sys, benchmarks.eval.benchmark_asr_transcribe_diarize as b; b.DEFAULT_MAX_NEW_TOKENS = None; sys.exit(b.main(sys.argv[1:]))'</span><span class="w"> </span><span class="se">\</span>
+python<span class="w"> </span>-m<span class="w"> </span>benchmarks.eval.benchmark_asr_transcribe_diarize<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--use-existing-server<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span>--dataset<span class="w"> </span>movies800times<span class="w"> </span>--stream<span class="w"> </span>--max-concurrency<span class="w"> </span><span class="m">16</span><span class="w"> </span>--request-timeout-s<span class="w"> </span><span class="m">300</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--output-dir<span class="w"> </span><span class="nv">$OUT</span>/moss_td/movies800times_stream<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>CLIENT_OK
 python<span class="w"> </span>-m<span class="w"> </span>benchmarks.eval.benchmark_asr_transcribe_diarize<span class="w"> </span>--use-existing-server<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
@@ -1143,7 +1170,7 @@ By SGLang-Omni Team
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Nov 05, 2026.
+  Last updated on Nov 12, 2026.
   <br/>
 </p>
   </div>

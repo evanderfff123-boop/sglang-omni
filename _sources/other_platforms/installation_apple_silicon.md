@@ -7,16 +7,10 @@ Choose the runtime you want to use on Apple Silicon:
 - **Torch MPS:** Follow the [installation steps on this page](#prerequisites)
   to run Qwen3-ASR and Fun-ASR with PyTorch on macOS 14 or newer.
 - **Native MLX / Voxt:** The C++ runtime in `sglang_omni_mlx/native/` has its
-  own build and run workflow. See the [Native MLX / Voxt guide](../mlx/index.md)
-  and the [Voxt backend guide](https://github.com/sgl-project/sglang-omni/blob/main/Voxt/backend/README.md).
+  own build and run workflow. See [Native MLX development](../developer_reference/mlx/index.md)
+  and [Voxt's README](https://github.com/sgl-project/sglang-omni/blob/main/Voxt/README.md).
 
-For NVIDIA GPUs, see the [CUDA installation](./installation.md).
-
-```{toctree}
-:hidden:
-
-Native MLX / Voxt <../mlx/index>
-```
+For NVIDIA GPUs, see the [CUDA installation](../get_started/installation.md).
 
 ## Prerequisites
 
@@ -91,6 +85,24 @@ Activate the environment printed by the installer if it is not already active.
 
 ```bash
 export DYLD_LIBRARY_PATH="$(brew --prefix ffmpeg@7)/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"
+```
+
+macOS may remove `DYLD_*` variables when a SIP-protected system executable
+launches the server. Set `DYLD_LIBRARY_PATH` on the final `sgl-omni` process;
+for example, place `/usr/bin/env DYLD_LIBRARY_PATH=...` after wrappers such as
+`/usr/bin/time`. Test a compressed input such as M4A or MP3, since WAV decoding
+can succeed without loading FFmpeg.
+
+Before downloading a model, check that both Metal and FFmpeg load:
+
+```bash
+python - <<'PY'
+import torch
+from torchcodec.decoders import AudioDecoder
+
+assert torch.backends.mps.is_available()
+print("PyTorch MPS and TorchCodec FFmpeg loading are available")
+PY
 ```
 
 - [Run Qwen3-ASR with Torch/MPS](../cookbook/qwen3_asr.md#apple-silicon).
